@@ -109,7 +109,7 @@
     <!-- MAIN CONTAINER -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
 
-        <!-- VIEW 1: LOGIN PORTAL -->
+        <!-- VIEW 1: LOGIN PORTAL (WITH BROWSER AUTO-SAVE CAPABILITY) -->
         <div id="viewLogin" class="max-w-md mx-auto my-6 sm:my-10">
             <div class="bg-white rounded-3xl shadow-2xl border border-slate-200/80 overflow-hidden">
                 <div class="bg-gradient-to-b from-spena-900 to-spena-800 px-6 py-8 text-center text-white relative">
@@ -122,24 +122,24 @@
                     <p class="text-xs text-spena-100 mt-1 font-medium">SMP Negeri 6 Kota Blitar</p>
                 </div>
 
-                <form id="loginForm" onsubmit="handleLogin(event)" class="p-6 space-y-4">
+                <form id="loginForm" method="POST" action="javascript:void(0);" onsubmit="handleLogin(event)" class="p-6 space-y-4">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Username / ID User</label>
+                        <label for="loginUsername" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Username / ID User</label>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
                                 <i class="fa-solid fa-user-gear"></i>
                             </span>
-                            <input type="text" id="loginUsername" required class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-spena-500 focus:border-spena-500 outline-none text-sm transition font-medium" placeholder="Masukkan username">
+                            <input type="text" id="loginUsername" name="username" autocomplete="username" required class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-spena-500 focus:border-spena-500 outline-none text-sm transition font-medium" placeholder="Masukkan username">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Password</label>
+                        <label for="loginPassword" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Password</label>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
                                 <i class="fa-solid fa-lock"></i>
                             </span>
-                            <input type="password" id="loginPassword" required class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-spena-500 focus:border-spena-500 outline-none text-sm transition font-medium" placeholder="Masukkan password">
+                            <input type="password" id="loginPassword" name="password" autocomplete="current-password" required class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-spena-500 focus:border-spena-500 outline-none text-sm transition font-medium" placeholder="Masukkan password">
                         </div>
                     </div>
 
@@ -916,48 +916,61 @@
 
         const ALL_CLASSES = generateClassList();
 
-        // --- HELPER FUNCTION: FORMAT JOURNAL DATE & TIME ---
+        // --- HELPER FUNCTION: CLEAN SINGLE FORMAT FOR JOURNAL DATE & TIME ---
         function formatJournalDateTime(j) {
-            if (j.hariTanggal) {
-                return `${j.hariTanggal} • ${j.waktuPresensi || ''}`;
+            if (!j) return '-';
+            
+            const presensi = (j.waktuPresensi || '').trim();
+            const hariTgl = (j.hariTanggal || '').trim();
+
+            // Check if waktuPresensi already contains date keywords
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            const containsDate = months.some(m => presensi.includes(m)) || presensi.includes('202');
+
+            if (containsDate) {
+                return presensi; // Clean single format already
             }
-            if (j.timestamp) {
-                const d = new Date(j.timestamp);
-                const dateStr = d.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-                return `${dateStr} • ${j.waktuPresensi || ''}`;
+
+            if (hariTgl && presensi) {
+                return `${hariTgl} • ${presensi}`;
             }
-            return j.waktuPresensi || '-';
+
+            return presensi || hariTgl || '-';
         }
 
-        // --- INITIALIZATION ON WINDOW LOAD ---
+        // --- INITIALIZATION ON WINDOW LOAD (PRESERVES LOGIN ON REFRESH) ---
         window.onload = async function() {
             renderAppLogo();
             populateClassDropdowns();
             startLiveClock();
             updateCloudBadge();
 
-            if (googleScriptUrl) {
-                await fetchFromGoogleSheets();
-            }
-
-            // SESSION PERSISTENCE RESTORATION
+            // 1. INSTANT RELIABLE SESSION RESTORATION FROM LOCALSTORAGE (PREVENTS REFRESH LOGOUT)
             const savedUserSession = localStorage.getItem('spena_session_user');
             if (savedUserSession) {
                 try {
                     const parsed = JSON.parse(savedUserSession);
-                    const verifiedUser = usersData.find(u => u.id === parsed.id || u.username === parsed.username);
-                    if (verifiedUser) {
+                    if (parsed && (parsed.id || parsed.username)) {
+                        const verifiedUser = usersData.find(u => String(u.id) === String(parsed.id) || u.username === parsed.username) || parsed;
+                        currentUser = verifiedUser;
                         applyLoginSession(verifiedUser);
-                    } else {
-                        localStorage.removeItem('spena_session_user');
-                        document.getElementById('loginUsername')?.focus();
                     }
                 } catch (err) {
-                    localStorage.removeItem('spena_session_user');
-                    document.getElementById('loginUsername')?.focus();
+                    console.error('Error restoring session:', err);
                 }
-            } else {
-                document.getElementById('loginUsername')?.focus();
+            }
+
+            // 2. BACKGROUND FETCH FROM GOOGLE SHEETS
+            if (googleScriptUrl) {
+                await fetchFromGoogleSheets();
+                // If user is currently logged in, sync currentUser reference seamlessly
+                if (currentUser) {
+                    const matchedUser = usersData.find(u => String(u.id) === String(currentUser.id) || u.username === currentUser.username);
+                    if (matchedUser) {
+                        currentUser = matchedUser;
+                        applyLoginSession(matchedUser);
+                    }
+                }
             }
         };
 
@@ -1189,11 +1202,12 @@
             const timeStr = now.toLocaleTimeString('id-ID') + ' WIB';
 
             if (type === 'hadir') {
-                document.getElementById('waktuPresensi').value = `${dateStr}, ${timeStr}`;
+                const cleanAttendanceStr = `${dateStr} • ${timeStr}`;
+                document.getElementById('waktuPresensi').value = cleanAttendanceStr;
                 const jamMulai = document.getElementById('journalJamMulai').value;
                 const jamSelesai = document.getElementById('journalJamSelesai').value;
                 const rangeStr = jamMulai === jamSelesai ? `Jam Ke-${jamMulai}` : `Jam Ke-${jamMulai} s/d ${jamSelesai}`;
-                showToast(`Waktu presensi hadir ${rangeStr} dicatat: ${dateStr}, ${timeStr}`, 'success');
+                showToast(`Waktu presensi hadir ${rangeStr} dicatat: ${cleanAttendanceStr}`, 'success');
             }
         }
 
@@ -1389,9 +1403,16 @@
             }).join('');
         }
 
+        // --- OPEN FEEDBACK MODAL WITH CLASS LOCKING FOR WALI MURID ---
         function openFeedbackModal() {
-            if (currentUser && currentUser.classAssigned) {
-                document.getElementById('fbKelas').value = currentUser.classAssigned;
+            const select = document.getElementById('fbKelas');
+            if (currentUser && currentUser.role === 'wali' && currentUser.classAssigned) {
+                select.value = currentUser.classAssigned;
+                select.disabled = true;
+                select.classList.add('bg-slate-100', 'cursor-not-allowed');
+            } else {
+                select.disabled = false;
+                select.classList.remove('bg-slate-100', 'cursor-not-allowed');
             }
             document.getElementById('modalFeedback').classList.remove('hidden');
         }
