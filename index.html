@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full bg-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Jurnal Online & Pemantauan Kinerja KBM - SMP Negeri 6 Kota Blitar</title>
+    
+    <!-- PWA & Mobile Friendly Icons/Meta -->
+    <meta name="theme-color" content="#075985">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Jurnal SPENA">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        spena: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            200: '#bae0fd',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                            800: '#0c4a6e',
+                            900: '#0a3651',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+        }
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white; color: black; }
+        }
+        /* Custom smooth scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-full text-slate-800 flex flex-col justify-between selection:bg-spena-500 selection:text-white">
+
+    <header class="bg-spena-800 text-white shadow-lg sticky top-0 z-30 no-print border-b border-spena-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white text-spena-900 font-extrabold rounded-xl p-1 flex items-center justify-center w-11 h-11 shadow-md border border-amber-300 overflow-hidden">
+                    <div id="appLogoHeader" class="w-full h-full flex items-center justify-center">
+                        <!-- SVG Presisi Logo SMP Negeri 6 Kota Blitar -->
+                        <svg class="w-full h-full" viewBox="0 0 500 600" xmlns="http://www.w3.org/2000/svg">
+                            <ellipse cx="250" cy="300" rx="235" ry="285" fill="#2d0b4e"/>
+                            <ellipse cx="250" cy="300" rx="220" ry="270" fill="#ffffff"/>
+                            <ellipse cx="250" cy="300" rx="210" ry="260" fill="#2d0b4e"/>
+                            <ellipse cx="250" cy="300" rx="198" ry="248" fill="#009bee"/>
+                            <defs>
+                                <path id="pathTopHeader" d="M 80,300 A 170,220 0 0,1 420,300" fill="none"/>
+                            </defs>
+                            <text font-family="'Inter', sans-serif" font-weight="900" font-size="42" fill="#ffffff" letter-spacing="2">
+                                <textPath href="#pathTopHeader" startOffset="50%" text-anchor="middle">SMP NEGERI 6</textPath>
+                            </text>
+                            <text x="250" y="508" font-family="'Inter', sans-serif" font-weight="900" font-size="38" fill="#ffffff" text-anchor="middle" letter-spacing="3">KOTA BLITAR</text>
+                            <rect x="222" y="220" width="56" height="180" fill="#ffcc00" stroke="#2d0b4e" stroke-width="5"/>
+                            <path d="M 222,400 L 222,418 A 28,28 0 0,0 278,418 L 278,400 Z" fill="#ffcc00" stroke="#2d0b4e" stroke-width="5"/>
+                            <rect x="216" y="215" width="68" height="20" rx="4" fill="#ffcc00" stroke="#2d0b4e" stroke-width="5"/>
+                            <path d="M 250,110 Q 288,160 280,225 L 220,225 Q 212,160 250,110 Z" fill="#f03800" stroke="#2d0b4e" stroke-width="5"/>
+                            <path d="M 250,140 Q 272,175 268,225 L 232,225 Q 228,175 250,140 Z" fill="#ffcc00"/>
+                            <g stroke="#2d0b4e" stroke-width="6" stroke-linejoin="round">
+                                <path d="M 250,270 Q 175,250 100,255 L 100,340 Q 175,335 250,370 Z" fill="#ffffff"/>
+                                <path d="M 250,270 Q 325,250 400,255 L 400,340 Q 325,335 250,370 Z" fill="#ffffff"/>
+                            </g>
+                            <path d="M 130,282 Q 180,280 230,294 M 125,302 Q 180,300 230,314 M 120,322 Q 180,320 230,334" stroke="#2d0b4e" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+                            <path d="M 370,282 Q 320,280 270,294 M 375,302 Q 320,300 270,314 M 380,322 Q 320,320 270,334" stroke="#2d0b4e" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+                            <g stroke="#2d0b4e" stroke-width="5">
+                                <path d="M 90,405 L 65,435 L 110,426 Z" fill="#e60000"/>
+                                <path d="M 65,435 L 60,455 L 105,438 L 110,426 Z" fill="#ffffff"/>
+                                <path d="M 410,405 L 435,435 L 390,426 Z" fill="#e60000"/>
+                                <path d="M 435,435 L 440,455 L 395,438 L 390,426 Z" fill="#ffffff"/>
+                                <path d="M 90,405 Q 250,365 410,405 L 410,422 Q 250,382 90,422 Z" fill="#e60000"/>
+                                <path d="M 90,422 Q 250,382 410,422 L 410,439 Q 250,399 90,439 Z" fill="#ffffff"/>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-base sm:text-lg leading-tight tracking-wide">JURNAL ONLINE SPENA</h1>
+                    <p class="text-[11px] text-spena-100 hidden sm:block">SMP Negeri 6 Kota Blitar • Pemantauan Kinerja KBM Real-Time</p>
+                </div>
+            </div>
+
+            <div id="navUserMenu" class="hidden flex items-center space-x-3">
+                <div class="text-right hidden sm:block">
+                    <div id="navUserName" class="font-bold text-sm">Nama User</div>
+                    <div id="navUserRole" class="text-[11px] text-amber-300 capitalize font-medium">Role</div>
+                </div>
+                <div class="relative inline-block text-left">
+                    <button onclick="toggleUserDropdown()" class="bg-spena-700 hover:bg-spena-600 p-2 rounded-xl text-sm flex items-center space-x-2 transition border border-spena-600 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                        <i class="fa-solid fa-circle-user text-xl text-amber-300"></i>
+                        <i class="fa-solid fa-chevron-down text-xs text-slate-300"></i>
+                    </button>
+                    <div id="userDropdown" class="hidden absolute right-0 mt-2 w-52 bg-white rounded-2xl shadow-2xl py-1 text-slate-800 z-50 border border-slate-100 divide-y divide-slate-100">
+                        <div class="px-4 py-2.5 sm:hidden bg-slate-50">
+                            <p id="navUserNameMobile" class="font-bold text-xs text-slate-800">Nama User</p>
+                            <p id="navUserRoleMobile" class="text-[10px] text-spena-600 font-semibold uppercase">Role</p>
+                        </div>
+                        <a href="#" onclick="openChangePasswordModal()" class="block px-4 py-2.5 text-xs font-semibold hover:bg-slate-50 transition text-slate-700">
+                            <i class="fa-solid fa-key me-2 text-slate-400"></i> Ubah Password
+                        </a>
+                        <a href="#" onclick="logout()" class="block px-4 py-2.5 text-xs font-bold hover:bg-rose-50 text-rose-600 transition">
+                            <i class="fa-solid fa-right-from-bracket me-2"></i> Keluar (Logout)
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+
+        <!-- VIEW 1: LOGIN PORTAL -->
+        <div id="viewLogin" class="max-w-md mx-auto my-6 sm:my-10">
+            <div class="bg-white rounded-3xl shadow-2xl border border-slate-200/80 overflow-hidden">
+                <div class="bg-gradient-to-b from-spena-900 to-spena-800 px-6 py-8 text-center text-white relative">
+                    <div class="w-24 h-24 bg-white rounded-full mx-auto flex items-center justify-center p-2 shadow-xl mb-3 border-4 border-amber-400 overflow-hidden">
+                        <div id="appLogoLogin" class="w-full h-full flex items-center justify-center">
+                            <!-- SVG Presisi Logo SMP Negeri 6 Kota Blitar -->
+                            <svg class="w-full h-full" viewBox="0 0 500 600" xmlns="http://www.w3.org/2000/svg">
+                                <ellipse cx="250" cy="300" rx="235" ry="285" fill="#2d0b4e"/>
+                                <ellipse cx="250" cy="300" rx="220" ry="270" fill="#ffffff"/>
+                                <ellipse cx="250" cy="300" rx="210" ry="260" fill="#2d0b4e"/>
+                                <ellipse cx="250" cy="300" rx="198" ry="248" fill="#009bee"/>
+                                <defs>
+                                    <path id="pathTopLogin" d="M 80,300 A 170,220 0 0,1 420,300" fill="none"/>
+                                </defs>
+                                <text font-family="'Inter', sans-serif" font-weight="900" font-size="42" fill="#ffffff" letter-spacing="2">
+                                    <textPath href="#pathTopLogin" startOffset="50%" text-anchor="middle">SMP NEGERI 6</textPath>
+                                </text>
+                                <text x="250" y="508" font-family="'Inter', sans-serif" font-weight="900" font-size="38" fill="#ffffff" text-anchor="middle" letter-spacing="3">KOTA BLITAR</text>
+                                <rect x="222" y="220" width="56" height="180" fill="#ffcc00" stroke="#2d0b4e" stroke-width="5"/>
+                                <path d="M 222,400 L 222,418 A 28,28 0 0,0 278,418 L 278,400 Z" fill="#ffcc00" stroke="#2d0b4e" stroke-width="5"/>
+                                <rect x="216" y="215" width="68" height="20" rx="4" fill="#ffcc00" stroke="#2d0b4e" stroke-width="5"/>
+                                <path d="M 250,110 Q 288,160 280,225 L 220,225 Q 212,160 250,110 Z" fill="#f03800" stroke="#2d0b4e" stroke-width="5"/>
+                                <path d="M 250,140 Q 272,175 268,225 L 232,225 Q 228,175 250,140 Z" fill="#ffcc00"/>
+                                <g stroke="#2d0b4e" stroke-width="6" stroke-linejoin="round">
+                                    <path d="M 250,270 Q 175,250 100,255 L 100,340 Q 175,335 250,370 Z" fill="#ffffff"/>
+                                    <path d="M 250,270 Q 325,250 400,255 L 400,340 Q 325,335 250,370 Z" fill="#ffffff"/>
+                                </g>
+                                <path d="M 130,282 Q 180,280 230,294 M 125,302 Q 180,300 230,314 M 120,322 Q 180,320 230,334" stroke="#2d0b4e" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+                                <path d="M 370,282 Q 320,280 270,294 M 375,302 Q 320,300 270,314 M 380,322 Q 320,320 270,334" stroke="#2d0b4e" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+                                <g stroke="#2d0b4e" stroke-width="5">
+                                    <path d="M 90,405 L 65,435 L 110,426 Z" fill="#e60000"/>
+                                    <path d="M 65,435 L 60,455 L 105,438 L 110,426 Z" fill="#ffffff"/>
+                                    <path d="M 410,405 L 435,435 L 390,426 Z" fill="#e60000"/>
+                                    <path d="M 435,435 L 440,455 L 395,438 L 390,426 Z" fill="#ffffff"/>
+                                    <path d="M 90,405 Q 250,365 410,405 L 410,422 Q 250,382 90,422 Z" fill="#e60000"/>
+                                    <path d="M 90,422 Q 250,382 410,422 L 410,439 Q 250,399 90,439 Z" fill="#ffffff"/>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                    <h2 class="text-xl font-extrabold tracking-tight">Portal Utama Jurnal Online</h2>
+                    <p class="text-xs text-spena-100 mt-1 font-medium">SMP Negeri 6 Kota Blitar</p>
+                </div>
+
+                <form id="loginForm" onsubmit="handleLogin(event)" class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Username / ID User</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                                <i class="fa-solid fa-user-gear"></i>
+                            </span>
+                            <input type="text" id="loginUsername" required class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-spena-500 focus:border-spena-500 outline-none text-sm transition font-medium" placeholder="Masukkan username">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Password</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                                <i class="fa-solid fa-lock"></i>
+                            </span>
+                            <input type="password" id="loginPassword" required class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-spena-500 focus:border-spena-500 outline-none text-sm transition font-medium" placeholder="Masukkan password">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-spena-600 hover:bg-spena-700 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition duration-200 flex items-center justify-center space-x-2 text-sm">
+                        <span>Masuk Aplikasi</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- VIEW 2: GURU DASHBOARD -->
+        <div id="viewGuru" class="hidden space-y-6">
+            <div class="bg-gradient-to-r from-spena-900 via-spena-800 to-spena-700 rounded-2xl p-6 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <span class="inline-block bg-amber-400 text-spena-900 text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest mb-2 shadow-sm">Portal Guru Pengajar</span>
+                    <h2 class="text-2xl font-black tracking-tight" id="guruWelcomeName">Selamat Datang, Bapak/Ibu Guru</h2>
+                    <p class="text-xs text-spena-100 mt-1">Isi jurnal mengajar Anda secara real-time saat melaksanakan KBM di kelas.</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-center border border-white/20 min-w-[200px]">
+                    <div class="text-[10px] text-spena-100 font-bold uppercase tracking-wider">Tanggal & Waktu Saat Ini</div>
+                    <div id="liveDateStr" class="text-sm font-black text-amber-300 mt-0.5">--</div>
+                    <div id="liveClockStr" class="text-xs text-white font-mono mt-0.5">--:--:-- WIB</div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6">
+                <div class="border-b border-slate-200 pb-4 mb-6 flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                        <h3 class="text-lg font-extrabold text-slate-800 flex items-center">
+                            <i class="fa-solid fa-pen-to-square text-spena-600 me-2.5"></i>Form Jurnal Mengajar Real-Time
+                        </h3>
+                        <p class="text-xs text-slate-500 mt-0.5">Isikan data presensi dan materi secara akurat saat KBM berlangsung</p>
+                    </div>
+                    <span class="text-xs bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-bold flex items-center">
+                        <i class="fa-solid fa-circle text-[8px] me-1.5 animate-pulse text-emerald-500"></i> Mode Presensi Aktif
+                    </span>
+                </div>
+
+                <form id="guruJournalForm" onsubmit="submitJournal(event)" class="space-y-6">
+                    <!-- Jam Ke Options & Presensi Button -->
+                    <div class="bg-slate-50 rounded-2xl p-4 sm:p-5 border border-slate-200">
+                        <label class="block text-sm font-extrabold text-slate-800 mb-1">
+                            1. Pilih Jam Pembelajaran & Presensi Hadir <span class="text-rose-500">*</span>
+                        </label>
+                        <p class="text-xs text-slate-500 mb-3">Pilih jam ke berapa Anda mengajar, lalu klik tombol **Presensi Hadir**.</p>
+                        
+                        <div id="jamContainer" class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-9 gap-2 mb-4"></div>
+
+                        <div class="flex flex-wrap items-center gap-3">
+                            <button type="button" onclick="recordAttendance('hadir')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-md hover:shadow-lg transition flex items-center space-x-2">
+                                <i class="fa-solid fa-clock"></i>
+                                <span>Presensi Hadir Mengajar</span>
+                            </button>
+                            <button type="button" onclick="recordAttendance('selesai')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-md hover:shadow-lg transition flex items-center space-x-2">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <span>Selesai Jam Pembelajaran</span>
+                            </button>
+                        </div>
+
+                        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm">
+                                <span class="text-slate-500 font-semibold">Waktu Presensi Hadir:</span>
+                                <input type="text" id="waktuPresensi" readonly required class="font-mono font-bold text-emerald-700 bg-transparent text-right outline-none cursor-default" placeholder="Belum Klik Presensi">
+                            </div>
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm">
+                                <span class="text-slate-500 font-semibold">Waktu Jam Selesai:</span>
+                                <input type="text" id="waktuSelesai" readonly class="font-mono font-bold text-indigo-700 bg-transparent text-right outline-none cursor-default" placeholder="Optional / Setelah Selesai">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kelas & Mapel -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-extrabold text-slate-800 mb-1.5">
+                                2. Pilih Kelas Mengajar <span class="text-rose-500">*</span>
+                            </label>
+                            <select id="journalKelas" required class="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-spena-500 focus:border-spena-500 text-sm font-semibold outline-none bg-white">
+                                <option value="">-- Pilih Kelas (7A - 9H) --</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-extrabold text-slate-800 mb-1.5">
+                                Mata Pelajaran <span class="text-rose-500">*</span>
+                            </label>
+                            <input type="text" id="journalMapel" required class="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-spena-500 focus:border-spena-500 text-sm outline-none font-medium" placeholder="Contoh: Matematika, Bahasa Indonesia">
+                        </div>
+                    </div>
+
+                    <!-- Materi Pembelajaran -->
+                    <div>
+                        <label class="block text-sm font-extrabold text-slate-800 mb-1.5">
+                            3. Materi Pembelajaran & Ringkasan KBM <span class="text-rose-500">*</span>
+                        </label>
+                        <textarea id="journalMateri" rows="3" required class="w-full p-3.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-spena-500 text-sm outline-none font-medium" placeholder="Tuliskan pokok pembahasan, bab, atau latihan soal yang diajarkan..."></textarea>
+                    </div>
+
+                    <!-- Absent Student Table -->
+                    <div class="bg-amber-50/60 rounded-2xl p-4 sm:p-5 border border-amber-200/80">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="block text-sm font-extrabold text-slate-800">
+                                4. Daftar Siswa Tidak Masuk pada Jam Ini
+                            </label>
+                            <button type="button" onclick="addAbsentRow()" class="text-xs bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded-lg font-bold transition shadow-sm">
+                                <i class="fa-solid fa-plus me-1"></i> Tambah Siswa
+                            </button>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-3">Tambahkan nama siswa yang Sakit, Izin, atau Alpha saat jam pelajaran Anda.</p>
+
+                        <div id="absentListContainer" class="space-y-2"></div>
+                    </div>
+
+                    <!-- Kejadian Khusus -->
+                    <div>
+                        <label class="block text-sm font-extrabold text-slate-800 mb-1.5">
+                            5. Catatan Kejadian Khusus (Optional)
+                        </label>
+                        <textarea id="journalCatatan" rows="2" class="w-full p-3.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-spena-500 text-sm outline-none font-medium" placeholder="Contoh: Ada siswa terlambat 15 menit, proyektor ruang kelas mati, dll."></textarea>
+                    </div>
+
+                    <div class="pt-2 flex justify-end">
+                        <button type="submit" class="bg-spena-600 hover:bg-spena-700 text-white font-extrabold px-8 py-3.5 rounded-xl shadow-lg hover:shadow-xl transition flex items-center space-x-2 text-base">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span>Simpan & Publis Jurnal KBM</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6">
+                <h3 class="text-lg font-extrabold text-slate-800 mb-4 flex items-center">
+                    <i class="fa-solid fa-history me-2 text-spena-600"></i>Riwayat Jurnal Hari Ini
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-600">
+                        <thead class="bg-slate-100 text-slate-700 uppercase font-bold">
+                            <tr>
+                                <th class="p-3">Jam Ke</th>
+                                <th class="p-3">Waktu Presensi</th>
+                                <th class="p-3">Kelas</th>
+                                <th class="p-3">Materi</th>
+                                <th class="p-3">Siswa Absen</th>
+                                <th class="p-3">Kejadian Khusus</th>
+                            </tr>
+                        </thead>
+                        <tbody id="guruJournalHistoryTable" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 3: WALI MURID DASHBOARD -->
+        <div id="viewWali" class="hidden space-y-6">
+            <div class="bg-gradient-to-r from-amber-700 via-amber-600 to-amber-800 rounded-2xl p-6 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <span class="inline-block bg-white text-amber-900 text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest mb-2 shadow-sm">Portal Wali Murid</span>
+                    <h2 class="text-2xl font-black tracking-tight" id="waliWelcomeName">Pantauan Pembelajaran Kelas</h2>
+                    <p class="text-xs text-amber-100 mt-1">Pantau jurnal KBM harian guru yang mengajar di kelas putra/putri Anda secara langsung.</p>
+                </div>
+                <div>
+                    <button onclick="openFeedbackModal()" class="bg-white hover:bg-amber-50 text-amber-900 font-extrabold px-5 py-3 rounded-xl shadow-md transition text-xs sm:text-sm flex items-center space-x-2 border border-amber-200">
+                        <i class="fa-solid fa-comment-dots text-amber-600 text-base"></i>
+                        <span>Kirim Kritik & Saran</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 flex flex-wrap items-center justify-between gap-3 shadow-sm">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-filter text-amber-600 text-lg"></i>
+                    <span class="text-xs sm:text-sm font-extrabold text-slate-800">Filter Tampilan Kelas:</span>
+                    <select id="waliFilterKelas" onchange="renderWaliJournalView()" class="p-2.5 border border-slate-300 rounded-xl text-xs font-bold text-slate-800 bg-slate-50 focus:ring-2 focus:ring-amber-500 outline-none">
+                        <!-- Dynamic options -->
+                    </select>
+                </div>
+                <div class="text-xs text-slate-500 font-medium">
+                    Menampilkan data KBM real-time untuk kelas terpilih
+                </div>
+            </div>
+
+            <div id="waliJournalFeed" class="space-y-4"></div>
+        </div>
+
+        <!-- VIEW 4: ADMIN / KEPALA SEKOLAH DASHBOARD -->
+        <div id="viewAdmin" class="hidden space-y-6">
+            <!-- Stat Overview Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Total Jurnal Hari Ini</p>
+                        <p id="statTotalToday" class="text-2xl font-black text-spena-700 mt-1">0</p>
+                    </div>
+                    <div class="w-12 h-12 bg-spena-100 text-spena-600 rounded-2xl flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-book-bookmark"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Guru Aktif Mengajar</p>
+                        <p id="statActiveTeachers" class="text-2xl font-black text-emerald-600 mt-1">0</p>
+                    </div>
+                    <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-user-check"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Kelas Terpantau</p>
+                        <p id="statCoveredClasses" class="text-2xl font-black text-indigo-600 mt-1">0 / 24</p>
+                    </div>
+                    <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-door-open"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Aduan / Masukan Ortus</p>
+                        <p id="statTotalFeedback" class="text-2xl font-black text-amber-600 mt-1">0</p>
+                    </div>
+                    <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Navigation Tabs -->
+            <div class="border-b border-slate-200 flex space-x-6">
+                <button onclick="switchAdminTab('monitoring')" id="adminTabBtn-monitoring" class="pb-3 text-xs sm:text-sm font-extrabold border-b-2 border-spena-600 text-spena-600 transition flex items-center space-x-2">
+                    <i class="fa-solid fa-desktop"></i>
+                    <span>Monitoring Jurnal Guru</span>
+                </button>
+                <button onclick="switchAdminTab('users')" id="adminTabBtn-users" class="pb-3 text-xs sm:text-sm font-extrabold border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition flex items-center space-x-2">
+                    <i class="fa-solid fa-users-gear"></i>
+                    <span>Kelola Akun (Guru & Wali)</span>
+                </button>
+                <button onclick="switchAdminTab('feedback')" id="adminTabBtn-feedback" class="pb-3 text-xs sm:text-sm font-extrabold border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition flex items-center space-x-2">
+                    <i class="fa-solid fa-envelope-open-text"></i>
+                    <span>Kritik & Saran Wali Murid</span>
+                </button>
+            </div>
+
+            <!-- TAB 1: MONITORING ALL JOURNALS -->
+            <div id="adminTab-monitoring" class="space-y-4">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 flex flex-wrap items-center justify-between gap-3 shadow-sm">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <input type="text" id="adminSearchInput" onkeyup="renderAdminJournals()" placeholder="Cari nama guru, mapel, materi..." class="p-2.5 border border-slate-300 rounded-xl text-xs w-64 focus:ring-2 focus:ring-spena-500 outline-none font-medium">
+                        
+                        <select id="adminFilterKelas" onchange="renderAdminJournals()" class="p-2.5 border border-slate-300 rounded-xl text-xs font-bold text-slate-800 outline-none bg-slate-50">
+                            <option value="ALL">Semua Kelas (7A-9H)</option>
+                        </select>
+                    </div>
+
+                    <button onclick="window.print()" class="no-print bg-slate-800 hover:bg-slate-900 text-white text-xs px-4 py-2.5 rounded-xl font-bold flex items-center space-x-2 shadow">
+                        <i class="fa-solid fa-print"></i>
+                        <span>Cetak Laporan</span>
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-600">
+                            <thead class="bg-spena-800 text-white uppercase font-bold">
+                                <tr>
+                                    <th class="p-3.5">Waktu / Jam</th>
+                                    <th class="p-3.5">Guru Pengajar</th>
+                                    <th class="p-3.5">Kelas</th>
+                                    <th class="p-3.5">Mata Pelajaran</th>
+                                    <th class="p-3.5">Materi Pembelajaran</th>
+                                    <th class="p-3.5">Ketidakhadiran Siswa</th>
+                                    <th class="p-3.5">Catatan Khusus</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminJournalTable" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: USER MANAGEMENT -->
+            <div id="adminTab-users" class="hidden space-y-4">
+                <div class="flex flex-wrap justify-between items-center bg-white p-4 rounded-2xl border border-slate-200 gap-3 shadow-sm">
+                    <div>
+                        <h4 class="font-extrabold text-slate-800 text-sm">Manajemen Pengguna & Pengaturan Aplikasi</h4>
+                        <p class="text-xs text-slate-500">Edit username, reset password guru/wali, atur logo sekolah, atau tambah pengguna baru.</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="openEditLogoModal()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs px-4 py-2.5 rounded-xl font-bold shadow transition flex items-center space-x-2">
+                            <i class="fa-solid fa-image"></i>
+                            <span>Edit Logo Sekolah</span>
+                        </button>
+                        <button onclick="openAddUserModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-4 py-2.5 rounded-xl font-bold shadow transition flex items-center space-x-2">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Tambah Akun Baru</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-600">
+                            <thead class="bg-spena-800 text-white uppercase font-bold">
+                                <tr>
+                                    <th class="p-3.5">Role</th>
+                                    <th class="p-3.5">Nama Pengguna</th>
+                                    <th class="p-3.5">Username</th>
+                                    <th class="p-3.5">Password</th>
+                                    <th class="p-3.5">Akses Kelas</th>
+                                    <th class="p-3.5 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminUserTable" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: FEEDBACK / KRITIK & SARAN -->
+            <div id="adminTab-feedback" class="hidden space-y-4">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                    <h4 class="font-extrabold text-slate-800 text-sm mb-0.5">Daftar Masukan & Kritik Saran Wali Murid</h4>
+                    <p class="text-xs text-slate-500">Aduan dan laporan langsung dari orang tua murid untuk evaluasi KBM.</p>
+                </div>
+
+                <div id="adminFeedbackList" class="space-y-3"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500 no-print">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="font-semibold">SMP Negeri 6 Kota Blitar &copy; 2026 • Sistem Jurnal Online & Pemantauan Kinerja KBM</p>
+        </div>
+    </footer>
+
+    <!-- MODAL: EDIT LOGO SEKOLAH (ADMIN) -->
+    <div id="modalEditLogo" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden">
+            <div class="bg-spena-800 text-white p-4 px-6 flex justify-between items-center">
+                <h3 class="font-bold text-sm flex items-center space-x-2">
+                    <i class="fa-solid fa-image text-amber-400"></i>
+                    <span>Pengaturan Logo Aplikasi Sekolah</span>
+                </h3>
+                <button onclick="closeEditLogoModal()" class="text-slate-300 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div class="text-center">
+                    <p class="text-xs font-bold text-slate-500 uppercase mb-2">Pratinjau Logo Saat Ini</p>
+                    <div class="w-24 h-24 bg-white rounded-full mx-auto flex items-center justify-center p-2 border-2 border-spena-500 shadow-md overflow-hidden" id="modalLogoPreview"></div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Unggah File Gambar Logo Baru</label>
+                    <input type="file" id="logoFileInput" accept="image/*" onchange="previewUploadedLogo(event)" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-spena-50 file:text-spena-700 hover:file:bg-spena-100 cursor-pointer border border-slate-200 rounded-xl">
+                    <p class="text-[10px] text-slate-400 mt-1">Format didukung: PNG, JPG, JPEG, SVG.</p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Atau Gunakan Link / URL Gambar</label>
+                    <input type="url" id="logoUrlInput" placeholder="https://example.com/logo.png" oninput="previewLogoUrl(this.value)" class="w-full p-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-spena-500">
+                </div>
+
+                <div class="pt-2 flex justify-between items-center">
+                    <button type="button" onclick="resetDefaultLogo()" class="text-xs text-rose-600 hover:underline font-bold flex items-center space-x-1">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>Reset Logo Default</span>
+                    </button>
+                    <div class="flex space-x-2">
+                        <button type="button" onclick="closeEditLogoModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100">Batal</button>
+                        <button type="button" onclick="saveLogoSettings()" class="bg-spena-600 hover:bg-spena-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold shadow">Simpan Logo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: GANTI PASSWORD -->
+    <div id="modalChangePassword" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden">
+            <div class="bg-spena-800 text-white p-4 px-6 flex justify-between items-center">
+                <h3 class="font-bold text-sm flex items-center space-x-2">
+                    <i class="fa-solid fa-key text-amber-400"></i>
+                    <span>Ganti Password Akun</span>
+                </h3>
+                <button onclick="closeChangePasswordModal()" class="text-slate-300 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="saveNewPassword(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Password Lama</label>
+                    <input type="password" id="oldPasswordInput" required class="w-full p-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-spena-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Password Baru</label>
+                    <input type="password" id="newPasswordInput" required minlength="4" class="w-full p-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-spena-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Konfirmasi Password Baru</label>
+                    <input type="password" id="confirmPasswordInput" required minlength="4" class="w-full p-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-spena-500">
+                </div>
+                <div class="pt-2 flex justify-end space-x-2">
+                    <button type="button" onclick="closeChangePasswordModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100">Batal</button>
+                    <button type="submit" class="bg-spena-600 hover:bg-spena-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold shadow">Simpan Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: KRITIK & SARAN WALI MURID -->
+    <div id="modalFeedback" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden">
+            <div class="bg-amber-600 text-white p-4 px-6 flex justify-between items-center">
+                <h3 class="font-bold text-sm flex items-center space-x-2">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>Form Kritik & Saran Wali Murid</span>
+                </h3>
+                <button onclick="closeFeedbackModal()" class="text-amber-100 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="submitFeedback(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Nama Orang Tua / Wali <span class="text-rose-500">*</span></label>
+                    <input type="text" id="fbNamaOrtu" required class="w-full p-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-amber-500">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Nama Siswa / Murid <span class="text-rose-500">*</span></label>
+                        <input type="text" id="fbNamaMurid" required class="w-full p-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-amber-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Kelas <span class="text-rose-500">*</span></label>
+                        <select id="fbKelas" required class="w-full p-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-amber-500 bg-white">
+                            <!-- Dynamic options -->
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Isi Aduan / Kritik & Saran <span class="text-rose-500">*</span></label>
+                    <textarea id="fbAduan" rows="4" required class="w-full p-3 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-amber-500" placeholder="Tuliskan aduan, masukan, atau kendala KBM yang dialami..."></textarea>
+                </div>
+                <div class="pt-2 flex justify-end space-x-2">
+                    <button type="button" onclick="closeFeedbackModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100">Batal</button>
+                    <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow">Kirimkan Sekarang</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: TAMBAH / EDIT USER (ADMIN) -->
+    <div id="modalAddUser" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden">
+            <div class="bg-spena-800 text-white p-4 px-6 flex justify-between items-center">
+                <h3 class="font-bold text-sm flex items-center space-x-2" id="addUserModalTitle">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <span>Tambah User Pengguna Baru</span>
+                </h3>
+                <button onclick="closeAddUserModal()" class="text-slate-300 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="saveUserAccount(event)" class="p-6 space-y-4">
+                <input type="hidden" id="editUserId" value="">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Role Akun <span class="text-rose-500">*</span></label>
+                    <select id="userRoleSelect" onchange="toggleUserRoleFields()" required class="w-full p-2.5 rounded-xl border border-slate-300 text-sm outline-none bg-white">
+                        <option value="guru">Guru Pengajar</option>
+                        <option value="wali">Wali Murid</option>
+                        <option value="admin">Administrator / Kepala Sekolah</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Nama Lengkap Pengguna <span class="text-rose-500">*</span></label>
+                    <input type="text" id="userNameInput" required class="w-full p-2.5 rounded-xl border border-slate-300 text-sm outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Username Login <span class="text-rose-500">*</span></label>
+                    <input type="text" id="userUsernameInput" required class="w-full p-2.5 rounded-xl border border-slate-300 text-sm outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Password <span class="text-rose-500">*</span></label>
+                    <input type="text" id="userPasswordInput" required class="w-full p-2.5 rounded-xl border border-slate-300 text-sm outline-none">
+                </div>
+                <div id="userClassField" class="hidden">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Akses Spesifik Kelas (Khusus Wali Murid)</label>
+                    <select id="userClassSelect" class="w-full p-2.5 rounded-xl border border-slate-300 text-sm outline-none bg-white">
+                        <!-- Dynamic options -->
+                    </select>
+                </div>
+                <div class="pt-2 flex justify-end space-x-2">
+                    <button type="button" onclick="closeAddUserModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100">Batal</button>
+                    <button type="submit" class="bg-spena-600 hover:bg-spena-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow">Simpan Akun</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATIONS -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <script>
+        // Storage keys for localStorage persistence across browser sessions/reloads
+        const STORAGE_KEY_USERS = 'SPENA_USERS_V2';
+        const STORAGE_KEY_JOURNALS = 'SPENA_JOURNALS_V2';
+        const STORAGE_KEY_FEEDBACKS = 'SPENA_FEEDBACKS_V2';
+        const STORAGE_KEY_LOGO = 'SPENA_LOGO_V2';
+
+        // Class List Generation: 7A..7H, 8A..8H, 9A..9H
+        const CLASS_LIST = [];
+        ['7', '8', '9'].forEach(grade => {
+            ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].forEach(letter => {
+                CLASS_LIST.push(`${grade}${letter}`);
+            });
+        });
+
+        // Default Users
+        const DEFAULT_USERS = [
+            { id: 'u1', username: 'admin', password: 'spena2026', role: 'admin', name: 'Kepala Sekolah / Admin SPENA', classAssigned: '' },
+            { id: 'u2', username: 'guru_ahmad', password: 'guru123', role: 'guru', name: 'Ahmad Subagyo, S.Pd (Matematika)', classAssigned: '' },
+            { id: 'u3', username: 'guru_siti', password: 'guru123', role: 'guru', name: 'Siti Rahmawati, M.Pd (B. Indonesia)', classAssigned: '' },
+            { id: 'u4', username: 'wali_7a', password: 'wali123', role: 'wali', name: 'Orang Tua / Wali Kelas 7A', classAssigned: '7A' },
+            { id: 'u5', username: 'wali_8b', password: 'wali123', role: 'wali', name: 'Orang Tua / Wali Kelas 8B', classAssigned: '8B' }
+        ];
+
+        // Default Journals
+        const DEFAULT_JOURNALS = [
+            {
+                id: 'j1',
+                guruId: 'u2',
+                guruName: 'Ahmad Subagyo, S.Pd (Matematika)',
+                jamKe: '1',
+                waktuPresensi: '07:05:12 WIB',
+                waktuSelesai: '07:45:00 WIB',
+                kelas: '7A',
+                mapel: 'Matematika',
+                materi: 'Persamaan Linear Satu Variabel - Aljabar Dasar & Pembahasan Soal Cerita',
+                absentList: [
+                    { name: 'Budi Santoso', status: 'Sakit' },
+                    { name: 'Dina Maria', status: 'Izin' }
+                ],
+                catatan: 'Proyektor ruang kelas 7A buram, KBM dialihkan ke papan tulis.',
+                timestamp: new Date().toISOString()
+            },
+            {
+                id: 'j2',
+                guruId: 'u3',
+                guruName: 'Siti Rahmawati, M.Pd (B. Indonesia)',
+                jamKe: '2',
+                waktuPresensi: '07:50:30 WIB',
+                waktuSelesai: '08:30:00 WIB',
+                kelas: '8B',
+                mapel: 'Bahasa Indonesia',
+                materi: 'Teks Laporan Hasil Observasi (LHO) - Analisis Kebahasaan',
+                absentList: [],
+                catatan: 'Seluruh siswa antusias mengerjakan tugas struktur teks LHO.',
+                timestamp: new Date().toISOString()
+            }
+        ];
+
+        // Default Feedbacks
+        const DEFAULT_FEEDBACKS = [
+            {
+                id: 'f1',
+                namaOrtu: 'Hendra Setiawan',
+                namaMurid: 'Budi Santoso',
+                kelas: '7A',
+                aduan: 'Mohon info materi tugas matematika hari ini karena anak saya izin sakit.',
+                timestamp: new Date().toLocaleString('id-ID')
+            }
+        ];
+
+        // Application State
+        let usersData = [];
+        let journalEntries = [];
+        let feedbackEntries = [];
+        let currentUser = null;
+        let selectedJamKe = '1';
+        let defaultLogoHTML = '';
+        let currentLogoHTML = '';
+        let tempLogoHTML = '';
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadFromLocalStorage();
+            initClassDropdowns();
+            renderJamKeButtons();
+            startLiveClock();
+            
+            // Capture default logo HTML
+            const defaultElem = document.getElementById('appLogoHeader');
+            if (defaultElem) {
+                defaultLogoHTML = defaultElem.innerHTML;
+                if (!currentLogoHTML) {
+                    currentLogoHTML = defaultLogoHTML;
+                } else {
+                    applyCustomLogoToUI(currentLogoHTML);
+                }
+                tempLogoHTML = currentLogoHTML;
+            }
+            
+            showToast('Aplikasi Jurnal SPENA Siap Digunakan.', 'info');
+        });
+
+        // Load persisted state or fallback
+        function loadFromLocalStorage() {
+            try {
+                const u = localStorage.getItem(STORAGE_KEY_USERS);
+                usersData = u ? JSON.parse(u) : [...DEFAULT_USERS];
+
+                const j = localStorage.getItem(STORAGE_KEY_JOURNALS);
+                journalEntries = j ? JSON.parse(j) : [...DEFAULT_JOURNALS];
+
+                const f = localStorage.getItem(STORAGE_KEY_FEEDBACKS);
+                feedbackEntries = f ? JSON.parse(f) : [...DEFAULT_FEEDBACKS];
+
+                const l = localStorage.getItem(STORAGE_KEY_LOGO);
+                if (l) currentLogoHTML = l;
+            } catch (err) {
+                console.warn('LocalStorage failed, using memory defaults', err);
+                usersData = [...DEFAULT_USERS];
+                journalEntries = [...DEFAULT_JOURNALS];
+                feedbackEntries = [...DEFAULT_FEEDBACKS];
+            }
+        }
+
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(usersData));
+                localStorage.setItem(STORAGE_KEY_JOURNALS, JSON.stringify(journalEntries));
+                localStorage.setItem(STORAGE_KEY_FEEDBACKS, JSON.stringify(feedbackEntries));
+                if (currentLogoHTML) {
+                    localStorage.setItem(STORAGE_KEY_LOGO, currentLogoHTML);
+                }
+            } catch (err) {
+                console.error('Failed to save state to localStorage', err);
+            }
+        }
+
+        function applyCustomLogoToUI(htmlStr) {
+            const h = document.getElementById('appLogoHeader');
+            const l = document.getElementById('appLogoLogin');
+            if (h) h.innerHTML = htmlStr;
+            if (l) l.innerHTML = htmlStr;
+        }
+
+        function openEditLogoModal() {
+            tempLogoHTML = currentLogoHTML || defaultLogoHTML;
+            document.getElementById('modalLogoPreview').innerHTML = tempLogoHTML;
+            document.getElementById('logoFileInput').value = '';
+            document.getElementById('logoUrlInput').value = '';
+            document.getElementById('modalEditLogo').classList.remove('hidden');
+        }
+
+        function closeEditLogoModal() {
+            document.getElementById('modalEditLogo').classList.add('hidden');
+        }
+
+        function previewUploadedLogo(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    tempLogoHTML = `<img src="${e.target.result}" class="w-full h-full object-contain" alt="Logo Sekolah">`;
+                    document.getElementById('modalLogoPreview').innerHTML = tempLogoHTML;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function previewLogoUrl(url) {
+            if (url.trim()) {
+                tempLogoHTML = `<img src="${url.trim()}" class="w-full h-full object-contain" alt="Logo Sekolah" onerror="this.onerror=null; this.src='https://placehold.co/150?text=Error';">`;
+                document.getElementById('modalLogoPreview').innerHTML = tempLogoHTML;
+            }
+        }
+
+        function resetDefaultLogo() {
+            tempLogoHTML = defaultLogoHTML;
+            document.getElementById('modalLogoPreview').innerHTML = tempLogoHTML;
+            document.getElementById('logoFileInput').value = '';
+            document.getElementById('logoUrlInput').value = '';
+            showToast('Logo dikembalikan ke default sekolah.', 'info');
+        }
+
+        function saveLogoSettings() {
+            currentLogoHTML = tempLogoHTML;
+            applyCustomLogoToUI(currentLogoHTML);
+            saveToLocalStorage();
+            closeEditLogoModal();
+            showToast('Logo aplikasi sekolah berhasil diperbarui!', 'success');
+        }
+
+        function startLiveClock() {
+            const updateClock = () => {
+                const now = new Date();
+                const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const dateStr = now.toLocaleDateString('id-ID', optionsDate);
+                const clockStr = now.toLocaleTimeString('id-ID') + ' WIB';
+
+                const elDate = document.getElementById('liveDateStr');
+                const elClock = document.getElementById('liveClockStr');
+                if (elDate) elDate.textContent = dateStr;
+                if (elClock) elClock.textContent = clockStr;
+            };
+            updateClock();
+            setInterval(updateClock, 1000);
+        }
+
+        function initClassDropdowns() {
+            const selects = [
+                document.getElementById('journalKelas'),
+                document.getElementById('waliFilterKelas'),
+                document.getElementById('adminFilterKelas'),
+                document.getElementById('fbKelas'),
+                document.getElementById('userClassSelect')
+            ];
+
+            selects.forEach(sel => {
+                if (!sel) return;
+                const firstOpt = sel.options[0];
+                sel.innerHTML = '';
+                if (firstOpt) sel.appendChild(firstOpt);
+
+                CLASS_LIST.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c;
+                    opt.textContent = `Kelas ${c}`;
+                    sel.appendChild(opt);
+                });
+            });
+        }
+
+        function renderJamKeButtons() {
+            const container = document.getElementById('jamContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            for (let i = 1; i <= 9; i++) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.id = `jamBtn-${i}`;
+                btn.onclick = () => selectJamKe(i.toString());
+                btn.className = `p-2.5 rounded-xl border text-xs font-bold transition flex flex-col items-center justify-center ${
+                    selectedJamKe === i.toString() 
+                    ? 'bg-spena-600 text-white border-spena-600 shadow-md ring-2 ring-spena-300' 
+                    : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
+                }`;
+                btn.innerHTML = `<span>Jam Ke</span><span class="text-sm font-black">${i}</span>`;
+                container.appendChild(btn);
+            }
+        }
+
+        function selectJamKe(jamStr) {
+            selectedJamKe = jamStr;
+            renderJamKeButtons();
+            showToast(`Jam Pembelajaran Ke-${jamStr} dipilih.`, 'info');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const uInput = document.getElementById('loginUsername').value.trim();
+            const pInput = document.getElementById('loginPassword').value;
+
+            const found = usersData.find(u => u.username === uInput && u.password === pInput);
+
+            if (found) {
+                currentUser = found;
+                document.getElementById('loginUsername').value = '';
+                document.getElementById('loginPassword').value = '';
+                
+                updateNavbarUI();
+                switchRoleView(found.role);
+                showToast(`Selamat datang, ${found.name}!`, 'success');
+            } else {
+                showToast('Username atau password salah! Silakan coba lagi.', 'error');
+            }
+        }
+
+        function fillLogin(u, p) {
+            document.getElementById('loginUsername').value = u;
+            document.getElementById('loginPassword').value = p;
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('userDropdown').classList.add('hidden');
+            document.getElementById('navUserMenu').classList.add('hidden');
+            hideAllViews();
+            document.getElementById('viewLogin').classList.remove('hidden');
+            showToast('Anda telah logout dari aplikasi.', 'info');
+        }
+
+        function updateNavbarUI() {
+            if (!currentUser) return;
+            document.getElementById('navUserName').textContent = currentUser.name;
+            document.getElementById('navUserRole').textContent = `Role: ${currentUser.role.toUpperCase()}`;
+            document.getElementById('navUserNameMobile').textContent = currentUser.name;
+            document.getElementById('navUserRoleMobile').textContent = currentUser.role.toUpperCase();
+            document.getElementById('navUserMenu').classList.remove('hidden');
+        }
+
+        function toggleUserDropdown() {
+            document.getElementById('userDropdown').classList.toggle('hidden');
+        }
+
+        function hideAllViews() {
+            ['viewLogin', 'viewGuru', 'viewWali', 'viewAdmin'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+        }
+
+        function switchRoleView(role) {
+            hideAllViews();
+            if (role === 'guru') {
+                document.getElementById('viewGuru').classList.remove('hidden');
+                document.getElementById('guruWelcomeName').textContent = `Selamat Datang, ${currentUser.name}`;
+                renderGuruJournalHistory();
+            } else if (role === 'wali') {
+                document.getElementById('viewWali').classList.remove('hidden');
+                document.getElementById('waliWelcomeName').textContent = `Portal Wali Murid - ${currentUser.name}`;
+                if (currentUser.classAssigned) {
+                    document.getElementById('waliFilterKelas').value = currentUser.classAssigned;
+                }
+                renderWaliJournalView();
+            } else if (role === 'admin') {
+                document.getElementById('viewAdmin').classList.remove('hidden');
+                renderAdminDashboard();
+            }
+        }
+
+        function recordAttendance(type) {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('id-ID') + ' WIB';
+
+            if (type === 'hadir') {
+                document.getElementById('waktuPresensi').value = timeStr;
+                showToast(`Presensi Hadir Jam Ke-${selectedJamKe} dicatat: ${timeStr}`, 'success');
+            } else if (type === 'selesai') {
+                document.getElementById('waktuSelesai').value = timeStr;
+                showToast(`Jam Ke-${selectedJamKe} dicatat selesai: ${timeStr}`, 'success');
+            }
+        }
+
+        function addAbsentRow(name = '', status = 'Sakit') {
+            const container = document.getElementById('absentListContainer');
+            const rowId = 'absent-' + Date.now() + Math.random().toString(36).substring(2, 5);
+
+            const div = document.createElement('div');
+            div.id = rowId;
+            div.className = 'flex items-center space-x-2 bg-white p-2 rounded-xl border border-slate-200 shadow-sm';
+            div.innerHTML = `
+                <input type="text" placeholder="Nama lengkap siswa" value="${name}" class="absent-name p-2 border border-slate-300 rounded-lg text-xs flex-grow outline-none focus:ring-1 focus:ring-amber-500 font-medium">
+                <select class="absent-status p-2 border border-slate-300 rounded-lg text-xs bg-slate-50 font-bold outline-none">
+                    <option value="Sakit" ${status === 'Sakit' ? 'selected' : ''}>Sakit</option>
+                    <option value="Izin" ${status === 'Izin' ? 'selected' : ''}>Izin</option>
+                    <option value="Alpha" ${status === 'Alpha' ? 'selected' : ''}>Alpha (Tanpa Ket.)</option>
+                </select>
+                <button type="button" onclick="document.getElementById('${rowId}').remove()" class="text-rose-500 hover:text-rose-700 p-2 text-sm">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            `;
+            container.appendChild(div);
+        }
+
+        function submitJournal(e) {
+            e.preventDefault();
+
+            const waktuPresensi = document.getElementById('waktuPresensi').value;
+            if (!waktuPresensi) {
+                showToast('Silakan klik tombol "Presensi Hadir Mengajar" terlebih dahulu!', 'error');
+                return;
+            }
+
+            const kelas = document.getElementById('journalKelas').value;
+            const mapel = document.getElementById('journalMapel').value;
+            const materi = document.getElementById('journalMateri').value;
+            const waktuSelesai = document.getElementById('waktuSelesai').value || 'Berlangsung';
+            const catatan = document.getElementById('journalCatatan').value;
+
+            const absentRows = document.querySelectorAll('#absentListContainer > div');
+            const absentList = [];
+            absentRows.forEach(row => {
+                const name = row.querySelector('.absent-name').value.trim();
+                const status = row.querySelector('.absent-status').value;
+                if (name) {
+                    absentList.push({ name, status });
+                }
+            });
+
+            const newJournal = {
+                id: 'j-' + Date.now(),
+                guruId: currentUser.id,
+                guruName: currentUser.name,
+                jamKe: selectedJamKe,
+                waktuPresensi,
+                waktuSelesai,
+                kelas,
+                mapel,
+                materi,
+                absentList,
+                catatan,
+                timestamp: new Date().toISOString()
+            };
+
+            journalEntries.unshift(newJournal);
+            saveToLocalStorage();
+
+            // Reset Form
+            document.getElementById('guruJournalForm').reset();
+            document.getElementById('waktuPresensi').value = '';
+            document.getElementById('waktuSelesai').value = '';
+            document.getElementById('absentListContainer').innerHTML = '';
+
+            renderGuruJournalHistory();
+            showToast('Jurnal KBM berhasil dipublis secara real-time!', 'success');
+        }
+
+        function renderGuruJournalHistory() {
+            const table = document.getElementById('guruJournalHistoryTable');
+            if (!table) return;
+
+            const myHistory = journalEntries.filter(j => j.guruId === currentUser.id);
+
+            if (myHistory.length === 0) {
+                table.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">Belum ada riwayat jurnal yang diisi hari ini.</td></tr>`;
+                return;
+            }
+
+            table.innerHTML = myHistory.map(j => `
+                <tr class="hover:bg-slate-50 transition">
+                    <td class="p-3 font-black text-spena-700">Jam Ke-${j.jamKe}</td>
+                    <td class="p-3">
+                        <div class="font-bold text-slate-800">${j.waktuPresensi}</div>
+                        <div class="text-[10px] text-slate-400">Selesai: ${j.waktuSelesai}</div>
+                    </td>
+                    <td class="p-3 font-black text-slate-800">Kelas ${j.kelas}</td>
+                    <td class="p-3 font-medium">${j.materi}</td>
+                    <td class="p-3">
+                        ${j.absentList.length > 0 
+                            ? j.absentList.map(a => `<span class="inline-block bg-amber-100 text-amber-900 text-[10px] px-2 py-0.5 rounded-md me-1 mb-1 font-bold">${a.name} (${a.status})</span>`).join('')
+                            : '<span class="text-emerald-600 font-bold">Nihil (Hadir Semua)</span>'
+                        }
+                    </td>
+                    <td class="p-3 italic text-slate-500">${j.catatan || '-'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderWaliJournalView() {
+            const filterKelas = document.getElementById('waliFilterKelas').value;
+            const container = document.getElementById('waliJournalFeed');
+            if (!container) return;
+
+            let filtered = journalEntries;
+            if (filterKelas) {
+                filtered = journalEntries.filter(j => j.kelas === filterKelas);
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-2xl p-8 text-center text-slate-400 border border-slate-200 shadow-sm">
+                        <i class="fa-solid fa-folder-open text-4xl mb-3 text-slate-300"></i>
+                        <p class="font-bold text-sm">Belum ada data jurnal KBM terisi untuk Kelas ${filterKelas || 'ini'}.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filtered.map(j => `
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                        <div class="flex items-center space-x-3">
+                            <span class="bg-spena-100 text-spena-800 font-extrabold text-xs px-3 py-1 rounded-full">
+                                Jam Ke-${j.jamKe}
+                            </span>
+                            <span class="font-extrabold text-slate-800 text-sm">Kelas ${j.kelas} - ${j.mapel}</span>
+                        </div>
+                        <div class="text-xs text-slate-500 font-mono flex items-center space-x-1 font-medium">
+                            <i class="fa-solid fa-clock text-amber-500 me-1"></i>
+                            <span>Presensi: ${j.waktuPresensi}</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-0.5">Guru Pengajar</div>
+                        <div class="text-sm font-extrabold text-slate-800">${j.guruName}</div>
+                    </div>
+
+                    <div>
+                        <div class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-1">Materi Pembelajaran</div>
+                        <div class="text-sm text-slate-800 bg-slate-50 p-3.5 rounded-xl border border-slate-100 font-medium">${j.materi}</div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                        <div class="bg-amber-50/70 p-3 rounded-xl border border-amber-100">
+                            <div class="text-xs font-bold text-amber-900 mb-1"><i class="fa-solid fa-user-xmark me-1"></i>Siswa Tidak Masuk:</div>
+                            <div class="text-xs text-slate-700">
+                                ${j.absentList.length > 0 
+                                    ? j.absentList.map(a => `<span class="inline-block bg-white border border-amber-200 text-amber-900 px-2 py-0.5 rounded me-1 mb-1 font-bold">${a.name} (${a.status})</span>`).join('')
+                                    : '<span class="text-emerald-700 font-bold"><i class="fa-solid fa-check me-1"></i>Seluruh Siswa Hadir</span>'
+                                }
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                            <div class="text-xs font-bold text-slate-600 mb-1"><i class="fa-solid fa-note-sticky me-1"></i>Catatan Kejadian Khusus:</div>
+                            <div class="text-xs text-slate-600 italic">${j.catatan || 'Tidak ada catatan khusus.'}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openFeedbackModal() {
+            if (currentUser && currentUser.role === 'wali') {
+                document.getElementById('fbNamaOrtu').value = currentUser.name;
+                if (currentUser.classAssigned) {
+                    document.getElementById('fbKelas').value = currentUser.classAssigned;
+                }
+            }
+            document.getElementById('modalFeedback').classList.remove('hidden');
+        }
+
+        function closeFeedbackModal() {
+            document.getElementById('modalFeedback').classList.add('hidden');
+        }
+
+        function submitFeedback(e) {
+            e.preventDefault();
+            const namaOrtu = document.getElementById('fbNamaOrtu').value.trim();
+            const namaMurid = document.getElementById('fbNamaMurid').value.trim();
+            const kelas = document.getElementById('fbKelas').value;
+            const aduan = document.getElementById('fbAduan').value.trim();
+
+            const newFb = {
+                id: 'f-' + Date.now(),
+                namaOrtu,
+                namaMurid,
+                kelas,
+                aduan,
+                timestamp: new Date().toLocaleString('id-ID')
+            };
+
+            feedbackEntries.unshift(newFb);
+            saveToLocalStorage();
+            closeFeedbackModal();
+            document.getElementById('fbAduan').value = '';
+            document.getElementById('fbNamaMurid').value = '';
+            showToast('Kritik & Saran Anda berhasil dikirim ke Admin / Kepala Sekolah!', 'success');
+        }
+
+        function switchAdminTab(tabName) {
+            ['monitoring', 'users', 'feedback'].forEach(t => {
+                document.getElementById(`adminTab-${t}`).classList.add('hidden');
+                const btn = document.getElementById(`adminTabBtn-${t}`);
+                btn.classList.remove('border-spena-600', 'text-spena-600');
+                btn.classList.add('border-transparent', 'text-slate-500');
+            });
+
+            document.getElementById(`adminTab-${tabName}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`adminTabBtn-${tabName}`);
+            activeBtn.classList.add('border-spena-600', 'text-spena-600');
+            activeBtn.classList.remove('border-transparent', 'text-slate-500');
+
+            if (tabName === 'monitoring') renderAdminJournals();
+            if (tabName === 'users') renderAdminUsers();
+            if (tabName === 'feedback') renderAdminFeedback();
+        }
+
+        function renderAdminDashboard() {
+            document.getElementById('statTotalToday').textContent = journalEntries.length;
+            
+            const activeTeachersCount = new Set(journalEntries.map(j => j.guruId)).size;
+            document.getElementById('statActiveTeachers').textContent = activeTeachersCount;
+
+            const activeClassesCount = new Set(journalEntries.map(j => j.kelas)).size;
+            document.getElementById('statCoveredClasses').textContent = `${activeClassesCount} / 24`;
+
+            document.getElementById('statTotalFeedback').textContent = feedbackEntries.length;
+
+            renderAdminJournals();
+        }
+
+        function renderAdminJournals() {
+            const search = document.getElementById('adminSearchInput')?.value.toLowerCase() || '';
+            const kelasFilter = document.getElementById('adminFilterKelas')?.value || 'ALL';
+            const table = document.getElementById('adminJournalTable');
+            if (!table) return;
+
+            let filtered = journalEntries.filter(j => {
+                const matchesSearch = j.guruName.toLowerCase().includes(search) || 
+                                      j.mapel.toLowerCase().includes(search) || 
+                                      j.materi.toLowerCase().includes(search);
+                const matchesKelas = kelasFilter === 'ALL' || j.kelas === kelasFilter;
+                return matchesSearch && matchesKelas;
+            });
+
+            if (filtered.length === 0) {
+                table.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">Tidak ada data jurnal yang cocok dengan pencarian.</td></tr>`;
+                return;
+            }
+
+            table.innerHTML = filtered.map(j => `
+                <tr class="hover:bg-slate-50 transition">
+                    <td class="p-3.5">
+                        <span class="font-extrabold text-spena-800">Jam Ke-${j.jamKe}</span>
+                        <div class="text-[10px] text-slate-400 font-mono">${j.waktuPresensi}</div>
+                    </td>
+                    <td class="p-3.5 font-bold text-slate-800">${j.guruName}</td>
+                    <td class="p-3.5"><span class="bg-slate-100 font-extrabold px-2.5 py-1 rounded-lg text-slate-700">Kelas ${j.kelas}</span></td>
+                    <td class="p-3.5 font-bold text-spena-700">${j.mapel}</td>
+                    <td class="p-3.5 max-w-xs font-medium">${j.materi}</td>
+                    <td class="p-3.5">
+                        ${j.absentList.length > 0 
+                            ? j.absentList.map(a => `<span class="inline-block bg-rose-100 text-rose-800 text-[10px] px-2 py-0.5 rounded me-1 mb-1 font-bold">${a.name} (${a.status})</span>`).join('')
+                            : '<span class="text-emerald-600 font-bold">Hadir Semua</span>'
+                        }
+                    </td>
+                    <td class="p-3.5 text-slate-500 italic">${j.catatan || '-'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderAdminUsers() {
+            const table = document.getElementById('adminUserTable');
+            if (!table) return;
+
+            table.innerHTML = usersData.map(u => `
+                <tr class="hover:bg-slate-50 transition">
+                    <td class="p-3.5 uppercase font-bold text-[10px]">
+                        <span class="${u.role === 'admin' ? 'bg-indigo-100 text-indigo-800' : u.role === 'guru' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'} px-2.5 py-1 rounded-md">
+                            ${u.role}
+                        </span>
+                    </td>
+                    <td class="p-3.5 font-extrabold text-slate-800">${u.name}</td>
+                    <td class="p-3.5 font-mono text-xs font-bold text-slate-600">${u.username}</td>
+                    <td class="p-3.5 font-mono text-xs font-bold text-slate-600">${u.password}</td>
+                    <td class="p-3.5 font-bold text-slate-600">${u.classAssigned ? 'Kelas ' + u.classAssigned : '-'}</td>
+                    <td class="p-3.5 text-center space-x-1">
+                        <button onclick="editUser('${u.id}')" class="bg-amber-500 hover:bg-amber-600 text-white p-2 rounded-xl text-xs shadow-sm" title="Edit Akun & Password">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        ${u.username !== 'admin' ? `
+                            <button onclick="deleteUser('${u.id}')" class="bg-rose-500 hover:bg-rose-600 text-white p-2 rounded-xl text-xs shadow-sm" title="Hapus User">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        ` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function toggleUserRoleFields() {
+            const role = document.getElementById('userRoleSelect').value;
+            const classField = document.getElementById('userClassField');
+            if (role === 'wali') {
+                classField.classList.remove('hidden');
+            } else {
+                classField.classList.add('hidden');
+            }
+        }
+
+        function openAddUserModal(userId = null) {
+            document.getElementById('editUserId').value = userId || '';
+            if (userId) {
+                const u = usersData.find(x => x.id === userId);
+                document.getElementById('addUserModalTitle').innerHTML = `<i class="fa-solid fa-user-pen"></i><span>Edit Akun Pengguna</span>`;
+                document.getElementById('userRoleSelect').value = u.role;
+                document.getElementById('userNameInput').value = u.name;
+                document.getElementById('userUsernameInput').value = u.username;
+                document.getElementById('userPasswordInput').value = u.password;
+                document.getElementById('userClassSelect').value = u.classAssigned || '7A';
+            } else {
+                document.getElementById('addUserModalTitle').innerHTML = `<i class="fa-solid fa-user-plus"></i><span>Tambah User Pengguna Baru</span>`;
+                document.getElementById('editUserId').value = '';
+                document.getElementById('userNameInput').value = '';
+                document.getElementById('userUsernameInput').value = '';
+                document.getElementById('userPasswordInput').value = '';
+            }
+            toggleUserRoleFields();
+            document.getElementById('modalAddUser').classList.remove('hidden');
+        }
+
+        function closeAddUserModal() {
+            document.getElementById('modalAddUser').classList.add('hidden');
+        }
+
+        function saveUserAccount(e) {
+            e.preventDefault();
+            const editId = document.getElementById('editUserId').value;
+            const role = document.getElementById('userRoleSelect').value;
+            const name = document.getElementById('userNameInput').value.trim();
+            const username = document.getElementById('userUsernameInput').value.trim();
+            const password = document.getElementById('userPasswordInput').value.trim();
+            const classAssigned = role === 'wali' ? document.getElementById('userClassSelect').value : '';
+
+            if (editId) {
+                const u = usersData.find(x => x.id === editId);
+                if (u) {
+                    u.role = role;
+                    u.name = name;
+                    u.username = username;
+                    u.password = password;
+                    u.classAssigned = classAssigned;
+                    showToast('Data akun pengguna berhasil diperbarui!', 'success');
+                }
+            } else {
+                usersData.push({
+                    id: 'u-' + Date.now(),
+                    role,
+                    name,
+                    username,
+                    password,
+                    classAssigned
+                });
+                showToast('Akun pengguna baru berhasil ditambahkan!', 'success');
+            }
+
+            saveToLocalStorage();
+            closeAddUserModal();
+            renderAdminUsers();
+        }
+
+        function editUser(id) {
+            openAddUserModal(id);
+        }
+
+        function deleteUser(id) {
+            usersData = usersData.filter(u => u.id !== id);
+            saveToLocalStorage();
+            renderAdminUsers();
+            showToast('Akun telah dihapus.', 'info');
+        }
+
+        function renderAdminFeedback() {
+            const container = document.getElementById('adminFeedbackList');
+            if (!container) return;
+
+            if (feedbackEntries.length === 0) {
+                container.innerHTML = `<div class="p-6 text-center text-slate-400 font-medium">Belum ada aduan atau kritik saran dari wali murid.</div>`;
+                return;
+            }
+
+            container.innerHTML = feedbackEntries.map(f => `
+                <div class="bg-amber-50/70 p-4 rounded-2xl border border-amber-200/80 space-y-2">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="font-extrabold text-slate-800 text-sm">${f.namaOrtu}</span>
+                            <span class="text-xs text-slate-600 me-2"> (Orang Tua dari <b>${f.namaMurid}</b> - Kelas ${f.kelas})</span>
+                        </div>
+                        <span class="text-[10px] text-slate-400 font-mono font-bold">${f.timestamp}</span>
+                    </div>
+                    <div class="text-xs text-slate-800 bg-white p-3.5 rounded-xl border border-amber-100 font-medium leading-relaxed">
+                        "${f.aduan}"
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openChangePasswordModal() {
+            document.getElementById('userDropdown').classList.add('hidden');
+            document.getElementById('modalChangePassword').classList.remove('hidden');
+        }
+
+        function closeChangePasswordModal() {
+            document.getElementById('modalChangePassword').classList.add('hidden');
+        }
+
+        function saveNewPassword(e) {
+            e.preventDefault();
+            const oldP = document.getElementById('oldPasswordInput').value;
+            const newP = document.getElementById('newPasswordInput').value;
+            const confP = document.getElementById('confirmPasswordInput').value;
+
+            if (oldP !== currentUser.password) {
+                showToast('Password lama Anda tidak cocok!', 'error');
+                return;
+            }
+
+            if (newP !== confP) {
+                showToast('Konfirmasi password baru tidak sesuai!', 'error');
+                return;
+            }
+
+            currentUser.password = newP;
+            const u = usersData.find(x => x.id === currentUser.id);
+            if (u) u.password = newP;
+
+            saveToLocalStorage();
+            closeChangePasswordModal();
+            document.getElementById('oldPasswordInput').value = '';
+            document.getElementById('newPasswordInput').value = '';
+            document.getElementById('confirmPasswordInput').value = '';
+            showToast('Password Anda berhasil diperbarui!', 'success');
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            const bgClass = type === 'success' ? 'bg-emerald-800 text-white' : type === 'error' ? 'bg-rose-800 text-white' : 'bg-slate-800 text-white';
+            const icon = type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+
+            toast.className = `${bgClass} p-3.5 rounded-2xl shadow-2xl flex items-center space-x-3 text-xs font-semibold pointer-events-auto transition duration-300 transform translate-y-2 opacity-0 max-w-sm border border-white/10`;
+            toast.innerHTML = `
+                <i class="fa-solid ${icon} text-base"></i>
+                <span class="flex-grow">${message}</span>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
