@@ -261,7 +261,7 @@
                             <label class="block text-sm font-extrabold text-slate-800 mb-1.5">
                                 Mata Pelajaran <span class="text-rose-500">*</span>
                             </label>
-                            <input type="text" id="journalMapel" required class="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-spena-500 focus:border-spena-500 text-sm outline-none font-medium" placeholder="Contoh: Matematika, Bahasa Indonesia">
+                            <select id="journalMapel" required class="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-spena-500 focus:border-spena-500 text-sm outline-none font-medium bg-white"></select>
                         </div>
                     </div>
 
@@ -320,11 +320,13 @@
                                 <th class="p-3">Materi Pembelajaran</th>
                                 <th class="p-3">Siswa Absen</th>
                                 <th class="p-3">Catatan Khusus</th>
+                                <th class="p-3 text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="guruJournalHistoryTable" class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
+                <div id="guruJournalPager" class="flex flex-wrap items-center justify-center gap-1.5 p-3 border-t border-slate-100 no-print"></div>
             </div>
             </div>
 
@@ -401,20 +403,27 @@
 
             <div id="wkPane-nilai" class="hidden space-y-4">
                 <div class="bg-white p-4 rounded-2xl border border-slate-200 flex flex-wrap items-center gap-3 shadow-sm">
-                    <select id="wkGbSelect" onchange="wkGbId=this.value; renderWkNilai()" class="p-3 border border-slate-300 rounded-xl text-sm font-bold bg-slate-50 flex-grow min-w-[220px]"></select>
                     <div id="wkPrintBtns" class="flex gap-2">
-                        <button onclick="printGradebooks([getGb(wkGbId)])" class="bg-slate-800 hover:bg-slate-900 text-white text-xs px-4 py-2.5 rounded-xl font-bold flex items-center space-x-2"><i class="fa-solid fa-print"></i><span>Cetak Mapel Ini</span></button>
-                        <button onclick="printGradebooks(gradebooksData.filter(g => g.kelas === wkClass()))" class="bg-slate-700 hover:bg-slate-800 text-white text-xs px-4 py-2.5 rounded-xl font-bold flex items-center space-x-2"><i class="fa-solid fa-print"></i><span>Cetak Semua Mapel</span></button>
+                        <button id="wkPrintOne" onclick="printGradebooks([getGb(wkGbId)])" class="bg-slate-800 hover:bg-slate-900 text-white text-xs px-4 py-2.5 rounded-xl font-bold flex items-center space-x-2"><i class="fa-solid fa-print"></i><span>Cetak Mapel Ini</span></button>
+                        <button id="wkPrintAll" onclick="printGradebooks(gradebooksData.filter(g => g.kelas === wkClass()))" class="bg-slate-700 hover:bg-slate-800 text-white text-xs px-4 py-2.5 rounded-xl font-bold flex items-center space-x-2"><i class="fa-solid fa-print"></i><span>Cetak Semua Mapel</span></button>
                     </div>
                 </div>
                 <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm"><div id="wkGbHost"></div></div>
             </div>
 
             <div id="wkPane-catatan" class="hidden space-y-4">
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-3">
+                    <h3 class="text-base font-extrabold text-slate-800 flex items-center"><i class="fa-solid fa-user-plus me-2 text-teal-600"></i><span>Daftar Murid Kelas</span></h3>
+                    <div class="flex flex-wrap gap-2">
+                        <input type="text" id="wkRosterNama" onkeydown="if(event.key==='Enter'){event.preventDefault();addRosterName();}" placeholder="Ketik nama murid (beberapa nama: pisahkan dengan koma)" class="flex-grow min-w-[220px] p-3 border border-slate-300 rounded-xl text-sm font-medium">
+                        <button type="button" onclick="addRosterName()" class="bg-teal-600 hover:bg-teal-700 text-white text-sm font-extrabold px-5 py-3 rounded-xl shadow-sm">Tambah Murid</button>
+                    </div>
+                    <div id="wkRosterList" class="flex flex-wrap gap-2"></div>
+                </div>
                 <form onsubmit="saveWkNote(event)" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-3">
                     <h3 class="text-base font-extrabold text-slate-800 flex items-center"><i class="fa-solid fa-pen me-2 text-teal-600"></i><span id="wkNoteFormTitle">Tambah Catatan Anak</span></h3>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Nama Siswa *</label><input list="wkNoteNames" id="wkNoteSiswa" required class="w-full p-3 border border-slate-300 rounded-xl text-sm font-medium" placeholder="Ketik / pilih nama"><datalist id="wkNoteNames"></datalist></div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Nama Siswa *</label><select id="wkNoteSiswa" required class="w-full p-3 border border-slate-300 rounded-xl text-sm font-bold bg-slate-50"></select></div>
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Jenis Catatan *</label><select id="wkNoteJenis" class="w-full p-3 border border-slate-300 rounded-xl text-sm font-bold bg-slate-50"><option value="baik">Catatan Baik</option><option value="prestasi">Prestasi</option><option value="buruk">Catatan Buruk / Pelanggaran</option></select></div>
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal *</label><input type="date" id="wkNoteTanggal" required class="w-full p-3 border border-slate-300 rounded-xl text-sm font-medium"></div>
                     </div>
@@ -708,7 +717,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Mata Pelajaran</label>
-                    <input type="text" id="editJournalMapel" required class="w-full p-2.5 border rounded-xl text-xs font-medium">
+                    <select id="editJournalMapel" required class="w-full p-2.5 border rounded-xl text-xs font-bold bg-slate-50"></select>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Materi Pembelajaran</label>
@@ -985,6 +994,7 @@
         let feedbackEntries = JSON.parse(localStorage.getItem('spena_feedbacks')) || [];
         let gradebooksData = JSON.parse(localStorage.getItem('spena_gradebooks')) || [];
         let notesData = JSON.parse(localStorage.getItem('spena_notes')) || [];
+        let rosterData = JSON.parse(localStorage.getItem('spena_roster')) || [];
 
         let currentUser = null;
         let activeAdminTab = 'monitoring';
@@ -1064,6 +1074,7 @@
             localStorage.setItem('spena_logo', customLogo);
             localStorage.setItem('spena_gradebooks', JSON.stringify(gradebooksData));
             localStorage.setItem('spena_notes', JSON.stringify(notesData));
+            localStorage.setItem('spena_roster', JSON.stringify(rosterData));
 
             if (triggerCloudSync && googleScriptUrl) {
                 queueChanges();
@@ -1085,7 +1096,7 @@
         }
 
         // --- SINKRONISASI PER-RECORD (v2) ---
-        const APP_VERSION = '2026-09-30-4'; // naikkan angka ini + version.json setiap update
+        const APP_VERSION = '2026-09-30-5'; // naikkan angka ini + version.json setiap update
         const SYNC_MS = 20000;
         let syncSnap = {};
         let pendingOps = JSON.parse(localStorage.getItem('spena_pending') || '[]');
@@ -1099,6 +1110,7 @@
             const c = collections();
             for (const k in c) c[k].forEach(r => { syncSnap[k + ':' + r.id] = JSON.stringify(r); });
             syncSnap['settings:logo'] = JSON.stringify(customLogo);
+            rosterData.forEach(r => { syncSnap['settings:' + r.id] = JSON.stringify(r); });
         }
 
         function addOp(op) {
@@ -1120,6 +1132,11 @@
                 syncSnap['settings:logo'] = logoJs;
                 addOp({ c: 'settings', op: 'upsert', id: 'logo', data: { id: 'logo', value: customLogo } });
             }
+            rosterData.forEach(r => {
+                const key = 'settings:' + r.id, js = JSON.stringify(r);
+                seen[key] = 1;
+                if (syncSnap[key] !== js) { syncSnap[key] = js; addOp({ c: 'settings', op: 'upsert', id: r.id, data: r }); }
+            });
             Object.keys(syncSnap).forEach(key => {
                 if (seen[key]) return;
                 delete syncSnap[key];
@@ -1143,6 +1160,7 @@
                 if (j.status !== 'success') throw new Error(j.message || 'Server menolak data');
                 pendingOps = pendingOps.filter(o => !batch.includes(o));
                 localStorage.setItem('spena_pending', JSON.stringify(pendingOps));
+                if (pendingOps.length) setTimeout(flushPending, 50); // ada perubahan baru saat mengirim: kirim segera
             } catch (err) {
                 console.warn('Kirim ke Google Sheets tertunda, akan dicoba lagi:', err);
                 setSyncBadge(false);
@@ -1160,6 +1178,7 @@
 
             if (fullReplace) {
                 Object.values(collections()).forEach(a => { a.length = 0; });
+                rosterData.length = 0;
                 syncSnap = {};
             }
             const pendingKeys = new Set(pendingOps.map(o => o.c + ':' + o.id));
@@ -1180,9 +1199,21 @@
                 }
             }));
             (d.settings || []).forEach(rec => {
-                if (rec.id !== 'logo' || rec.deleted || !rec.data || pendingKeys.has('settings:logo')) return;
-                if (customLogo !== rec.data.value) { customLogo = rec.data.value; changed = true; }
-                syncSnap['settings:logo'] = JSON.stringify(customLogo);
+                const key = 'settings:' + rec.id;
+                if (pendingKeys.has(key)) return;
+                if (rec.id === 'logo') {
+                    if (rec.deleted || !rec.data) return;
+                    if (customLogo !== rec.data.value) { customLogo = rec.data.value; changed = true; }
+                    syncSnap[key] = JSON.stringify(customLogo);
+                } else if (String(rec.id).startsWith('rs-')) {
+                    const i = rosterData.findIndex(x => x.id === rec.id);
+                    if (rec.deleted) { if (i >= 0) { rosterData.splice(i, 1); changed = true; } delete syncSnap[key]; }
+                    else if (rec.data) {
+                        const js = JSON.stringify(rec.data);
+                        if (syncSnap[key] !== js) { if (i >= 0) rosterData[i] = rec.data; else rosterData.push(rec.data); changed = true; }
+                        syncSnap[key] = js;
+                    }
+                }
             });
 
             lastTs = d.ts;
@@ -1413,7 +1444,7 @@
                 return;
             }
 
-            guruTab = 'jurnal'; wkTab = 'jurnal'; guruGbId = null; admGbId = null;
+            guruTab = 'jurnal'; wkTab = 'jurnal'; guruGbId = null; admGbId = null; wkGbId = null; guruHistPage = 1;
             applyLoginSession(user);
             showToast(`Selamat datang, ${user.name}!`, 'success');
         }
@@ -1533,24 +1564,46 @@
             document.getElementById('waktuPresensi').value = '';
             document.getElementById('absentListContainer').innerHTML = '';
 
+            guruHistPage = 1;
             renderGuruJournalHistory();
             showToast('Jurnal KBM berhasil disimpan dan dipublikasikan!', 'success');
         }
 
+        let guruHistPage = 1;
+        const HIST_PAGE_SIZE = 10;
+        function pagerHTML(total, cur, fn) {
+            const pages = Math.ceil(total / HIST_PAGE_SIZE);
+            if (pages <= 1) return '';
+            const set = new Set([1, pages, cur - 1, cur, cur + 1]);
+            const nums = [...set].filter(n => n >= 1 && n <= pages).sort((x, y) => x - y);
+            const btn = (label, p, active, dis) => `<button ${dis ? 'disabled' : `onclick="${fn}(${p})"`} class="min-w-[40px] h-10 px-3 rounded-xl text-sm font-extrabold border ${active ? 'bg-spena-700 text-white border-spena-700' : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'} ${dis ? 'opacity-40 cursor-not-allowed' : ''}">${label}</button>`;
+            let h = btn('&laquo; Sebelumnya', cur - 1, false, cur === 1);
+            let prev = 0;
+            nums.forEach(n => { if (prev && n - prev > 1) h += '<span class="px-1 text-slate-400 font-bold">…</span>'; h += btn(n, n, n === cur, false); prev = n; });
+            return h + btn('Berikutnya &raquo;', cur + 1, false, cur === pages);
+        }
+        function goGuruHistPage(p) { guruHistPage = p; renderGuruJournalHistory(); }
         function renderGuruJournalHistory() {
             const table = document.getElementById('guruJournalHistoryTable');
             if (!table) return;
+            const pager = document.getElementById('guruJournalPager');
 
             const myJournals = journalEntries.filter(j => j.guruId === currentUser.id);
-            // Sort Chronologically Ascending (Terlama di atas, Terbaru di bawah)
-            myJournals.sort((a, b) => new Date(a.timestamp || 0) - new Date(b.timestamp || 0));
+            // Terbaru di atas, 10 data per halaman
+            myJournals.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
 
             if (myJournals.length === 0) {
-                table.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">Belum ada jurnal KBM yang diisi hari ini.</td></tr>`;
+                table.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-400">Belum ada jurnal KBM yang diisi hari ini.</td></tr>`;
+                if (pager) pager.innerHTML = '';
                 return;
             }
 
-            table.innerHTML = myJournals.map(j => {
+            const pages = Math.ceil(myJournals.length / HIST_PAGE_SIZE);
+            if (guruHistPage > pages) guruHistPage = pages;
+            if (guruHistPage < 1) guruHistPage = 1;
+            const pageItems = myJournals.slice((guruHistPage - 1) * HIST_PAGE_SIZE, guruHistPage * HIST_PAGE_SIZE);
+
+            table.innerHTML = pageItems.map(j => {
                 const jamDisplay = (j.jamMulai && j.jamSelesai) 
                     ? (j.jamMulai == j.jamSelesai ? `Jam Ke-${j.jamMulai}` : `Jam Ke-${j.jamMulai} - ${j.jamSelesai}`)
                     : `Jam Ke-${j.jamKe}`;
@@ -1569,9 +1622,14 @@
                         }
                     </td>
                     <td class="p-3 text-slate-500 italic">${j.catatan || '-'}</td>
+                    <td class="p-3 text-center whitespace-nowrap space-x-1">
+                        <button onclick="openEditJournalModal('${j.id}')" class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-2 rounded-xl text-xs font-bold shadow-sm" title="Edit jurnal"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+                        <button onclick="if(confirm('Hapus jurnal ini?')) deleteJournal('${j.id}')" class="bg-rose-500 hover:bg-rose-600 text-white px-3 py-2 rounded-xl text-xs font-bold shadow-sm" title="Hapus jurnal"><i class="fa-solid fa-trash-can"></i> Hapus</button>
+                    </td>
                 </tr>
             `;
             }).join('');
+            if (pager) pager.innerHTML = pagerHTML(myJournals.length, guruHistPage, 'goGuruHistPage');
         }
 
         // --- WALI MURID LOGIC ---
@@ -1605,7 +1663,7 @@
                 return;
             }
 
-            container.innerHTML = list.map(j => {
+            const cardOf = j => {
                 const jamDisplay = (j.jamMulai && j.jamSelesai) 
                     ? (j.jamMulai == j.jamSelesai ? `Jam Ke-${j.jamMulai}` : `Jam Ke-${j.jamMulai} - ${j.jamSelesai}`)
                     : `Jam Ke-${j.jamKe}`;
@@ -1642,7 +1700,40 @@
                     ` : ''}
                 </div>
             `;
+            };
+
+            const dayOf = j => {
+                if (j.timestamp) { const d = new Date(j.timestamp); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+                return 'x-' + (j.hariTanggal || '-');
+            };
+            const dayLabel = (k, sample) => {
+                if (sample.timestamp) return new Date(sample.timestamp).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                return sample.hariTanggal || '-';
+            };
+            const groups = {};
+            list.forEach(j => { const k = dayOf(j); (groups[k] = groups[k] || []).push(j); });
+            const keys = Object.keys(groups).sort().reverse(); // hari terbaru di atas
+
+            container.innerHTML = keys.map(k => {
+                const open = openJournalDays.has(cid + '|' + k);
+                return `
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <button type="button" data-key="${encodeURIComponent(cid + '|' + k)}" onclick="toggleJournalDay(this)" class="w-full flex items-center justify-between gap-3 p-4 text-left hover:bg-slate-50 transition">
+                        <span class="flex items-center gap-3"><i class="fa-regular fa-calendar-days text-spena-600 text-lg"></i><span class="font-extrabold text-slate-800 text-sm sm:text-base">${dayLabel(k, groups[k][0])}</span></span>
+                        <span class="flex items-center gap-3 shrink-0"><span class="bg-spena-100 text-spena-800 text-xs font-extrabold px-2.5 py-1 rounded-lg">${groups[k].length} jurnal</span><i class="fa-solid ${open ? 'fa-chevron-up' : 'fa-chevron-down'} text-slate-400 chev"></i></span>
+                    </button>
+                    <div class="${open ? '' : 'hidden'} border-t border-slate-100 p-4 space-y-4 bg-slate-50/60">${groups[k].map(cardOf).join('')}</div>
+                </div>`;
             }).join('');
+        }
+
+        const openJournalDays = new Set();
+        function toggleJournalDay(btn) {
+            const key = decodeURIComponent(btn.dataset.key);
+            const panel = btn.nextElementSibling, chev = btn.querySelector('.chev');
+            const nowOpen = panel.classList.toggle('hidden') === false;
+            if (nowOpen) openJournalDays.add(key); else openJournalDays.delete(key);
+            chev.className = 'fa-solid ' + (nowOpen ? 'fa-chevron-up' : 'fa-chevron-down') + ' text-slate-400 chev';
         }
 
         // --- OPEN FEEDBACK MODAL WITH CLASS LOCKING FOR WALI MURID ---
@@ -1902,6 +1993,7 @@
             }
 
             document.getElementById('editJournalKelas').value = j.kelas;
+            fillMapelSelect('editJournalMapel', j.mapel);
             document.getElementById('editJournalMapel').value = j.mapel;
             document.getElementById('editJournalMateri').value = j.materi;
             document.getElementById('editJournalCatatan').value = j.catatan || '';
@@ -1972,14 +2064,14 @@
 
             saveToLocalStorage();
             closeEditJournalModal();
-            renderAdminDashboard();
+            if (currentUser && currentUser.role === 'guru') renderGuruJournalHistory(); else renderAdminDashboard();
             showToast('Data jurnal berhasil diperbarui!', 'success');
         }
 
         function deleteJournal(id) {
             journalEntries = journalEntries.filter(j => j.id !== id);
             saveToLocalStorage();
-            renderAdminDashboard();
+            if (currentUser && currentUser.role === 'guru') renderGuruJournalHistory(); else renderAdminDashboard();
             showToast('Jurnal telah dihapus!', 'info');
         }
 
@@ -2329,7 +2421,15 @@
 
         function initNilaiUI() {
             const m = document.getElementById('newGbMapel');
+            fillMapelSelect('journalMapel', '', '-- Pilih Mata Pelajaran --');
             if (m) m.innerHTML = MAPEL_LIST.map(x => `<option value="${esc(x)}">${esc(x)}</option>`).join('') + '<option value="__lain">Lainnya (ketik sendiri)...</option>';
+        }
+function fillMapelSelect(id, current, placeholder) {
+            const el = document.getElementById(id); if (!el) return;
+            let opts = placeholder ? `<option value="">${esc(placeholder)}</option>` : '';
+            opts += MAPEL_LIST.map(x => `<option value="${esc(x)}">${esc(x)}</option>`).join('');
+            if (current && !MAPEL_LIST.includes(current)) opts += `<option value="${esc(current)}">${esc(current)}</option>`;
+            el.innerHTML = opts;
         }
         function schoolYearNow() {
             const d = new Date(), m = d.getMonth() + 1, y = d.getFullYear();
@@ -2589,10 +2689,42 @@
                 rows.map((n, i) => `<tr><td>${i + 1}</td><td>${fmtDate(n.tanggal)}</td><td>${esc(n.siswa)}</td><td>${esc(n.kelas)}</td><td>${(NOTE_TYPES[n.jenis] || NOTE_TYPES.baik).label}</td><td>${esc(n.isi)}</td><td>${esc(n.penulisName || '-')}</td></tr>`).join('') +
                 `</tbody></table><p style="font-size:11px;margin-top:10px">Dicetak: ${todayLong()}. Dokumen ini bersifat rahasia.</p>`);
         }
+function rosterNames(kelas) {
+            const set = new Set(rosterData.filter(r => r.kelas === kelas).map(r => r.nama));
+            notesData.filter(n => n.kelas === kelas).forEach(n => set.add(n.siswa));
+            return [...set].sort((a, b) => a.localeCompare(b, 'id'));
+        }
+        function renderWkRoster() {
+            const box = document.getElementById('wkRosterList'); if (!box) return;
+            const list = rosterData.filter(r => r.kelas === wkClass()).sort((a, b) => a.nama.localeCompare(b.nama, 'id'));
+            box.innerHTML = list.length ? list.map(r => `<span class="inline-flex items-center gap-1.5 bg-teal-50 border border-teal-200 text-teal-900 text-sm font-bold ps-3 pe-1.5 py-1.5 rounded-full">${esc(r.nama)}<button type="button" onclick="removeRosterName('${r.id}')" class="text-rose-500 hover:text-rose-700 w-6 h-6 rounded-full" title="Hapus nama"><i class="fa-solid fa-xmark"></i></button></span>`).join('')
+                : '<span class="text-sm text-slate-400 font-medium">Belum ada nama murid. Tambahkan nama di atas, lalu pilih dari dropdown saat membuat catatan.</span>';
+        }
+        function addRosterName() {
+            const k = wkClass(); if (!k) { showToast('Akun Anda belum diberi kelas. Hubungi admin.', 'error'); return; }
+            const inp = document.getElementById('wkRosterNama');
+            const names = inp.value.split(/[,;\n]/).map(x => x.trim()).filter(Boolean);
+            if (!names.length) { showToast('Ketik nama murid terlebih dahulu.', 'error'); return; }
+            const have = new Set(rosterNames(k).map(x => x.toLowerCase()));
+            let added = 0;
+            names.forEach(nm => { if (have.has(nm.toLowerCase())) return; have.add(nm.toLowerCase()); rosterData.push({ id: uid('rs-'), kelas: k, nama: nm }); added++; });
+            inp.value = '';
+            if (added) { saveToLocalStorage(); renderWkCatatan(); showToast(`${added} nama murid ditambahkan.`, 'success'); }
+            else showToast('Nama tersebut sudah ada di daftar.', 'info');
+        }
+        function removeRosterName(id) {
+            const r = rosterData.find(x => x.id === id); if (!r) return;
+            if (!confirm(`Hapus nama "${r.nama}" dari daftar murid? (Catatan yang sudah dibuat tidak ikut terhapus)`)) return;
+            rosterData = rosterData.filter(x => x.id !== id); saveToLocalStorage(); renderWkCatatan();
+        }
         function wkClass() { return currentUser?.classAssigned || ''; }
         function renderWkCatatan() {
             const k = wkClass(), names = classStudentNames(k);
-            document.getElementById('wkNoteNames').innerHTML = names.map(n => `<option value="${esc(n)}">`).join('');
+            renderWkRoster();
+            const selSiswa = document.getElementById('wkNoteSiswa'), keep = selSiswa.value, rn = rosterNames(k);
+            selSiswa.innerHTML = `<option value="">${rn.length ? '-- Pilih Nama Murid --' : '-- Belum ada murid, tambahkan dulu di atas --'}</option>` + rn.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('');
+            if (keep && !rn.includes(keep)) selSiswa.insertAdjacentHTML('beforeend', `<option value="${esc(keep)}">${esc(keep)}</option>`);
+            selSiswa.value = keep;
             const fs = document.getElementById('wkNoteFilterSiswa'), cur = fs.value || 'ALL';
             fs.innerHTML = '<option value="ALL">Semua Siswa</option>' + names.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('');
             fs.value = names.includes(cur) ? cur : 'ALL';
@@ -2615,7 +2747,8 @@
         function editNote(id) {
             const n = notesData.find(x => x.id === id); if (!n) return;
             wkEditNoteId = id;
-            document.getElementById('wkNoteSiswa').value = n.siswa; document.getElementById('wkNoteJenis').value = n.jenis;
+            { const sl = document.getElementById('wkNoteSiswa'); if (![...sl.options].some(o => o.value === n.siswa)) sl.insertAdjacentHTML('beforeend', `<option value="${esc(n.siswa)}">${esc(n.siswa)}</option>`); sl.value = n.siswa; }
+            document.getElementById('wkNoteJenis').value = n.jenis;
             document.getElementById('wkNoteTanggal').value = n.tanggal; document.getElementById('wkNoteIsi').value = n.isi;
             document.getElementById('wkNoteFormTitle').textContent = 'Edit Catatan Anak';
             document.getElementById('wkNoteCancel').classList.remove('hidden');
@@ -2665,16 +2798,18 @@
             if (wkTab === 'nilai') renderWkNilai();
             if (wkTab === 'catatan') renderWkCatatan();
         }
+        function openWkGb(id) { wkGbId = id; renderWkNilai(); }
+        function backWkGb() { wkGbId = null; renderWkNilai(); }
         function renderWkNilai() {
-            const list = gradebooksData.filter(g => g.kelas === wkClass()).sort((a, b) => a.mapel.localeCompare(b.mapel));
-            if (!list.find(g => g.id === wkGbId)) wkGbId = list[0]?.id || null;
-            const sel = document.getElementById('wkGbSelect');
-            sel.innerHTML = list.length ? list.map(g => `<option value="${g.id}">${esc(g.mapel)} — ${esc(g.guruName)} (${esc(g.semester)} ${esc(g.tahun)})</option>`).join('') : '<option value="">(Belum ada nilai dari guru mapel)</option>';
-            sel.value = wkGbId || '';
+            const list = gradebooksData.filter(g => g.kelas === wkClass()).sort((a, b) => a.mapel.localeCompare(b.mapel) || a.guruName.localeCompare(b.guruName, 'id'));
+            if (!list.find(g => g.id === wkGbId)) wkGbId = null;
             const gb = getGb(wkGbId);
-            document.getElementById('wkGbHost').innerHTML = gb ? `<div class="grade-host" data-gb="${gb.id}" data-edit="0">${gradeTableHTML(gb, false)}</div>`
-                : '<div class="p-8 text-center text-slate-400 font-medium">Belum ada nilai yang diinput guru mata pelajaran untuk kelas ini.</div>';
-            document.getElementById('wkPrintBtns').classList.toggle('hidden', !list.length);
+            document.getElementById('wkPrintOne').classList.toggle('hidden', !gb);
+            document.getElementById('wkPrintAll').classList.toggle('hidden', !!gb);
+            document.getElementById('wkPrintBtns').parentElement.classList.toggle('hidden', !list.length);
+            document.getElementById('wkGbHost').innerHTML = gb
+                ? gbDetailHead(gb, 'backWkGb', true) + `<div class="grade-host" data-gb="${gb.id}" data-edit="0">${gradeTableHTML(gb, false)}</div>`
+                : gbListHTML(list, 'openWkGb', true, 'Belum ada nilai yang diinput guru mata pelajaran untuk kelas ini.');
         }
 
         // --- TOAST NOTIFICATIONS ---
