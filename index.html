@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
     <title>Jurnal Online & Pemantauan Kinerja KBM - SMP Negeri 6 Kota Blitar</title>
     
     <!-- PWA & Mobile Friendly Icons/Meta -->
@@ -888,11 +890,12 @@
         let googleScriptUrl = localStorage.getItem('spena_gas_url') || 'https://script.google.com/macros/s/AKfycbzVehIZYerw9G_tWv_WFY5HxcHgmeoxrXxLKX-GJmf08si4AcsbNKSRn4SZivgvZ7nxZw/exec';
         let customLogo = localStorage.getItem('spena_logo') || DEFAULT_LOGO_SVG;
 
-        let usersData = JSON.parse(localStorage.getItem('spena_users')) || [
+        const DEFAULT_USERS = [
             { id: '1', username: 'admin', password: 'spena2026', role: 'admin', name: 'Kepala Sekolah / Admin' },
             { id: '2', username: 'guru_ahmad', password: 'guru123', role: 'guru', name: 'Ahmad Dahlan, S.Pd' },
             { id: '3', username: 'wali_7a', password: 'wali123', role: 'wali', name: 'Wali Murid Kelas 7A', classAssigned: '7A' }
         ];
+        let usersData = JSON.parse(localStorage.getItem('spena_users')) || DEFAULT_USERS.map(u => ({...u}));
 
         let journalEntries = JSON.parse(localStorage.getItem('spena_journals')) || [];
         let feedbackEntries = JSON.parse(localStorage.getItem('spena_feedbacks')) || [];
@@ -960,18 +963,10 @@
                 }
             }
 
-            // 2. BACKGROUND FETCH FROM GOOGLE SHEETS
-            if (googleScriptUrl) {
-                await fetchFromGoogleSheets();
-                // If user is currently logged in, sync currentUser reference seamlessly
-                if (currentUser) {
-                    const matchedUser = usersData.find(u => String(u.id) === String(currentUser.id) || u.username === currentUser.username);
-                    if (matchedUser) {
-                        currentUser = matchedUser;
-                        applyLoginSession(matchedUser);
-                    }
-                }
-            }
+            // 2. SINKRON DATA (per-record) + CEK VERSI APLIKASI
+            checkVersion();
+            setInterval(checkVersion, 60000);
+            await bootSync();
         };
 
         // --- LOCAL & CLOUD STORAGE SYNC ---
@@ -982,7 +977,8 @@
             localStorage.setItem('spena_logo', customLogo);
 
             if (triggerCloudSync && googleScriptUrl) {
-                pushToGoogleSheets();
+                queueChanges();
+                flushPending();
             }
         }
 
@@ -999,51 +995,181 @@
             }
         }
 
-        async function pushToGoogleSheets() {
-            if (!googleScriptUrl) return;
+        // --- SINKRONISASI PER-RECORD (v2) ---
+        const APP_VERSION = '2026-09-30-1'; // naikkan angka ini + version.json setiap update
+        const SYNC_MS = 20000;
+        let syncSnap = {};
+        let pendingOps = JSON.parse(localStorage.getItem('spena_pending') || '[]');
+        let lastTs = Number(localStorage.getItem('spena_ts') || 0);
+        let syncBusy = false, flushing = false, needRefresh = false;
 
-            const payload = {
-                action: 'syncAll',
-                data: {
-                    users: usersData,
-                    journals: journalEntries,
-                    feedbacks: feedbackEntries,
-                    logo: customLogo
-                }
-            };
+        function collections() { return { users: usersData, journals: journalEntries, feedbacks: feedbackEntries }; }
 
+        function rebuildSnap() {
+            syncSnap = {};
+            const c = collections();
+            for (const k in c) c[k].forEach(r => { syncSnap[k + ':' + r.id] = JSON.stringify(r); });
+            syncSnap['settings:logo'] = JSON.stringify(customLogo);
+        }
+
+        function addOp(op) {
+            pendingOps = pendingOps.filter(o => !(o.c === op.c && o.id === op.id));
+            pendingOps.push(op);
+        }
+
+        // Bandingkan data sekarang dengan yang terakhir disinkron -> hanya kirim yang berubah/dihapus
+        function queueChanges() {
+            const c = collections(), seen = {};
+            for (const k in c) c[k].forEach(r => {
+                const key = k + ':' + r.id, js = JSON.stringify(r);
+                seen[key] = 1;
+                if (syncSnap[key] !== js) { syncSnap[key] = js; addOp({ c: k, op: 'upsert', id: String(r.id), data: r }); }
+            });
+            const logoJs = JSON.stringify(customLogo);
+            seen['settings:logo'] = 1;
+            if (syncSnap['settings:logo'] !== logoJs) {
+                syncSnap['settings:logo'] = logoJs;
+                addOp({ c: 'settings', op: 'upsert', id: 'logo', data: { id: 'logo', value: customLogo } });
+            }
+            Object.keys(syncSnap).forEach(key => {
+                if (seen[key]) return;
+                delete syncSnap[key];
+                const p = key.indexOf(':');
+                addOp({ c: key.slice(0, p), op: 'delete', id: key.slice(p + 1) });
+            });
+            localStorage.setItem('spena_pending', JSON.stringify(pendingOps));
+        }
+
+        async function flushPending() {
+            if (!googleScriptUrl || !pendingOps.length || flushing) return;
+            flushing = true;
+            const batch = pendingOps.slice();
             try {
-                await fetch(googleScriptUrl, {
+                const r = await fetch(googleScriptUrl, {
                     method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'apply', ops: batch })
                 });
+                const j = await r.json();
+                if (j.status !== 'success') throw new Error(j.message || 'Server menolak data');
+                pendingOps = pendingOps.filter(o => !batch.includes(o));
+                localStorage.setItem('spena_pending', JSON.stringify(pendingOps));
             } catch (err) {
-                console.error('Koneksi Google Sheets gagal:', err);
+                console.warn('Kirim ke Google Sheets tertunda, akan dicoba lagi:', err);
+                setSyncBadge(false);
+            } finally {
+                flushing = false;
             }
         }
 
-        async function fetchFromGoogleSheets() {
-            if (!googleScriptUrl) return;
+        async function pullFromCloud(fullReplace) {
+            if (!googleScriptUrl) return false;
+            const r = await fetch(googleScriptUrl + '?action=get&v=2&since=' + (fullReplace ? 0 : lastTs) + '&_=' + Date.now());
+            const d = await r.json();
+            if (d.nochange) return false;
+            if (!d || typeof d.ts !== 'number') throw new Error('Respon server tidak valid');
 
-            try {
-                const response = await fetch(googleScriptUrl + '?action=get');
-                if (!response.ok) return;
-
-                const cloudResult = await response.json();
-                if (cloudResult) {
-                    if (cloudResult.users && cloudResult.users.length > 0) usersData = cloudResult.users;
-                    if (cloudResult.journals) journalEntries = cloudResult.journals;
-                    if (cloudResult.feedbacks) feedbackEntries = cloudResult.feedbacks;
-                    if (cloudResult.logo) customLogo = cloudResult.logo;
-
-                    saveToLocalStorage(false);
-                    renderAppLogo();
-                }
-            } catch (err) {
-                console.warn('Gagal memuat data awal dari Google Sheets, menggunakan data browser lokal:', err);
+            if (fullReplace) {
+                usersData.length = 0; journalEntries.length = 0; feedbackEntries.length = 0;
+                syncSnap = {};
             }
+            const pendingKeys = new Set(pendingOps.map(o => o.c + ':' + o.id));
+            const c = collections();
+            let changed = false;
+
+            ['users', 'journals', 'feedbacks'].forEach(k => (d[k] || []).forEach(rec => {
+                const key = k + ':' + rec.id;
+                if (pendingKeys.has(key)) return; // perubahan lokal belum terkirim: jangan ditimpa
+                const arr = c[k], i = arr.findIndex(x => String(x.id) === rec.id);
+                if (rec.deleted) {
+                    if (i >= 0) { arr.splice(i, 1); changed = true; }
+                    delete syncSnap[key];
+                } else if (rec.data) {
+                    const js = JSON.stringify(rec.data);
+                    if (syncSnap[key] !== js) { if (i >= 0) arr[i] = rec.data; else arr.push(rec.data); changed = true; }
+                    syncSnap[key] = js;
+                }
+            }));
+            (d.settings || []).forEach(rec => {
+                if (rec.id !== 'logo' || rec.deleted || !rec.data || pendingKeys.has('settings:logo')) return;
+                if (customLogo !== rec.data.value) { customLogo = rec.data.value; changed = true; }
+                syncSnap['settings:logo'] = JSON.stringify(customLogo);
+            });
+
+            lastTs = d.ts;
+            localStorage.setItem('spena_ts', String(lastTs));
+            if (changed || fullReplace) { saveToLocalStorage(false); renderAppLogo(); }
+            return changed || fullReplace;
+        }
+
+        function isBusy() {
+            return !!document.querySelector('input:focus, textarea:focus, select:focus') ||
+                Array.from(document.querySelectorAll('[id^="modal"]')).some(m => !m.classList.contains('hidden'));
+        }
+
+        function refreshView() {
+            if (!currentUser) return;
+            const me = usersData.find(u => String(u.id) === String(currentUser.id));
+            if (!me) { needRefresh = false; logout(); showToast('Akun Anda sudah tidak ada atau diubah admin. Silakan login ulang.', 'error'); return; }
+            if (isBusy()) { needRefresh = true; return; } // jangan ganggu yang sedang mengetik
+            needRefresh = false;
+            applyLoginSession(me);
+        }
+
+        function setSyncBadge(ok) {
+            if (ok) { updateCloudBadge(); return; }
+            const badge = document.getElementById('cloudStatusBadge');
+            if (!badge || !googleScriptUrl) return;
+            badge.className = 'text-[11px] font-mono px-2.5 py-1 rounded-md bg-amber-700 text-amber-100 flex items-center space-x-1';
+            badge.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i><span>Menunggu koneksi (data aman, akan dikirim)</span>';
+        }
+
+        async function syncNow() {
+            if (!googleScriptUrl || syncBusy) return;
+            syncBusy = true;
+            try {
+                await flushPending();
+                const changed = await pullFromCloud(false);
+                if (!pendingOps.length) setSyncBadge(true);
+                if (changed || needRefresh) refreshView();
+            } catch (err) {
+                console.warn('Sinkron gagal:', err);
+                setSyncBadge(false);
+            } finally {
+                syncBusy = false;
+            }
+        }
+
+        async function bootSync() {
+            if (!googleScriptUrl) return;
+            rebuildSnap();
+            try {
+                // Pertama kali dengan versi ini: data server jadi sumber utama (bukan cache browser lama)
+                const first = !localStorage.getItem('spena_ts');
+                const changed = await pullFromCloud(first);
+                if (usersData.length === 0) { DEFAULT_USERS.forEach(u => usersData.push({ ...u })); saveToLocalStorage(); }
+                if (changed) refreshView();
+                setSyncBadge(true);
+            } catch (err) {
+                console.warn('Gagal memuat dari Google Sheets, memakai data browser:', err);
+                setSyncBadge(false);
+            }
+            flushPending();
+            setInterval(() => { if (!document.hidden) syncNow(); }, SYNC_MS);
+            document.addEventListener('visibilitychange', () => { if (!document.hidden) { syncNow(); checkVersion(); } });
+            window.addEventListener('online', syncNow);
+        }
+
+        // --- AUTO-UPDATE APLIKASI: cek version.json, reload jika ada versi baru ---
+        async function checkVersion() {
+            try {
+                const r = await fetch('version.json?_=' + Date.now(), { cache: 'no-store' });
+                const v = (await r.json()).version;
+                if (v && v !== APP_VERSION && sessionStorage.getItem('spena_reload_for') !== v && !isBusy()) {
+                    sessionStorage.setItem('spena_reload_for', v);
+                    location.replace(location.pathname + '?v=' + encodeURIComponent(v));
+                }
+            } catch (e) { /* offline / belum ada version.json */ }
         }
 
         // --- GOOGLE SHEETS SETUP MODAL ---
@@ -1067,7 +1193,9 @@
 
             if (url) {
                 showToast('Koneksi Google Sheets berhasil disimpan! Mengirimkan data awal...', 'success');
-                await pushToGoogleSheets();
+                syncSnap = {}; lastTs = 0; localStorage.removeItem('spena_ts');
+                queueChanges();
+                await syncNow();
             } else {
                 showToast('Koneksi Google Sheets dinonaktifkan.', 'info');
             }
