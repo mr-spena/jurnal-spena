@@ -57,6 +57,7 @@
             th, td { border: 1px solid #cbd5e1 !important; color: black !important; padding: 6px 8px !important; }
             thead { background-color: #075985 !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             thead th { color: white !important; }
+            body.print-sheet > *:not(#printSheet) { display: none !important; }
         }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
@@ -168,6 +169,12 @@
                 </div>
             </div>
 
+                        <div class="flex flex-wrap gap-2 no-print">
+                <button id="guruTabBtn-jurnal" onclick="switchGuruTab('jurnal')" class="px-5 py-3 rounded-xl text-sm font-extrabold flex items-center space-x-2 shadow-sm"><i class="fa-solid fa-pen-to-square"></i><span>Jurnal Mengajar</span></button>
+                <button id="guruTabBtn-nilai" onclick="switchGuruTab('nilai')" class="px-5 py-3 rounded-xl text-sm font-extrabold flex items-center space-x-2 shadow-sm"><i class="fa-solid fa-table-list"></i><span>Input Nilai Siswa</span></button>
+            </div>
+
+            <div id="guruPane-jurnal" class="space-y-6">
             <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6">
                 <div class="border-b border-slate-200 pb-4 mb-6 flex flex-wrap items-center justify-between gap-2">
                     <div>
@@ -319,6 +326,31 @@
                     </table>
                 </div>
             </div>
+            </div>
+
+            <div id="guruPane-nilai" class="hidden space-y-4">
+                <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-5 space-y-4">
+                    <div class="flex flex-wrap items-end gap-3">
+                        <div class="flex-grow min-w-[220px]">
+                            <label class="block text-sm font-bold text-slate-700 mb-1">Pilih Daftar Nilai Anda</label>
+                            <select id="guruGbSelect" onchange="guruGbId=this.value; renderGuruNilai()" class="w-full p-3 border border-slate-300 rounded-xl text-sm font-bold bg-slate-50 outline-none focus:ring-2 focus:ring-spena-500"></select>
+                        </div>
+                        <button onclick="toggleNewGb()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-extrabold px-5 py-3 rounded-xl shadow-md flex items-center space-x-2"><i class="fa-solid fa-plus"></i><span>Buat Daftar Nilai Baru</span></button>
+                    </div>
+                    <form id="newGbForm" onsubmit="createGradebook(event)" class="hidden">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Kelas *</label><select id="newGbKelas" required class="w-full p-3 border rounded-xl text-sm font-bold bg-white"></select></div>
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Mata Pelajaran *</label><select id="newGbMapel" onchange="document.getElementById('newGbMapelLain').classList.toggle('hidden', this.value !== '__lain')" class="w-full p-3 border rounded-xl text-sm font-bold bg-white"></select>
+                                <input type="text" id="newGbMapelLain" placeholder="Ketik nama mata pelajaran" class="hidden w-full p-3 border rounded-xl text-sm mt-2"></div>
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Semester *</label><select id="newGbSemester" class="w-full p-3 border rounded-xl text-sm font-bold bg-white"><option>Ganjil</option><option>Genap</option></select></div>
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Tahun Ajaran *</label><input type="text" id="newGbTahun" placeholder="2026/2027" class="w-full p-3 border rounded-xl text-sm font-bold bg-white"></div>
+                            <div class="sm:col-span-2 flex gap-2"><button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-extrabold px-6 py-3 rounded-xl">Buat Daftar Nilai</button><button type="button" onclick="toggleNewGb()" class="bg-white border text-slate-700 text-sm font-bold px-5 py-3 rounded-xl">Batal</button></div>
+                        </div>
+                    </form>
+                </div>
+                <div id="guruGbTools" class="hidden bg-white rounded-2xl shadow-md border border-slate-200 p-4"></div>
+                <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-4"><div id="guruGbHost"></div></div>
+            </div>
         </div>
 
         <!-- VIEW 3: WALI MURID DASHBOARD -->
@@ -350,6 +382,52 @@
             </div>
 
             <div id="waliJournalFeed" class="space-y-4"></div>
+        </div>
+
+        <!-- VIEW 3B: WALI KELAS DASHBOARD -->
+        <div id="viewWaliKelas" class="hidden space-y-6">
+            <div class="bg-gradient-to-r from-teal-900 via-teal-800 to-teal-700 rounded-2xl p-6 text-white shadow-xl no-print">
+                <span class="inline-block bg-amber-400 text-teal-900 text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest mb-2 shadow-sm">Portal Wali Kelas</span>
+                <h2 class="text-2xl font-black tracking-tight" id="wkWelcome">Selamat Datang</h2>
+                <p class="text-xs text-teal-100 mt-1"><span id="wkClassBadge" class="font-extrabold text-amber-300"></span> &bull; Pantau jurnal guru, nilai mata pelajaran, dan catat perkembangan anak di kelas Anda.</p>
+            </div>
+            <div class="flex flex-wrap gap-2 no-print">
+                <button id="wkTabBtn-jurnal" onclick="switchWkTab('jurnal')" class="px-5 py-3 rounded-xl text-sm font-extrabold flex items-center space-x-2 shadow-sm"><i class="fa-solid fa-book"></i><span>Jurnal Guru di Kelas</span></button>
+                <button id="wkTabBtn-nilai" onclick="switchWkTab('nilai')" class="px-5 py-3 rounded-xl text-sm font-extrabold flex items-center space-x-2 shadow-sm"><i class="fa-solid fa-table-list"></i><span>Nilai Siswa</span></button>
+                <button id="wkTabBtn-catatan" onclick="switchWkTab('catatan')" class="px-5 py-3 rounded-xl text-sm font-extrabold flex items-center space-x-2 shadow-sm"><i class="fa-solid fa-book-open-reader"></i><span>Catatan Anak</span></button>
+            </div>
+
+            <div id="wkPane-jurnal" class="space-y-4"><div id="wkJournalFeed" class="space-y-4"></div></div>
+
+            <div id="wkPane-nilai" class="hidden space-y-4">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 flex flex-wrap items-center gap-3 shadow-sm">
+                    <select id="wkGbSelect" onchange="wkGbId=this.value; renderWkNilai()" class="p-3 border border-slate-300 rounded-xl text-sm font-bold bg-slate-50 flex-grow min-w-[220px]"></select>
+                    <div id="wkPrintBtns" class="flex gap-2">
+                        <button onclick="printGradebooks([getGb(wkGbId)])" class="bg-slate-800 hover:bg-slate-900 text-white text-xs px-4 py-2.5 rounded-xl font-bold flex items-center space-x-2"><i class="fa-solid fa-print"></i><span>Cetak Mapel Ini</span></button>
+                        <button onclick="printGradebooks(gradebooksData.filter(g => g.kelas === wkClass()))" class="bg-slate-700 hover:bg-slate-800 text-white text-xs px-4 py-2.5 rounded-xl font-bold flex items-center space-x-2"><i class="fa-solid fa-print"></i><span>Cetak Semua Mapel</span></button>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm"><div id="wkGbHost"></div></div>
+            </div>
+
+            <div id="wkPane-catatan" class="hidden space-y-4">
+                <form onsubmit="saveWkNote(event)" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-3">
+                    <h3 class="text-base font-extrabold text-slate-800 flex items-center"><i class="fa-solid fa-pen me-2 text-teal-600"></i><span id="wkNoteFormTitle">Tambah Catatan Anak</span></h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Nama Siswa *</label><input list="wkNoteNames" id="wkNoteSiswa" required class="w-full p-3 border border-slate-300 rounded-xl text-sm font-medium" placeholder="Ketik / pilih nama"><datalist id="wkNoteNames"></datalist></div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Jenis Catatan *</label><select id="wkNoteJenis" class="w-full p-3 border border-slate-300 rounded-xl text-sm font-bold bg-slate-50"><option value="baik">Catatan Baik</option><option value="prestasi">Prestasi</option><option value="buruk">Catatan Buruk / Pelanggaran</option></select></div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal *</label><input type="date" id="wkNoteTanggal" required class="w-full p-3 border border-slate-300 rounded-xl text-sm font-medium"></div>
+                    </div>
+                    <div><label class="block text-xs font-bold text-slate-700 mb-1">Isi Catatan *</label><textarea id="wkNoteIsi" rows="3" required class="w-full p-3 border border-slate-300 rounded-xl text-sm font-medium" placeholder="Tuliskan catatan perkembangan / prestasi / pelanggaran siswa..."></textarea></div>
+                    <div class="flex gap-2"><button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white text-sm font-extrabold px-6 py-3 rounded-xl">Simpan Catatan</button><button type="button" id="wkNoteCancel" onclick="cancelEditNote()" class="hidden bg-white border text-slate-700 text-sm font-bold px-5 py-3 rounded-xl">Batal Edit</button></div>
+                </form>
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 flex flex-wrap items-center gap-3 shadow-sm">
+                    <select id="wkNoteFilterSiswa" onchange="renderWkCatatan()" class="p-2.5 border border-slate-300 rounded-xl text-xs font-bold bg-slate-50 max-w-[220px]"></select>
+                    <select id="wkNoteFilterJenis" onchange="renderWkCatatan()" class="p-2.5 border border-slate-300 rounded-xl text-xs font-bold bg-slate-50"><option value="ALL">Semua Jenis</option><option value="baik">Catatan Baik</option><option value="prestasi">Prestasi</option><option value="buruk">Catatan Buruk</option></select>
+                    <button onclick="printWkNotes()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs px-4 py-2.5 rounded-xl font-bold flex items-center space-x-2"><i class="fa-solid fa-print"></i><span>Cetak Catatan</span></button>
+                </div>
+                <div id="wkNoteList" class="space-y-3"></div>
+            </div>
         </div>
 
         <!-- VIEW 4: ADMIN / KEPALA SEKOLAH DASHBOARD -->
@@ -398,18 +476,26 @@
             </div>
 
             <!-- Admin Navigation Tabs -->
-            <div class="border-b border-slate-200 flex space-x-6 no-print">
-                <button onclick="switchAdminTab('monitoring')" id="adminTabBtn-monitoring" class="pb-3 text-xs sm:text-sm font-extrabold border-b-2 border-spena-600 text-spena-600 transition flex items-center space-x-2">
+            <div class="border-b border-slate-200 flex space-x-6 no-print overflow-x-auto whitespace-nowrap">
+                <button onclick="switchAdminTab('monitoring')" id="adminTabBtn-monitoring" class="pb-3 shrink-0 text-xs sm:text-sm font-extrabold border-b-2 border-spena-600 text-spena-600 transition flex items-center space-x-2">
                     <i class="fa-solid fa-desktop"></i>
                     <span>Monitoring Jurnal Guru</span>
                 </button>
-                <button onclick="switchAdminTab('users')" id="adminTabBtn-users" class="pb-3 text-xs sm:text-sm font-extrabold border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition flex items-center space-x-2">
+                <button onclick="switchAdminTab('users')" id="adminTabBtn-users" class="pb-3 shrink-0 text-xs sm:text-sm font-extrabold border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition flex items-center space-x-2">
                     <i class="fa-solid fa-users-gear"></i>
                     <span>Kelola Akun (Guru & Wali)</span>
                 </button>
-                <button onclick="switchAdminTab('feedback')" id="adminTabBtn-feedback" class="pb-3 text-xs sm:text-sm font-extrabold border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition flex items-center space-x-2">
+                <button onclick="switchAdminTab('feedback')" id="adminTabBtn-feedback" class="pb-3 shrink-0 text-xs sm:text-sm font-extrabold border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition flex items-center space-x-2">
                     <i class="fa-solid fa-envelope-open-text"></i>
                     <span>Kritik & Saran Wali Murid</span>
+                </button>
+                <button onclick="switchAdminTab('nilai')" id="adminTabBtn-nilai" class="pb-3 shrink-0 text-xs sm:text-sm font-extrabold border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition flex items-center space-x-2">
+                    <i class="fa-solid fa-table-list"></i>
+                    <span>Nilai Siswa</span>
+                </button>
+                <button onclick="switchAdminTab('catatan')" id="adminTabBtn-catatan" class="pb-3 shrink-0 text-xs sm:text-sm font-extrabold border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition flex items-center space-x-2">
+                    <i class="fa-solid fa-book-open-reader"></i>
+                    <span>Catatan Wali Kelas</span>
                 </button>
             </div>
 
@@ -514,6 +600,32 @@
             </div>
 
             <!-- TAB 3: FEEDBACK MANAGEMENT -->
+
+            <!-- TAB 4: NILAI SISWA (ADMIN) -->
+            <div id="adminTab-nilai" class="hidden space-y-4">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 flex flex-wrap items-center gap-3 shadow-sm no-print">
+                    <select id="admGbFilterKelas" onchange="renderAdminNilai()" class="p-2.5 border border-slate-300 rounded-xl text-xs font-bold bg-slate-50"></select>
+                    <select id="admGbFilterGuru" onchange="renderAdminNilai()" class="p-2.5 border border-slate-300 rounded-xl text-xs font-bold bg-slate-50 max-w-[200px]"></select>
+                    <select id="admGbSelect" onchange="admGbId=this.value; renderAdminNilai()" class="p-2.5 border border-slate-300 rounded-xl text-xs font-bold bg-slate-50 flex-grow min-w-[220px]"></select>
+                    <button onclick="printGradebooks(admFilteredGb())" class="bg-slate-800 hover:bg-slate-900 text-white text-xs px-4 py-2.5 rounded-xl font-bold flex items-center space-x-2"><i class="fa-solid fa-print"></i><span>Cetak Semua (sesuai filter)</span></button>
+                </div>
+                <div id="admGbTools" class="hidden bg-white p-4 rounded-2xl border border-slate-200 shadow-sm no-print"></div>
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm"><div id="admGbHost"></div></div>
+            </div>
+
+            <!-- TAB 5: CATATAN WALI KELAS (ADMIN) -->
+            <div id="adminTab-catatan" class="hidden space-y-4">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 flex flex-wrap items-center gap-3 shadow-sm no-print">
+                    <select id="admNoteFilterKelas" onchange="renderAdminCatatan()" class="p-2.5 border border-slate-300 rounded-xl text-xs font-bold bg-slate-50"></select>
+                    <select id="admNoteFilterSiswa" onchange="renderAdminCatatan()" class="p-2.5 border border-slate-300 rounded-xl text-xs font-bold bg-slate-50 max-w-[200px]"></select>
+                    <select id="admNoteFilterJenis" onchange="renderAdminCatatan()" class="p-2.5 border border-slate-300 rounded-xl text-xs font-bold bg-slate-50">
+                        <option value="ALL">Semua Jenis</option><option value="baik">Catatan Baik</option><option value="prestasi">Prestasi</option><option value="buruk">Catatan Buruk</option>
+                    </select>
+                    <button onclick="printAdminNotes()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs px-4 py-2.5 rounded-xl font-bold flex items-center space-x-2"><i class="fa-solid fa-print"></i><span>Cetak Catatan</span></button>
+                </div>
+                <div id="admNoteList" class="space-y-3"></div>
+            </div>
+
             <div id="adminTab-feedback" class="hidden space-y-4">
                 <div class="bg-white p-4 rounded-2xl border border-slate-200 flex flex-wrap items-center justify-between gap-3 shadow-sm no-print">
                     <div class="flex items-center space-x-3">
@@ -535,6 +647,8 @@
     </main>
 
     <!-- FOOTER -->
+    <div id="printSheet" class="hidden print-only p-4 bg-white text-black"></div>
+
     <footer class="bg-slate-800 text-slate-400 text-xs py-4 text-center border-t border-slate-700 no-print mt-auto">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
             <p>© 2026 SMP Negeri 6 Kota Blitar • Sistem Informasi Jurnal & Kinerja KBM Online</p>
@@ -636,6 +750,7 @@
                     <select id="userRoleSelect" onchange="toggleUserRoleFields()" class="w-full p-3 border rounded-xl text-xs font-bold bg-slate-50">
                         <option value="guru">Guru Pengajar</option>
                         <option value="wali">Wali Murid</option>
+                        <option value="walikelas">Wali Kelas (guru wali kelas)</option>
                         <option value="admin">Admin / Kepala Sekolah</option>
                     </select>
                 </div>
@@ -899,6 +1014,8 @@
 
         let journalEntries = JSON.parse(localStorage.getItem('spena_journals')) || [];
         let feedbackEntries = JSON.parse(localStorage.getItem('spena_feedbacks')) || [];
+        let gradebooksData = JSON.parse(localStorage.getItem('spena_gradebooks')) || [];
+        let notesData = JSON.parse(localStorage.getItem('spena_notes')) || [];
 
         let currentUser = null;
         let activeAdminTab = 'monitoring';
@@ -945,6 +1062,7 @@
         window.onload = async function() {
             renderAppLogo();
             populateClassDropdowns();
+            initNilaiUI();
             startLiveClock();
             updateCloudBadge();
 
@@ -975,6 +1093,8 @@
             localStorage.setItem('spena_journals', JSON.stringify(journalEntries));
             localStorage.setItem('spena_feedbacks', JSON.stringify(feedbackEntries));
             localStorage.setItem('spena_logo', customLogo);
+            localStorage.setItem('spena_gradebooks', JSON.stringify(gradebooksData));
+            localStorage.setItem('spena_notes', JSON.stringify(notesData));
 
             if (triggerCloudSync && googleScriptUrl) {
                 queueChanges();
@@ -996,14 +1116,14 @@
         }
 
         // --- SINKRONISASI PER-RECORD (v2) ---
-        const APP_VERSION = '2026-09-30-1'; // naikkan angka ini + version.json setiap update
+        const APP_VERSION = '2026-09-30-2'; // naikkan angka ini + version.json setiap update
         const SYNC_MS = 20000;
         let syncSnap = {};
         let pendingOps = JSON.parse(localStorage.getItem('spena_pending') || '[]');
         let lastTs = Number(localStorage.getItem('spena_ts') || 0);
         let syncBusy = false, flushing = false, needRefresh = false;
 
-        function collections() { return { users: usersData, journals: journalEntries, feedbacks: feedbackEntries }; }
+        function collections() { return { users: usersData, journals: journalEntries, feedbacks: feedbackEntries, gradebooks: gradebooksData, notes: notesData }; }
 
         function rebuildSnap() {
             syncSnap = {};
@@ -1070,14 +1190,14 @@
             if (!d || typeof d.ts !== 'number') throw new Error('Respon server tidak valid');
 
             if (fullReplace) {
-                usersData.length = 0; journalEntries.length = 0; feedbackEntries.length = 0;
+                Object.values(collections()).forEach(a => { a.length = 0; });
                 syncSnap = {};
             }
             const pendingKeys = new Set(pendingOps.map(o => o.c + ':' + o.id));
             const c = collections();
             let changed = false;
 
-            ['users', 'journals', 'feedbacks'].forEach(k => (d[k] || []).forEach(rec => {
+            Object.keys(c).forEach(k => (d[k] || []).forEach(rec => {
                 const key = k + ':' + rec.id;
                 if (pendingKeys.has(key)) return; // perubahan lokal belum terkirim: jangan ditimpa
                 const arr = c[k], i = arr.findIndex(x => String(x.id) === rec.id);
@@ -1223,7 +1343,7 @@
 
         // --- POPULATE CLASS DROPDOWNS ---
         function populateClassDropdowns() {
-            const dropdownIds = ['journalKelas', 'editJournalKelas', 'waliFilterKelas', 'userClassSelect', 'editFbKelas', 'fbKelas', 'adminFilterKelas'];
+            const dropdownIds = ['journalKelas', 'editJournalKelas', 'waliFilterKelas', 'userClassSelect', 'editFbKelas', 'fbKelas', 'adminFilterKelas', 'newGbKelas', 'admGbFilterKelas', 'admNoteFilterKelas'];
             
             dropdownIds.forEach(id => {
                 const select = document.getElementById(id);
@@ -1263,9 +1383,9 @@
 
             document.getElementById('navUserMenu').classList.remove('hidden');
             document.getElementById('navUserName').textContent = user.name;
-            document.getElementById('navUserRole').textContent = `Role: ${user.role}`;
+            document.getElementById('navUserRole').textContent = `Role: ${user.role === 'walikelas' ? 'wali kelas' : user.role}`;
             document.getElementById('navUserNameMobile').textContent = user.name;
-            document.getElementById('navUserRoleMobile').textContent = user.role;
+            document.getElementById('navUserRoleMobile').textContent = user.role === 'walikelas' ? 'wali kelas' : user.role;
 
             document.getElementById('viewLogin').classList.add('hidden');
 
@@ -1273,6 +1393,10 @@
                 document.getElementById('guruWelcomeName').textContent = `Selamat Datang, ${user.name}`;
                 document.getElementById('viewGuru').classList.remove('hidden');
                 renderGuruJournalHistory();
+                switchGuruTab(guruTab);
+            } else if (user.role === 'walikelas') {
+                document.getElementById('viewWaliKelas').classList.remove('hidden');
+                renderWaliKelas();
             } else if (user.role === 'wali') {
                 document.getElementById('waliWelcomeName').textContent = `Pantauan KBM ${user.classAssigned ? 'Kelas ' + user.classAssigned : ''}`;
                 document.getElementById('viewWali').classList.remove('hidden');
@@ -1302,6 +1426,7 @@
                 return;
             }
 
+            guruTab = 'jurnal'; wkTab = 'jurnal';
             applyLoginSession(user);
             showToast(`Selamat datang, ${user.name}!`, 'success');
         }
@@ -1315,6 +1440,7 @@
 
             document.getElementById('viewGuru').classList.add('hidden');
             document.getElementById('viewWali').classList.add('hidden');
+            document.getElementById('viewWaliKelas').classList.add('hidden');
             document.getElementById('viewAdmin').classList.add('hidden');
             document.getElementById('viewLogin').classList.remove('hidden');
 
@@ -1462,11 +1588,12 @@
         }
 
         // --- WALI MURID LOGIC ---
-        function renderWaliJournalView() {
-            const container = document.getElementById('waliJournalFeed');
+        function renderWaliJournalView(cid = 'waliJournalFeed', forcedKelas = null) {
+            const container = document.getElementById(cid);
             if (!container) return;
 
             let filterKelas = document.getElementById('waliFilterKelas').value;
+            if (forcedKelas) filterKelas = forcedKelas;
             
             // STRICT RESTRICTION: Lock Wali Murid to only view their assigned class
             if (currentUser && currentUser.role === 'wali' && currentUser.classAssigned) {
@@ -1579,20 +1706,22 @@
         // --- ADMIN DASHBOARD & MONITORING LOGIC ---
         function switchAdminTab(tab) {
             activeAdminTab = tab;
-            ['monitoring', 'users', 'feedback'].forEach(t => {
+            ['monitoring', 'users', 'feedback', 'nilai', 'catatan'].forEach(t => {
                 const btn = document.getElementById(`adminTabBtn-${t}`);
                 const view = document.getElementById(`adminTab-${t}`);
                 if (t === tab) {
-                    btn.className = 'pb-3 text-xs sm:text-sm font-extrabold border-b-2 border-spena-600 text-spena-600 transition flex items-center space-x-2';
+                    btn.className = 'pb-3 shrink-0 text-xs sm:text-sm font-extrabold border-b-2 border-spena-600 text-spena-600 transition flex items-center space-x-2';
                     view.classList.remove('hidden');
                 } else {
-                    btn.className = 'pb-3 text-xs sm:text-sm font-extrabold border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition flex items-center space-x-2';
+                    btn.className = 'pb-3 shrink-0 text-xs sm:text-sm font-extrabold border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition flex items-center space-x-2';
                     view.classList.add('hidden');
                 }
             });
 
             if (tab === 'users') renderAdminUsers();
             if (tab === 'feedback') renderAdminFeedback();
+            if (tab === 'nilai') renderAdminNilai();
+            if (tab === 'catatan') renderAdminCatatan();
         }
 
         function toggleAdminDateInputs() {
@@ -1654,6 +1783,9 @@
 
             populateAdminGuruFilter();
             renderAdminJournals();
+            if (activeAdminTab === 'nilai') renderAdminNilai();
+            if (activeAdminTab === 'catatan') renderAdminCatatan();
+            if (activeAdminTab === 'users') renderAdminUsers();
         }
 
         function renderAdminJournals() {
@@ -1756,6 +1888,7 @@
         }
 
         function printAdminJournalReport() {
+            clearPrintSheet();
             renderAdminJournals();
             setTimeout(() => {
                 window.print();
@@ -1871,8 +2004,8 @@
             table.innerHTML = usersData.map(u => `
                 <tr class="hover:bg-slate-50 transition">
                     <td class="p-3.5 uppercase font-bold text-[10px]">
-                        <span class="${u.role === 'admin' ? 'bg-indigo-100 text-indigo-800' : u.role === 'guru' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'} px-2.5 py-1 rounded-md">
-                            ${u.role}
+                        <span class="${u.role === 'admin' ? 'bg-indigo-100 text-indigo-800' : u.role === 'guru' ? 'bg-emerald-100 text-emerald-800' : u.role === 'walikelas' ? 'bg-teal-100 text-teal-800' : 'bg-amber-100 text-amber-800'} px-2.5 py-1 rounded-md">
+                            ${u.role === 'walikelas' ? 'wali kelas' : u.role}
                         </span>
                     </td>
                     <td class="p-3.5 font-extrabold text-slate-800">${u.name}</td>
@@ -1896,7 +2029,7 @@
         function toggleUserRoleFields() {
             const role = document.getElementById('userRoleSelect').value;
             const classField = document.getElementById('userClassField');
-            if (role === 'wali') {
+            if (role === 'wali' || role === 'walikelas') {
                 classField.classList.remove('hidden');
             } else {
                 classField.classList.add('hidden');
@@ -1937,10 +2070,10 @@
             const name = document.getElementById('userNameInput').value.trim();
             const username = document.getElementById('userUsernameInput').value.trim();
             const password = document.getElementById('userPasswordInput').value.trim();
-            const classAssigned = role === 'wali' ? document.getElementById('userClassSelect').value : '';
+            const classAssigned = (role === 'wali' || role === 'walikelas') ? document.getElementById('userClassSelect').value : '';
 
-            if (role === 'wali' && !classAssigned) {
-                showToast('Harap pilih kelas khusus untuk akun Wali Murid!', 'error');
+            if ((role === 'wali' || role === 'walikelas') && !classAssigned) {
+                showToast('Harap pilih kelas khusus untuk akun Wali Murid / Wali Kelas!', 'error');
                 return;
             }
 
@@ -2023,6 +2156,7 @@
         }
 
         function printSelectedFeedback() {
+            clearPrintSheet();
             const checkboxes = document.querySelectorAll('.fb-checkbox:checked');
             if (checkboxes.length === 0) {
                 showToast('Pilih minimal satu kritik & saran dengan mencentang kotak!', 'error');
@@ -2178,6 +2312,369 @@
             document.getElementById('newPasswordInput').value = '';
             document.getElementById('confirmPasswordInput').value = '';
             showToast('Password Anda berhasil diperbarui!', 'success');
+        }
+
+        // ================= NILAI SISWA & CATATAN WALI KELAS =================
+        const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const uid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+        const MONTHS_ID = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        const MAPEL_LIST = [
+            'Pendidikan Agama Islam dan Budi Pekerti', 'Pendidikan Agama Kristen dan Budi Pekerti', 'Pendidikan Agama Katolik dan Budi Pekerti',
+            'Pendidikan Agama Hindu dan Budi Pekerti', 'Pendidikan Agama Buddha dan Budi Pekerti', 'Pendidikan Agama Khonghucu dan Budi Pekerti',
+            'Pendidikan Pancasila', 'Bahasa Indonesia', 'Matematika', 'Ilmu Pengetahuan Alam (IPA)', 'Ilmu Pengetahuan Sosial (IPS)', 'Bahasa Inggris',
+            'Pendidikan Jasmani, Olahraga, dan Kesehatan (PJOK)', 'Informatika', 'Seni Musik', 'Seni Rupa', 'Seni Teater', 'Seni Tari', 'Prakarya',
+            'Bahasa Jawa (Muatan Lokal)'
+        ];
+        const GROUPS = {
+            harian: { label: 'Nilai Harian', short: 'Harian', cls: 'bg-sky-100 text-sky-900', btn: 'bg-sky-600 hover:bg-sky-700' },
+            ulangan: { label: 'Ulangan Harian', short: 'UH', cls: 'bg-indigo-100 text-indigo-900', btn: 'bg-indigo-600 hover:bg-indigo-700' },
+            tugas: { label: 'Tugas / Proyek', short: 'Tugas', cls: 'bg-emerald-100 text-emerald-900', btn: 'bg-emerald-600 hover:bg-emerald-700' },
+            akhir: { label: 'Nilai Akhir Semester', short: 'Akhir Sem.', cls: 'bg-amber-100 text-amber-900', btn: 'bg-amber-600 hover:bg-amber-700' }
+        };
+        const GROUP_ORDER = ['harian', 'ulangan', 'tugas', 'akhir'];
+        const NOTE_TYPES = {
+            baik: { label: 'Catatan Baik', cls: 'bg-emerald-50 border-emerald-200 text-emerald-800', icon: 'fa-face-smile' },
+            prestasi: { label: 'Prestasi', cls: 'bg-amber-50 border-amber-300 text-amber-800', icon: 'fa-trophy' },
+            buruk: { label: 'Catatan Buruk / Pelanggaran', cls: 'bg-rose-50 border-rose-200 text-rose-800', icon: 'fa-triangle-exclamation' }
+        };
+        let guruTab = 'jurnal', guruGbId = null, wkTab = 'jurnal', wkGbId = null, admGbId = null, wkEditNoteId = null;
+        const $v = id => document.getElementById(id)?.value || '';
+
+        function initNilaiUI() {
+            const m = document.getElementById('newGbMapel');
+            if (m) m.innerHTML = MAPEL_LIST.map(x => `<option value="${esc(x)}">${esc(x)}</option>`).join('') + '<option value="__lain">Lainnya (ketik sendiri)...</option>';
+        }
+        function schoolYearNow() {
+            const d = new Date(), m = d.getMonth() + 1, y = d.getFullYear();
+            return m >= 7 ? { tahun: `${y}/${y + 1}`, semester: 'Ganjil' } : { tahun: `${y - 1}/${y}`, semester: 'Genap' };
+        }
+        function setPillTabs(prefix, tabs, active, panePrefix) {
+            tabs.forEach(t => {
+                const b = document.getElementById(`${prefix}Btn-${t}`), p = document.getElementById(`${panePrefix}-${t}`);
+                if (b) b.className = 'px-5 py-3 rounded-xl text-sm font-extrabold flex items-center space-x-2 shadow-sm ' +
+                    (t === active ? 'bg-spena-700 text-white' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50');
+                if (p) p.classList.toggle('hidden', t !== active);
+            });
+        }
+        function getGb(id) { return gradebooksData.find(g => g.id === id); }
+        function gbLabel(g) { return `Kelas ${g.kelas} — ${g.mapel} (${g.semester} ${g.tahun})`; }
+        function sortedCols(gb) { return [...gb.cols].sort((a, b) => GROUP_ORDER.indexOf(a.g) - GROUP_ORDER.indexOf(b.g)); }
+        function rowAvg(gb, st) {
+            const v = gb.cols.map(c => st.scores[c.id]).filter(x => x !== '' && x != null && !isNaN(x)).map(Number);
+            return v.length ? (v.reduce((a, b) => a + b, 0) / v.length).toFixed(1) : '-';
+        }
+
+        // ---------- TABEL NILAI (dipakai guru, admin, wali kelas, dan cetak) ----------
+        function gradeTableHTML(gb, edit, print) {
+            const cols = sortedCols(gb);
+            if (!cols.length && !gb.students.length) return '<div class="p-8 text-center text-slate-400 font-medium">Daftar masih kosong. Tambahkan kolom nilai dan siswa.</div>';
+            const groups = GROUP_ORDER.filter(g => cols.some(c => c.g === g));
+            const gc = g => print ? '' : GROUPS[g].cls;
+            const stick = print ? '' : 'sticky left-0 z-10';
+            let h = `<div class="${print ? '' : 'overflow-x-auto border border-slate-200 rounded-xl'}"><table class="w-full text-left text-sm text-slate-700 border-collapse"><thead>`;
+            h += `<tr><th rowspan="2" class="p-2 text-center border ${print ? '' : 'bg-slate-100'} w-10">No</th><th rowspan="2" class="p-2 border ${print ? '' : 'bg-slate-100'} ${stick} min-w-[190px]">Nama Siswa</th>`;
+            h += groups.map(g => `<th colspan="${cols.filter(c => c.g === g).length}" class="p-2 text-center border ${gc(g)}">${GROUPS[g].label}</th>`).join('');
+            h += `<th rowspan="2" class="p-2 text-center border ${print ? '' : 'bg-slate-100'}">Rata-rata</th>${edit ? '<th rowspan="2" class="border bg-slate-100"></th>' : ''}</tr><tr>`;
+            h += cols.map(c => `<th class="p-1.5 text-center border ${gc(c.g)} min-w-[92px]">` + (edit
+                ? `<input value="${esc(c.label)}" onchange="gradeSetLabel('${gb.id}','${c.id}',this.value)" class="w-[74px] text-center text-xs font-bold p-1 border rounded bg-white/90 text-slate-800"><button onclick="gradeDelCol('${gb.id}','${c.id}')" class="ms-1 text-rose-600 hover:text-rose-800" title="Hapus kolom"><i class="fa-solid fa-xmark"></i></button>`
+                : esc(c.label)) + '</th>').join('');
+            h += '</tr></thead><tbody>';
+            h += gb.students.map((st, i) => `<tr class="hover:bg-slate-50"><td class="p-2 text-center border font-bold">${i + 1}</td>
+                <td class="p-2 border ${stick} ${print ? '' : 'bg-white'} font-bold">${edit ? `<input value="${esc(st.name)}" onchange="gradeSetName('${gb.id}','${st.id}',this.value)" class="st-name w-full min-w-[170px] p-2 border-2 border-slate-200 rounded-lg text-sm font-bold focus:border-spena-600 outline-none">` : esc(st.name)}</td>` +
+                cols.map(c => {
+                    const v = st.scores[c.id] ?? '';
+                    return `<td class="p-1 border text-center">` + (edit
+                        ? `<input type="number" inputmode="decimal" step="any" min="0" max="100" value="${v}" data-col="${c.id}" onchange="gradeSetScore('${gb.id}','${st.id}','${c.id}',this)" onkeydown="gradeKey(event)" class="w-[78px] h-11 text-center text-base font-bold border-2 border-slate-300 rounded-lg focus:border-spena-600 focus:bg-yellow-50 outline-none">`
+                        : v) + '</td>';
+                }).join('') +
+                `<td ${print ? '' : `id="avg-${st.id}"`} class="p-2 border text-center font-black">${rowAvg(gb, st)}</td>` +
+                (edit ? `<td class="p-1 border text-center"><button onclick="gradeDelStudent('${gb.id}','${st.id}')" class="text-rose-600 hover:text-rose-800 p-2" title="Hapus siswa"><i class="fa-solid fa-trash-can"></i></button></td>` : '') + '</tr>').join('');
+            h += '</tbody></table></div>';
+            return h;
+        }
+        function gradeToolsHTML(gid) {
+            const b = (g) => `<button onclick="gradeAddCol('${gid}','${g}')" class="${GROUPS[g].btn} text-white text-sm font-extrabold px-4 py-2.5 rounded-xl shadow-sm">+ ${GROUPS[g].label}</button>`;
+            return `<div class="flex flex-wrap gap-2">${GROUP_ORDER.map(b).join('')}
+                <button onclick="gradeAddStudent('${gid}')" class="bg-slate-700 hover:bg-slate-800 text-white text-sm font-extrabold px-4 py-2.5 rounded-xl"><i class="fa-solid fa-user-plus me-1"></i> Tambah Siswa</button>
+                <button onclick="document.getElementById('bulkBox').classList.toggle('hidden')" class="bg-white border border-slate-300 text-slate-800 text-sm font-extrabold px-4 py-2.5 rounded-xl"><i class="fa-solid fa-paste me-1"></i> Tempel Daftar Nama</button>
+                <button onclick="printGradebooks([getGb('${gid}')])" class="bg-white border border-slate-300 text-slate-800 text-sm font-extrabold px-4 py-2.5 rounded-xl"><i class="fa-solid fa-print me-1"></i> Cetak</button>
+                <button onclick="deleteGradebook('${gid}')" class="bg-rose-100 hover:bg-rose-200 text-rose-800 text-sm font-extrabold px-4 py-2.5 rounded-xl ms-auto"><i class="fa-solid fa-trash-can me-1"></i> Hapus Daftar</button></div>
+                <div id="bulkBox" class="hidden mt-3"><textarea id="bulkNames" rows="5" class="w-full p-3 border border-slate-300 rounded-xl text-sm" placeholder="Tempel nama siswa, satu nama per baris"></textarea>
+                <button onclick="gradeBulk('${gid}')" class="mt-2 bg-spena-700 hover:bg-spena-800 text-white text-sm font-extrabold px-5 py-2.5 rounded-xl">Tambahkan ke Tabel</button></div>`;
+        }
+
+        // ---------- EDIT NILAI ----------
+        function rerenderGrade(gid) {
+            const gb = getGb(gid);
+            document.querySelectorAll(`.grade-host[data-gb="${gid}"]`).forEach(h => { h.innerHTML = gb ? gradeTableHTML(gb, h.dataset.edit === '1') : ''; });
+        }
+        function gradeSetScore(gid, sid, cid, el) {
+            const gb = getGb(gid); const st = gb?.students.find(s => s.id === sid); if (!st) return;
+            let v = el.value.trim();
+            if (v !== '') { let n = parseFloat(v.replace(',', '.')); v = isNaN(n) ? '' : Math.min(100, Math.max(0, n)); }
+            el.value = v; st.scores[cid] = v;
+            const a = document.getElementById('avg-' + sid); if (a) a.textContent = rowAvg(gb, st);
+            saveToLocalStorage();
+        }
+        function gradeSetName(gid, sid, val) { const st = getGb(gid)?.students.find(s => s.id === sid); if (st) { st.name = val.trim(); saveToLocalStorage(); } }
+        function gradeSetLabel(gid, cid, val) { const c = getGb(gid)?.cols.find(x => x.id === cid); if (c) { c.label = val.trim() || c.label; saveToLocalStorage(); } }
+        function gradeAddCol(gid, g) {
+            const gb = getGb(gid); if (!gb) return;
+            const n = gb.cols.filter(c => c.g === g).length + 1;
+            gb.cols.push({ id: uid('c-'), g, label: GROUPS[g].short + ' ' + n });
+            saveToLocalStorage(); rerenderGrade(gid);
+        }
+        function gradeDelCol(gid, cid) {
+            if (!confirm('Hapus kolom nilai ini beserta semua nilai di dalamnya?')) return;
+            const gb = getGb(gid); if (!gb) return;
+            gb.cols = gb.cols.filter(c => c.id !== cid); gb.students.forEach(s => delete s.scores[cid]);
+            saveToLocalStorage(); rerenderGrade(gid);
+        }
+        function gradeAddStudent(gid) {
+            const gb = getGb(gid); if (!gb) return;
+            gb.students.push({ id: uid('s-'), name: '', scores: {} });
+            saveToLocalStorage(); rerenderGrade(gid);
+            const all = document.querySelectorAll(`.grade-host[data-gb="${gid}"] .st-name`); all[all.length - 1]?.focus();
+        }
+        function gradeDelStudent(gid, sid) {
+            const gb = getGb(gid); const st = gb?.students.find(s => s.id === sid); if (!st) return;
+            if (!confirm(`Hapus siswa "${st.name || 'tanpa nama'}" dari daftar nilai?`)) return;
+            gb.students = gb.students.filter(s => s.id !== sid); saveToLocalStorage(); rerenderGrade(gid);
+        }
+        function gradeBulk(gid) {
+            const gb = getGb(gid); if (!gb) return;
+            const names = $v('bulkNames').split('\n').map(x => x.replace(/^\s*\d+[\.\)]\s*/, '').trim()).filter(Boolean);
+            if (!names.length) { showToast('Tempel dulu daftar nama siswa.', 'error'); return; }
+            names.forEach(n => gb.students.push({ id: uid('s-'), name: n, scores: {} }));
+            document.getElementById('bulkNames').value = ''; document.getElementById('bulkBox').classList.add('hidden');
+            saveToLocalStorage(); rerenderGrade(gid); showToast(`${names.length} siswa ditambahkan.`, 'success');
+        }
+        function gradeKey(e) {
+            if (e.key !== 'Enter') return;
+            e.preventDefault();
+            const list = [...e.target.closest('table').querySelectorAll(`input[data-col="${e.target.dataset.col}"]`)];
+            const nx = list[list.indexOf(e.target) + 1] || list[0]; nx.focus(); nx.select();
+        }
+        function deleteGradebook(gid) {
+            const gb = getGb(gid); if (!gb) return;
+            if (!confirm(`Hapus SELURUH daftar nilai "${gbLabel(gb)}"? Tindakan ini tidak bisa dibatalkan.`)) return;
+            gradebooksData = gradebooksData.filter(g => g.id !== gid);
+            saveToLocalStorage();
+            if (currentUser.role === 'admin') renderAdminNilai(); else renderGuruNilai();
+            showToast('Daftar nilai dihapus.', 'info');
+        }
+
+        // ---------- CETAK ----------
+        function clearPrintSheet() { const el = document.getElementById('printSheet'); if (el) el.innerHTML = ''; document.body.classList.remove('print-sheet'); }
+        window.addEventListener('afterprint', clearPrintSheet);
+        function printSheet(html) {
+            document.getElementById('printSheet').innerHTML = html;
+            document.body.classList.add('print-sheet');
+            setTimeout(() => window.print(), 150);
+        }
+        function sheetHeader(title, sub) {
+            return `<div style="text-align:center;border-bottom:2px solid #1e293b;padding-bottom:8px;margin-bottom:12px"><h2 style="font-size:18px;font-weight:900;text-transform:uppercase">${title}</h2><h3 style="font-size:14px;font-weight:700">SMP NEGERI 6 KOTA BLITAR</h3><p style="font-size:12px;font-weight:600">${sub}</p></div>`;
+        }
+        function todayLong() { const d = new Date(); return `${d.getDate()} ${MONTHS_ID[d.getMonth()]} ${d.getFullYear()}`; }
+        function printGradebooks(list) {
+            list = (list || []).filter(Boolean);
+            if (!list.length) { showToast('Tidak ada data nilai untuk dicetak.', 'error'); return; }
+            printSheet('<style>@media print{@page{size:landscape;margin:10mm}}</style>' + list.map((gb, i) =>
+                `<div style="${i ? 'page-break-before:always;' : ''}">` +
+                sheetHeader('LAPORAN DAFTAR NILAI SISWA', `Kelas ${esc(gb.kelas)} &bull; ${esc(gb.mapel)} &bull; Semester ${esc(gb.semester)} ${esc(gb.tahun)} &bull; Guru: ${esc(gb.guruName)}`) +
+                gradeTableHTML(gb, false, true) + `<p style="font-size:11px;margin-top:10px">Dicetak: ${todayLong()}</p></div>`).join(''));
+        }
+
+        // ---------- GURU: TAB & DAFTAR NILAI ----------
+        function switchGuruTab(t) {
+            guruTab = t;
+            setPillTabs('guruTab', ['jurnal', 'nilai'], t, 'guruPane');
+            if (t === 'nilai') renderGuruNilai();
+        }
+        function toggleNewGb() {
+            const f = document.getElementById('newGbForm');
+            f.classList.toggle('hidden');
+            if (!f.classList.contains('hidden')) {
+                const y = schoolYearNow();
+                if (!$v('newGbTahun')) document.getElementById('newGbTahun').value = y.tahun;
+                document.getElementById('newGbSemester').value = y.semester;
+            }
+        }
+        function createGradebook(e) {
+            e.preventDefault();
+            const kelas = $v('newGbKelas'), sel = $v('newGbMapel'), semester = $v('newGbSemester'), tahun = $v('newGbTahun').trim();
+            const mapel = sel === '__lain' ? $v('newGbMapelLain').trim() : sel;
+            if (!kelas || !mapel || !tahun) { showToast('Lengkapi kelas, mata pelajaran, dan tahun ajaran.', 'error'); return; }
+            const dup = gradebooksData.find(g => g.guruId === currentUser.id && g.kelas === kelas && g.mapel === mapel && g.semester === semester && g.tahun === tahun);
+            if (dup) { guruGbId = dup.id; toggleNewGb(); renderGuruNilai(); showToast('Daftar nilai tersebut sudah ada, sudah dibuka.', 'info'); return; }
+            const gb = {
+                id: uid('gb-'), guruId: currentUser.id, guruName: currentUser.name, kelas, mapel, semester, tahun,
+                cols: GROUP_ORDER.map(g => ({ id: uid('c-'), g, label: GROUPS[g].short + (g === 'akhir' ? '' : ' 1') })), students: []
+            };
+            gradebooksData.push(gb); saveToLocalStorage();
+            guruGbId = gb.id; toggleNewGb(); renderGuruNilai();
+            document.getElementById('bulkBox')?.classList.remove('hidden');
+            showToast('Daftar nilai dibuat. Tempel daftar nama siswa atau tambah satu per satu.', 'success');
+        }
+        function renderGuruNilai() {
+            if (!currentUser) return;
+            const mine = gradebooksData.filter(g => g.guruId === currentUser.id);
+            if (!mine.find(g => g.id === guruGbId)) guruGbId = mine[0]?.id || null;
+            const sel = document.getElementById('guruGbSelect');
+            sel.innerHTML = mine.length ? mine.map(g => `<option value="${g.id}">${esc(gbLabel(g))}</option>`).join('') : '<option value="">(Belum ada daftar nilai)</option>';
+            sel.value = guruGbId || '';
+            const gb = getGb(guruGbId), tools = document.getElementById('guruGbTools');
+            tools.classList.toggle('hidden', !gb);
+            tools.innerHTML = gb ? gradeToolsHTML(gb.id) : '';
+            document.getElementById('guruGbHost').innerHTML = gb
+                ? `<div class="grade-host" data-gb="${gb.id}" data-edit="1">${gradeTableHTML(gb, true)}</div>`
+                : '<div class="p-8 text-center text-slate-400 font-medium">Belum ada daftar nilai. Klik tombol hijau <b>Buat Daftar Nilai Baru</b>.</div>';
+        }
+
+        // ---------- ADMIN: NILAI ----------
+        function admFilteredGb() {
+            const k = $v('admGbFilterKelas') || 'ALL', g = $v('admGbFilterGuru') || 'ALL';
+            return gradebooksData.filter(x => (k === 'ALL' || x.kelas === k) && (g === 'ALL' || x.guruName === g))
+                .sort((a, b) => a.kelas.localeCompare(b.kelas) || a.mapel.localeCompare(b.mapel));
+        }
+        function renderAdminNilai() {
+            const gf = document.getElementById('admGbFilterGuru'); if (!gf) return;
+            const cur = gf.value || 'ALL', gurus = [...new Set(gradebooksData.map(g => g.guruName))].sort();
+            gf.innerHTML = '<option value="ALL">Semua Guru</option>' + gurus.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('');
+            gf.value = gurus.includes(cur) ? cur : 'ALL';
+            const list = admFilteredGb();
+            if (!list.find(g => g.id === admGbId)) admGbId = list[0]?.id || null;
+            const sel = document.getElementById('admGbSelect');
+            sel.innerHTML = list.length ? list.map(g => `<option value="${g.id}">Kelas ${esc(g.kelas)} — ${esc(g.mapel)} — ${esc(g.guruName)}</option>`).join('') : '<option value="">(Belum ada data nilai)</option>';
+            sel.value = admGbId || '';
+            const gb = getGb(admGbId), tools = document.getElementById('admGbTools');
+            tools.classList.toggle('hidden', !gb);
+            tools.innerHTML = gb ? gradeToolsHTML(gb.id) : '';
+            document.getElementById('admGbHost').innerHTML = gb
+                ? `<div class="grade-host" data-gb="${gb.id}" data-edit="1">${gradeTableHTML(gb, true)}</div>`
+                : '<div class="p-8 text-center text-slate-400 font-medium">Belum ada daftar nilai yang dibuat guru.</div>';
+        }
+
+        // ---------- CATATAN ANAK ----------
+        function classStudentNames(kelas) {
+            const s = new Set();
+            gradebooksData.filter(g => !kelas || g.kelas === kelas).forEach(g => g.students.forEach(x => x.name && s.add(x.name)));
+            notesData.filter(n => !kelas || n.kelas === kelas).forEach(n => s.add(n.siswa));
+            return [...s].sort((a, b) => a.localeCompare(b, 'id'));
+        }
+        function todayISO() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+        function fmtDate(iso) { if (!iso) return '-'; const [y, m, d] = iso.split('-'); return `${+d} ${MONTHS_ID[m - 1]} ${y}`; }
+        function filteredNotes(kelas, siswa, jenis) {
+            return notesData.filter(n => (!kelas || kelas === 'ALL' || n.kelas === kelas) && (!siswa || siswa === 'ALL' || n.siswa === siswa) && (!jenis || jenis === 'ALL' || n.jenis === jenis))
+                .sort((a, b) => (b.tanggal || '').localeCompare(a.tanggal || ''));
+        }
+        function noteCardHTML(n, canEdit, canDelete) {
+            const t = NOTE_TYPES[n.jenis] || NOTE_TYPES.baik;
+            return `<div class="rounded-2xl border p-4 ${t.cls} space-y-1.5">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div class="font-extrabold text-sm text-slate-900">${esc(n.siswa)} <span class="text-xs font-bold text-slate-500">• Kelas ${esc(n.kelas)}</span></div>
+                    <span class="text-[11px] font-black uppercase px-2.5 py-1 rounded-lg bg-white/70"><i class="fa-solid ${t.icon} me-1"></i>${t.label}</span>
+                </div>
+                <p class="text-sm text-slate-800 font-medium leading-relaxed whitespace-pre-line">${esc(n.isi)}</p>
+                <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] font-semibold text-slate-500">
+                    <span>${fmtDate(n.tanggal)} • Dicatat: ${esc(n.penulisName || '-')}</span>
+                    <span class="space-x-1 no-print">${canEdit ? `<button onclick="editNote('${n.id}')" class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded-lg text-xs"><i class="fa-solid fa-pen-to-square"></i> Edit</button>` : ''}${canDelete ? `<button onclick="deleteNote('${n.id}')" class="bg-rose-500 hover:bg-rose-600 text-white px-3 py-1.5 rounded-lg text-xs"><i class="fa-solid fa-trash-can"></i> Hapus</button>` : ''}</span>
+                </div></div>`;
+        }
+        function printNotes(list, sub) {
+            if (!list.length) { showToast('Tidak ada catatan untuk dicetak.', 'error'); return; }
+            const rows = [...list].sort((a, b) => a.kelas.localeCompare(b.kelas) || a.siswa.localeCompare(b.siswa, 'id') || (a.tanggal || '').localeCompare(b.tanggal || ''));
+            printSheet(sheetHeader('LAPORAN CATATAN WALI KELAS', sub) +
+                `<table class="w-full text-left text-xs"><thead><tr><th>No</th><th>Tanggal</th><th>Nama Siswa</th><th>Kelas</th><th>Jenis</th><th>Catatan</th><th>Dicatat Oleh</th></tr></thead><tbody>` +
+                rows.map((n, i) => `<tr><td>${i + 1}</td><td>${fmtDate(n.tanggal)}</td><td>${esc(n.siswa)}</td><td>${esc(n.kelas)}</td><td>${(NOTE_TYPES[n.jenis] || NOTE_TYPES.baik).label}</td><td>${esc(n.isi)}</td><td>${esc(n.penulisName || '-')}</td></tr>`).join('') +
+                `</tbody></table><p style="font-size:11px;margin-top:10px">Dicetak: ${todayLong()}. Dokumen ini bersifat rahasia.</p>`);
+        }
+        function wkClass() { return currentUser?.classAssigned || ''; }
+        function renderWkCatatan() {
+            const k = wkClass(), names = classStudentNames(k);
+            document.getElementById('wkNoteNames').innerHTML = names.map(n => `<option value="${esc(n)}">`).join('');
+            const fs = document.getElementById('wkNoteFilterSiswa'), cur = fs.value || 'ALL';
+            fs.innerHTML = '<option value="ALL">Semua Siswa</option>' + names.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('');
+            fs.value = names.includes(cur) ? cur : 'ALL';
+            if (!wkEditNoteId && !$v('wkNoteTanggal')) document.getElementById('wkNoteTanggal').value = todayISO();
+            const list = filteredNotes(k || '__none__', fs.value, $v('wkNoteFilterJenis'));
+            document.getElementById('wkNoteList').innerHTML = list.length ? list.map(n => noteCardHTML(n, true, true)).join('')
+                : '<div class="p-8 text-center bg-white rounded-2xl border border-slate-200 text-slate-400 font-medium">Belum ada catatan.</div>';
+        }
+        function saveWkNote(e) {
+            e.preventDefault();
+            const k = wkClass(); if (!k) { showToast('Akun Anda belum diberi kelas. Hubungi admin.', 'error'); return; }
+            const siswa = $v('wkNoteSiswa').trim(), jenis = $v('wkNoteJenis'), tanggal = $v('wkNoteTanggal'), isi = $v('wkNoteIsi').trim();
+            if (!siswa || !isi || !tanggal) { showToast('Lengkapi nama siswa, tanggal, dan isi catatan.', 'error'); return; }
+            const ex = wkEditNoteId && notesData.find(n => n.id === wkEditNoteId);
+            if (ex) Object.assign(ex, { siswa, jenis, tanggal, isi });
+            else notesData.push({ id: uid('n-'), kelas: k, siswa, jenis, tanggal, isi, penulisId: currentUser.id, penulisName: currentUser.name, timestamp: new Date().toISOString() });
+            saveToLocalStorage(); cancelEditNote(); renderWkCatatan();
+            showToast('Catatan tersimpan.', 'success');
+        }
+        function editNote(id) {
+            const n = notesData.find(x => x.id === id); if (!n) return;
+            wkEditNoteId = id;
+            document.getElementById('wkNoteSiswa').value = n.siswa; document.getElementById('wkNoteJenis').value = n.jenis;
+            document.getElementById('wkNoteTanggal').value = n.tanggal; document.getElementById('wkNoteIsi').value = n.isi;
+            document.getElementById('wkNoteFormTitle').textContent = 'Edit Catatan Anak';
+            document.getElementById('wkNoteCancel').classList.remove('hidden');
+            document.getElementById('wkNoteSiswa').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        function cancelEditNote() {
+            wkEditNoteId = null;
+            ['wkNoteSiswa', 'wkNoteIsi'].forEach(i => { document.getElementById(i).value = ''; });
+            document.getElementById('wkNoteTanggal').value = todayISO(); document.getElementById('wkNoteJenis').value = 'baik';
+            document.getElementById('wkNoteFormTitle').textContent = 'Tambah Catatan Anak';
+            document.getElementById('wkNoteCancel').classList.add('hidden');
+        }
+        function deleteNote(id) {
+            if (!confirm('Hapus catatan ini?')) return;
+            notesData = notesData.filter(n => n.id !== id); saveToLocalStorage();
+            if (currentUser.role === 'admin') renderAdminCatatan(); else renderWkCatatan();
+        }
+        function printWkNotes() {
+            const s = $v('wkNoteFilterSiswa');
+            printNotes(filteredNotes(wkClass() || '__none__', s, $v('wkNoteFilterJenis')), `Kelas ${esc(wkClass())}${s && s !== 'ALL' ? ' &bull; Siswa: ' + esc(s) : ''} &bull; Wali Kelas: ${esc(currentUser.name)}`);
+        }
+        function renderAdminCatatan() {
+            const kelas = $v('admNoteFilterKelas') || 'ALL';
+            const names = classStudentNames(kelas === 'ALL' ? '' : kelas);
+            const fs = document.getElementById('admNoteFilterSiswa'); if (!fs) return;
+            const cur = fs.value || 'ALL';
+            fs.innerHTML = '<option value="ALL">Semua Siswa</option>' + names.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('');
+            fs.value = names.includes(cur) ? cur : 'ALL';
+            const list = filteredNotes(kelas, fs.value, $v('admNoteFilterJenis'));
+            document.getElementById('admNoteList').innerHTML = list.length ? list.map(n => noteCardHTML(n, false, true)).join('')
+                : '<div class="p-8 text-center bg-white rounded-2xl border border-slate-200 text-slate-400 font-medium">Belum ada catatan wali kelas.</div>';
+        }
+        function printAdminNotes() {
+            const k = $v('admNoteFilterKelas') || 'ALL', s = $v('admNoteFilterSiswa');
+            printNotes(filteredNotes(k, s, $v('admNoteFilterJenis')), `${k === 'ALL' ? 'Semua Kelas' : 'Kelas ' + esc(k)}${s && s !== 'ALL' ? ' &bull; Siswa: ' + esc(s) : ''}`);
+        }
+
+        // ---------- WALI KELAS ----------
+        function switchWkTab(t) { wkTab = t; renderWaliKelas(); }
+        function renderWaliKelas() {
+            if (!currentUser) return;
+            const k = wkClass();
+            document.getElementById('wkWelcome').textContent = `Selamat Datang, ${currentUser.name}`;
+            document.getElementById('wkClassBadge').textContent = k ? `Wali Kelas ${k}` : 'Kelas belum ditentukan (hubungi admin)';
+            setPillTabs('wkTab', ['jurnal', 'nilai', 'catatan'], wkTab, 'wkPane');
+            if (wkTab === 'jurnal') renderWaliJournalView('wkJournalFeed', k || '-');
+            if (wkTab === 'nilai') renderWkNilai();
+            if (wkTab === 'catatan') renderWkCatatan();
+        }
+        function renderWkNilai() {
+            const list = gradebooksData.filter(g => g.kelas === wkClass()).sort((a, b) => a.mapel.localeCompare(b.mapel));
+            if (!list.find(g => g.id === wkGbId)) wkGbId = list[0]?.id || null;
+            const sel = document.getElementById('wkGbSelect');
+            sel.innerHTML = list.length ? list.map(g => `<option value="${g.id}">${esc(g.mapel)} — ${esc(g.guruName)} (${esc(g.semester)} ${esc(g.tahun)})</option>`).join('') : '<option value="">(Belum ada nilai dari guru mapel)</option>';
+            sel.value = wkGbId || '';
+            const gb = getGb(wkGbId);
+            document.getElementById('wkGbHost').innerHTML = gb ? `<div class="grade-host" data-gb="${gb.id}" data-edit="0">${gradeTableHTML(gb, false)}</div>`
+                : '<div class="p-8 text-center text-slate-400 font-medium">Belum ada nilai yang diinput guru mata pelajaran untuk kelas ini.</div>';
+            document.getElementById('wkPrintBtns').classList.toggle('hidden', !list.length);
         }
 
         // --- TOAST NOTIFICATIONS ---
