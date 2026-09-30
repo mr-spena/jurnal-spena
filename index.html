@@ -332,8 +332,8 @@
                 <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-5 space-y-4">
                     <div class="flex flex-wrap items-end gap-3">
                         <div class="flex-grow min-w-[220px]">
-                            <label class="block text-sm font-bold text-slate-700 mb-1">Pilih Daftar Nilai Anda</label>
-                            <select id="guruGbSelect" onchange="guruGbId=this.value; renderGuruNilai()" class="w-full p-3 border border-slate-300 rounded-xl text-sm font-bold bg-slate-50 outline-none focus:ring-2 focus:ring-spena-500"></select>
+                            <h3 class="text-base font-extrabold text-slate-800">Daftar Nilai Anda</h3>
+                            <p class="text-xs text-slate-500 font-medium">Klik salah satu daftar di bawah untuk membuka nilainya.</p>
                         </div>
                         <button onclick="toggleNewGb()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-extrabold px-5 py-3 rounded-xl shadow-md flex items-center space-x-2"><i class="fa-solid fa-plus"></i><span>Buat Daftar Nilai Baru</span></button>
                     </div>
@@ -606,7 +606,7 @@
                 <div class="bg-white p-4 rounded-2xl border border-slate-200 flex flex-wrap items-center gap-3 shadow-sm no-print">
                     <select id="admGbFilterKelas" onchange="renderAdminNilai()" class="p-2.5 border border-slate-300 rounded-xl text-xs font-bold bg-slate-50"></select>
                     <select id="admGbFilterGuru" onchange="renderAdminNilai()" class="p-2.5 border border-slate-300 rounded-xl text-xs font-bold bg-slate-50 max-w-[200px]"></select>
-                    <select id="admGbSelect" onchange="admGbId=this.value; renderAdminNilai()" class="p-2.5 border border-slate-300 rounded-xl text-xs font-bold bg-slate-50 flex-grow min-w-[220px]"></select>
+                    
                     <button onclick="printGradebooks(admFilteredGb())" class="bg-slate-800 hover:bg-slate-900 text-white text-xs px-4 py-2.5 rounded-xl font-bold flex items-center space-x-2"><i class="fa-solid fa-print"></i><span>Cetak Semua (sesuai filter)</span></button>
                 </div>
                 <div id="admGbTools" class="hidden bg-white p-4 rounded-2xl border border-slate-200 shadow-sm no-print"></div>
@@ -1116,7 +1116,7 @@
         }
 
         // --- SINKRONISASI PER-RECORD (v2) ---
-        const APP_VERSION = '2026-09-30-2'; // naikkan angka ini + version.json setiap update
+        const APP_VERSION = '2026-09-30-3'; // naikkan angka ini + version.json setiap update
         const SYNC_MS = 20000;
         let syncSnap = {};
         let pendingOps = JSON.parse(localStorage.getItem('spena_pending') || '[]');
@@ -1426,7 +1426,7 @@
                 return;
             }
 
-            guruTab = 'jurnal'; wkTab = 'jurnal';
+            guruTab = 'jurnal'; wkTab = 'jurnal'; guruGbId = null; admGbId = null;
             applyLoginSession(user);
             showToast(`Selamat datang, ${user.name}!`, 'success');
         }
@@ -2516,19 +2516,33 @@
             document.getElementById('bulkBox')?.classList.remove('hidden');
             showToast('Daftar nilai dibuat. Tempel daftar nama siswa atau tambah satu per satu.', 'success');
         }
+        function gbCardHTML(g, fn, showGuru) {
+            return `<button onclick="${fn}('${g.id}')" class="text-left bg-white hover:bg-spena-50 border-2 border-slate-200 hover:border-spena-500 rounded-2xl p-4 shadow-sm transition space-y-1.5 w-full">
+                <div class="flex items-center justify-between gap-2"><span class="bg-spena-100 text-spena-800 font-extrabold px-3 py-1 rounded-lg text-sm">Kelas ${esc(g.kelas)}</span><i class="fa-solid fa-chevron-right text-slate-400"></i></div>
+                <div class="font-extrabold text-slate-800 text-base leading-snug">${esc(g.mapel)}</div>
+                ${showGuru ? `<div class="text-sm font-semibold text-slate-600"><i class="fa-solid fa-user-tie me-1.5 text-emerald-600"></i>${esc(g.guruName)}</div>` : ''}
+                <div class="text-xs text-slate-500 font-medium">Semester ${esc(g.semester)} ${esc(g.tahun)} &bull; ${g.students.length} siswa &bull; ${g.cols.length} kolom nilai</div></button>`;
+        }
+        function gbListHTML(list, fn, showGuru, emptyMsg) {
+            return list.length ? `<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">${list.map(g => gbCardHTML(g, fn, showGuru)).join('')}</div>`
+                : `<div class="p-8 text-center text-slate-400 font-medium">${emptyMsg}</div>`;
+        }
+        function gbDetailHead(g, backFn, showGuru) {
+            return `<div class="flex flex-wrap items-center gap-3 mb-3"><button onclick="${backFn}()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 text-sm font-extrabold px-4 py-2.5 rounded-xl flex items-center space-x-2"><i class="fa-solid fa-arrow-left"></i><span>Kembali ke Daftar</span></button>
+                <div><div class="font-extrabold text-slate-800 text-base">Kelas ${esc(g.kelas)} — ${esc(g.mapel)}</div><div class="text-xs text-slate-500 font-semibold">${showGuru ? esc(g.guruName) + ' &bull; ' : ''}Semester ${esc(g.semester)} ${esc(g.tahun)}</div></div></div>`;
+        }
+        function openGuruGb(id) { guruGbId = id; renderGuruNilai(); }
+        function backGuruGb() { guruGbId = null; renderGuruNilai(); }
         function renderGuruNilai() {
             if (!currentUser) return;
-            const mine = gradebooksData.filter(g => g.guruId === currentUser.id);
-            if (!mine.find(g => g.id === guruGbId)) guruGbId = mine[0]?.id || null;
-            const sel = document.getElementById('guruGbSelect');
-            sel.innerHTML = mine.length ? mine.map(g => `<option value="${g.id}">${esc(gbLabel(g))}</option>`).join('') : '<option value="">(Belum ada daftar nilai)</option>';
-            sel.value = guruGbId || '';
+            const mine = gradebooksData.filter(g => g.guruId === currentUser.id).sort((a, b) => a.kelas.localeCompare(b.kelas) || a.mapel.localeCompare(b.mapel));
+            if (!mine.find(g => g.id === guruGbId)) guruGbId = null;
             const gb = getGb(guruGbId), tools = document.getElementById('guruGbTools');
             tools.classList.toggle('hidden', !gb);
-            tools.innerHTML = gb ? gradeToolsHTML(gb.id) : '';
+            tools.innerHTML = gb ? gbDetailHead(gb, 'backGuruGb', false) + gradeToolsHTML(gb.id) : '';
             document.getElementById('guruGbHost').innerHTML = gb
                 ? `<div class="grade-host" data-gb="${gb.id}" data-edit="1">${gradeTableHTML(gb, true)}</div>`
-                : '<div class="p-8 text-center text-slate-400 font-medium">Belum ada daftar nilai. Klik tombol hijau <b>Buat Daftar Nilai Baru</b>.</div>';
+                : gbListHTML(mine, 'openGuruGb', false, 'Belum ada daftar nilai. Klik tombol hijau <b>Buat Daftar Nilai Baru</b>.');
         }
 
         // ---------- ADMIN: NILAI ----------
@@ -2537,22 +2551,21 @@
             return gradebooksData.filter(x => (k === 'ALL' || x.kelas === k) && (g === 'ALL' || x.guruName === g))
                 .sort((a, b) => a.kelas.localeCompare(b.kelas) || a.mapel.localeCompare(b.mapel));
         }
+        function openAdmGb(id) { admGbId = id; renderAdminNilai(); }
+        function backAdmGb() { admGbId = null; renderAdminNilai(); }
         function renderAdminNilai() {
             const gf = document.getElementById('admGbFilterGuru'); if (!gf) return;
             const cur = gf.value || 'ALL', gurus = [...new Set(gradebooksData.map(g => g.guruName))].sort();
             gf.innerHTML = '<option value="ALL">Semua Guru</option>' + gurus.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('');
             gf.value = gurus.includes(cur) ? cur : 'ALL';
-            const list = admFilteredGb();
-            if (!list.find(g => g.id === admGbId)) admGbId = list[0]?.id || null;
-            const sel = document.getElementById('admGbSelect');
-            sel.innerHTML = list.length ? list.map(g => `<option value="${g.id}">Kelas ${esc(g.kelas)} — ${esc(g.mapel)} — ${esc(g.guruName)}</option>`).join('') : '<option value="">(Belum ada data nilai)</option>';
-            sel.value = admGbId || '';
+            const list = admFilteredGb().sort((a, b) => a.guruName.localeCompare(b.guruName, 'id') || a.kelas.localeCompare(b.kelas) || a.mapel.localeCompare(b.mapel));
+            if (!list.find(g => g.id === admGbId)) admGbId = null;
             const gb = getGb(admGbId), tools = document.getElementById('admGbTools');
             tools.classList.toggle('hidden', !gb);
-            tools.innerHTML = gb ? gradeToolsHTML(gb.id) : '';
+            tools.innerHTML = gb ? gbDetailHead(gb, 'backAdmGb', true) + gradeToolsHTML(gb.id) : '';
             document.getElementById('admGbHost').innerHTML = gb
                 ? `<div class="grade-host" data-gb="${gb.id}" data-edit="1">${gradeTableHTML(gb, true)}</div>`
-                : '<div class="p-8 text-center text-slate-400 font-medium">Belum ada daftar nilai yang dibuat guru.</div>';
+                : gbListHTML(list, 'openAdmGb', true, 'Belum ada daftar nilai yang dibuat guru.');
         }
 
         // ---------- CATATAN ANAK ----------
