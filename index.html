@@ -97,7 +97,7 @@
                             <p id="navUserNameMobile" class="font-bold text-xs text-slate-800">Nama User</p>
                             <p id="navUserRoleMobile" class="text-[10px] text-spena-600 font-semibold uppercase">Role</p>
                         </div>
-                        <a href="#" onclick="openChangePasswordModal()" class="block px-4 py-2.5 text-xs font-semibold hover:bg-slate-50 transition text-slate-700">
+                        <a href="#" id="navChangePassword" onclick="openChangePasswordModal()" class="block px-4 py-2.5 text-xs font-semibold hover:bg-slate-50 transition text-slate-700">
                             <i class="fa-solid fa-key me-2 text-slate-400"></i> Ubah Password
                         </a>
                         <a href="#" onclick="logout()" class="block px-4 py-2.5 text-xs font-bold hover:bg-rose-50 text-rose-600 transition">
@@ -1096,7 +1096,7 @@
         }
 
         // --- SINKRONISASI PER-RECORD (v2) ---
-        const APP_VERSION = '2026-09-30-5'; // naikkan angka ini + version.json setiap update
+        const APP_VERSION = '2026-09-30-6'; // naikkan angka ini + version.json setiap update
         const SYNC_MS = 20000;
         let syncSnap = {};
         let pendingOps = JSON.parse(localStorage.getItem('spena_pending') || '[]');
@@ -1402,6 +1402,7 @@
             document.getElementById('navUserRoleMobile').textContent = user.role === 'walikelas' ? 'wali kelas' : user.role;
 
             document.getElementById('viewLogin').classList.add('hidden');
+            document.getElementById('navChangePassword').style.display = user.role === 'wali' ? 'none' : '';
 
             if (user.role === 'guru') {
                 document.getElementById('guruWelcomeName').textContent = `Selamat Datang, ${user.name}`;
@@ -1678,7 +1679,7 @@
                         </div>
                         <div class="text-right">
                             <span class="bg-amber-100 text-amber-800 font-black text-xs px-2.5 py-1 rounded-lg">${jamDisplay}</span>
-                            <div class="text-[10px] text-emerald-700 font-mono font-bold mt-1">${formatJournalDateTime(j)}</div>
+                            ${currentUser && currentUser.role === 'wali' ? '' : `<div class="text-[10px] text-emerald-700 font-mono font-bold mt-1">${formatJournalDateTime(j)}</div>`}
                         </div>
                     </div>
                     <div>
@@ -2357,6 +2358,7 @@
 
         // --- CHANGE PASSWORD LOGIC ---
         function openChangePasswordModal() {
+            if (currentUser && currentUser.role === 'wali') return; // wali murid: password hanya bisa diubah admin
             document.getElementById('userDropdown').classList.add('hidden');
             document.getElementById('modalChangePassword').classList.remove('hidden');
         }
@@ -2367,6 +2369,7 @@
 
         function saveNewPassword(e) {
             e.preventDefault();
+            if (currentUser && currentUser.role === 'wali') return; // wali murid tidak boleh ubah password sendiri
             const oldP = document.getElementById('oldPasswordInput').value;
             const newP = document.getElementById('newPasswordInput').value;
             const confP = document.getElementById('confirmPasswordInput').value;
