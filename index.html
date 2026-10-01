@@ -171,7 +171,7 @@
 
                         <div class="flex flex-wrap gap-2 no-print">
                 <button id="guruTabBtn-jurnal" onclick="switchGuruTab('jurnal')" class="px-5 py-3 rounded-xl text-sm font-extrabold flex items-center space-x-2 shadow-sm"><i class="fa-solid fa-pen-to-square"></i><span>Jurnal Mengajar</span></button>
-                <button id="guruTabBtn-nilai" onclick="switchGuruTab('nilai')" class="px-5 py-3 rounded-xl text-sm font-extrabold flex items-center space-x-2 shadow-sm"><i class="fa-solid fa-table-list"></i><span>Input Nilai Siswa</span></button>
+                <button id="guruTabBtn-nilai" onclick="switchGuruTab('nilai')" class="px-5 py-3 rounded-xl text-sm font-extrabold flex items-center space-x-2 shadow-sm"><i class="fa-solid fa-table-list"></i><span>Input Nilai Murid</span></button>
             </div>
 
             <div id="guruPane-jurnal" class="space-y-6">
@@ -277,13 +277,13 @@
                     <div class="bg-amber-50/60 rounded-2xl p-4 sm:p-5 border border-amber-200/80">
                         <div class="flex justify-between items-center mb-2">
                             <label class="block text-sm font-extrabold text-slate-800">
-                                4. Daftar Siswa Tidak Masuk pada Jam Ini
+                                4. Daftar Murid Tidak Masuk pada Jam Ini
                             </label>
                             <button type="button" onclick="addAbsentRow()" class="text-xs bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded-lg font-bold transition shadow-sm">
-                                <i class="fa-solid fa-plus me-1"></i> Tambah Siswa
+                                <i class="fa-solid fa-plus me-1"></i> Tambah Murid
                             </button>
                         </div>
-                        <p class="text-xs text-slate-500 mb-3">Tambahkan nama siswa yang Sakit, Izin, atau Alpha saat jam pelajaran Anda.</p>
+                        <p class="text-xs text-slate-500 mb-3">Tambahkan nama murid yang Sakit, Izin, atau Alpha saat jam pelajaran Anda.</p>
 
                         <div id="absentListContainer" class="space-y-2"></div>
                     </div>
@@ -293,7 +293,7 @@
                         <label class="block text-sm font-extrabold text-slate-800 mb-1.5">
                             5. Catatan Kejadian Khusus (Optional)
                         </label>
-                        <textarea id="journalCatatan" rows="2" class="w-full p-3.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-spena-500 text-sm outline-none font-medium" placeholder="Contoh: Ada siswa terlambat 15 menit, proyektor ruang kelas mati, dll."></textarea>
+                        <textarea id="journalCatatan" rows="2" class="w-full p-3.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-spena-500 text-sm outline-none font-medium" placeholder="Contoh: Ada murid terlambat 15 menit, proyektor ruang kelas mati, dll."></textarea>
                     </div>
 
                     <div class="pt-2 flex justify-end">
@@ -318,7 +318,7 @@
                                 <th class="p-3">Kelas</th>
                                 <th class="p-3">Mata Pelajaran</th>
                                 <th class="p-3">Materi Pembelajaran</th>
-                                <th class="p-3">Siswa Absen</th>
+                                <th class="p-3">Murid Absen</th>
                                 <th class="p-3">Catatan Khusus</th>
                                 <th class="p-3 text-center">Aksi</th>
                             </tr>
@@ -395,7 +395,7 @@
             </div>
             <div class="flex flex-wrap gap-2 no-print">
                 <button id="wkTabBtn-jurnal" onclick="switchWkTab('jurnal')" class="px-5 py-3 rounded-xl text-sm font-extrabold flex items-center space-x-2 shadow-sm"><i class="fa-solid fa-book"></i><span>Jurnal Guru di Kelas</span></button>
-                <button id="wkTabBtn-nilai" onclick="switchWkTab('nilai')" class="px-5 py-3 rounded-xl text-sm font-extrabold flex items-center space-x-2 shadow-sm"><i class="fa-solid fa-table-list"></i><span>Nilai Siswa</span></button>
+                <button id="wkTabBtn-nilai" onclick="switchWkTab('nilai')" class="px-5 py-3 rounded-xl text-sm font-extrabold flex items-center space-x-2 shadow-sm"><i class="fa-solid fa-table-list"></i><span>Nilai Murid</span></button>
                 <button id="wkTabBtn-catatan" onclick="switchWkTab('catatan')" class="px-5 py-3 rounded-xl text-sm font-extrabold flex items-center space-x-2 shadow-sm"><i class="fa-solid fa-book-open-reader"></i><span>Catatan Anak</span></button>
             </div>
 
@@ -423,11 +423,11 @@
                 <form onsubmit="saveWkNote(event)" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-3">
                     <h3 class="text-base font-extrabold text-slate-800 flex items-center"><i class="fa-solid fa-pen me-2 text-teal-600"></i><span id="wkNoteFormTitle">Tambah Catatan Anak</span></h3>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Nama Siswa *</label><select id="wkNoteSiswa" required class="w-full p-3 border border-slate-300 rounded-xl text-sm font-bold bg-slate-50"></select></div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Nama Murid *</label><select id="wkNoteSiswa" required class="w-full p-3 border border-slate-300 rounded-xl text-sm font-bold bg-slate-50"></select></div>
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Jenis Catatan *</label><select id="wkNoteJenis" class="w-full p-3 border border-slate-300 rounded-xl text-sm font-bold bg-slate-50"><option value="baik">Catatan Baik</option><option value="prestasi">Prestasi</option><option value="buruk">Catatan Buruk / Pelanggaran</option></select></div>
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal *</label><input type="date" id="wkNoteTanggal" required class="w-full p-3 border border-slate-300 rounded-xl text-sm font-medium"></div>
                     </div>
-                    <div><label class="block text-xs font-bold text-slate-700 mb-1">Isi Catatan *</label><textarea id="wkNoteIsi" rows="3" required class="w-full p-3 border border-slate-300 rounded-xl text-sm font-medium" placeholder="Tuliskan catatan perkembangan / prestasi / pelanggaran siswa..."></textarea></div>
+                    <div><label class="block text-xs font-bold text-slate-700 mb-1">Isi Catatan *</label><textarea id="wkNoteIsi" rows="3" required class="w-full p-3 border border-slate-300 rounded-xl text-sm font-medium" placeholder="Tuliskan catatan perkembangan / prestasi / pelanggaran murid..."></textarea></div>
                     <div class="flex gap-2"><button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white text-sm font-extrabold px-6 py-3 rounded-xl">Simpan Catatan</button><button type="button" id="wkNoteCancel" onclick="cancelEditNote()" class="hidden bg-white border text-slate-700 text-sm font-bold px-5 py-3 rounded-xl">Batal Edit</button></div>
                 </form>
                 <div class="bg-white p-4 rounded-2xl border border-slate-200 flex flex-wrap items-center gap-3 shadow-sm">
@@ -500,7 +500,7 @@
                 </button>
                 <button onclick="switchAdminTab('nilai')" id="adminTabBtn-nilai" class="pb-3 shrink-0 text-xs sm:text-sm font-extrabold border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition flex items-center space-x-2">
                     <i class="fa-solid fa-table-list"></i>
-                    <span>Nilai Siswa</span>
+                    <span>Nilai Murid</span>
                 </button>
                 <button onclick="switchAdminTab('catatan')" id="adminTabBtn-catatan" class="pb-3 shrink-0 text-xs sm:text-sm font-extrabold border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition flex items-center space-x-2">
                     <i class="fa-solid fa-book-open-reader"></i>
@@ -555,7 +555,7 @@
                                     <th class="p-3.5">Kelas</th>
                                     <th class="p-3.5">Mata Pelajaran</th>
                                     <th class="p-3.5">Materi KBM</th>
-                                    <th class="p-3.5">Siswa Absen</th>
+                                    <th class="p-3.5">Murid Absen</th>
                                     <th class="p-3.5">Catatan Khusus</th>
                                     <th class="p-3.5 text-center no-print">Aksi Admin</th>
                                 </tr>
@@ -582,6 +582,14 @@
                             <i class="fa-solid fa-image"></i>
                             <span>Edit Logo Sekolah</span>
                         </button>
+                        <button onclick="openImportModal()" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 shadow">
+                            <i class="fa-solid fa-file-import"></i>
+                            <span>Impor Akun</span>
+                        </button>
+                        <button onclick="openExportModal()" class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 shadow">
+                            <i class="fa-solid fa-file-pdf"></i>
+                            <span>Ekspor Kartu Login (PDF)</span>
+                        </button>
                         <button onclick="openAddUserModal()" class="bg-spena-600 hover:bg-spena-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 shadow">
                             <i class="fa-solid fa-user-plus"></i>
                             <span>Tambah User Baru</span>
@@ -589,7 +597,15 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
+                <div id="userRoleTabs" class="grid grid-cols-2 lg:grid-cols-4 gap-2">
+                    <button type="button" id="userTabBtn-admin" onclick="setUserTab('admin')" class="px-4 py-3 rounded-xl text-sm font-extrabold flex items-center justify-between gap-2 shadow-sm"><span class="flex items-center gap-2"><i class="fa-solid fa-user-shield"></i><span>Admin</span></span><span id="userTabCount-admin" class="text-xs font-black px-2 py-0.5 rounded-lg bg-white/80 text-slate-700">0</span></button>
+                    <button type="button" id="userTabBtn-guru" onclick="setUserTab('guru')" class="px-4 py-3 rounded-xl text-sm font-extrabold flex items-center justify-between gap-2 shadow-sm"><span class="flex items-center gap-2"><i class="fa-solid fa-chalkboard-user"></i><span>Guru Mapel</span></span><span id="userTabCount-guru" class="text-xs font-black px-2 py-0.5 rounded-lg bg-white/80 text-slate-700">0</span></button>
+                    <button type="button" id="userTabBtn-walikelas" onclick="setUserTab('walikelas')" class="px-4 py-3 rounded-xl text-sm font-extrabold flex items-center justify-between gap-2 shadow-sm"><span class="flex items-center gap-2"><i class="fa-solid fa-user-tie"></i><span>Wali Kelas</span></span><span id="userTabCount-walikelas" class="text-xs font-black px-2 py-0.5 rounded-lg bg-white/80 text-slate-700">0</span></button>
+                    <button type="button" id="userTabBtn-wali" onclick="setUserTab('wali')" class="px-4 py-3 rounded-xl text-sm font-extrabold flex items-center justify-between gap-2 shadow-sm"><span class="flex items-center gap-2"><i class="fa-solid fa-people-roof"></i><span>Wali Murid</span></span><span id="userTabCount-wali" class="text-xs font-black px-2 py-0.5 rounded-lg bg-white/80 text-slate-700">0</span></button>
+                </div>
+                <div id="adminUserHint" class="bg-white rounded-2xl border border-dashed border-slate-300 p-8 text-center text-slate-400 font-medium">Klik salah satu peran di atas untuk melihat daftar akunnya.</div>
+
+                <div id="adminUserTableCard" class="hidden bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs text-slate-600">
                             <thead class="bg-slate-800 text-white uppercase font-bold">
@@ -610,7 +626,7 @@
 
             <!-- TAB 3: FEEDBACK MANAGEMENT -->
 
-            <!-- TAB 4: NILAI SISWA (ADMIN) -->
+            <!-- TAB 4: NILAI MURID (ADMIN) -->
             <div id="adminTab-nilai" class="hidden space-y-4">
                 <div class="bg-white p-4 rounded-2xl border border-slate-200 flex flex-wrap items-center gap-3 shadow-sm no-print">
                     <select id="admGbFilterKelas" onchange="renderAdminNilai()" class="p-2.5 border border-slate-300 rounded-xl text-xs font-bold bg-slate-50"></select>
@@ -725,7 +741,7 @@
                 </div>
                 <div>
                     <div class="flex justify-between items-center mb-1">
-                        <label class="block text-xs font-bold text-slate-700">Daftar Siswa Absen</label>
+                        <label class="block text-xs font-bold text-slate-700">Daftar Murid Absen</label>
                         <button type="button" onclick="addEditAbsentRow()" class="text-[10px] bg-amber-600 text-white px-2 py-1 rounded font-bold">+ Tambah</button>
                     </div>
                     <div id="editAbsentListContainer" class="space-y-2"></div>
@@ -860,6 +876,63 @@
     </div>
 
     <!-- MODAL 5: EDIT LOGO SEKOLAH (ADMIN) -->
+    <div id="modalImportAccounts" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden max-h-[92vh] overflow-y-auto">
+            <div class="bg-spena-800 text-white px-5 py-4 flex items-center justify-between">
+                <h3 class="font-extrabold text-sm flex items-center"><i class="fa-solid fa-file-import me-2"></i><span>Impor Akun dari Excel</span></h3>
+                <button onclick="closeImportModal()" class="text-spena-200 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-5 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">1. Pilih peran untuk semua akun di file</label>
+                    <select id="importRole" class="w-full p-3 border border-slate-300 rounded-xl text-sm font-bold bg-slate-50">
+                        <option value="guru">Guru Mapel</option><option value="walikelas">Wali Kelas</option><option value="wali">Wali Murid</option><option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">2. Unduh template, isi nama lengkap, username, dan password</label>
+                    <button type="button" onclick="downloadAccountTemplate()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center space-x-2"><i class="fa-solid fa-file-excel"></i><span>Unduh Template Excel</span></button>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">3. Unggah file yang sudah diisi (.xlsx atau .csv)</label>
+                    <input type="file" id="importFile" accept=".xlsx,.csv" onchange="previewImport()" class="w-full text-xs p-2.5 border border-slate-300 rounded-xl bg-slate-50">
+                </div>
+                <div id="importPreview" class="hidden bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm"></div>
+                <p class="text-xs text-slate-500">Akses kelas untuk wali kelas dan wali murid diisi menyusul lewat tombol Edit pada akun.</p>
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closeImportModal()" class="px-4 py-2.5 rounded-xl border text-xs font-bold text-slate-600">Batal</button>
+                    <button type="button" id="importGo" onclick="doImportAccounts()" disabled class="px-5 py-2.5 rounded-xl bg-spena-700 hover:bg-spena-800 text-white text-xs font-extrabold disabled:opacity-40 disabled:cursor-not-allowed">Impor Akun</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalExportCards" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div class="bg-spena-800 text-white px-5 py-4 flex items-center justify-between">
+                <h3 class="font-extrabold text-sm flex items-center"><i class="fa-solid fa-file-pdf me-2"></i><span>Ekspor Kartu Login (PDF)</span></h3>
+                <button onclick="closeExportModal()" class="text-spena-200 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-5 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Peran</label>
+                    <select id="exportRole" onchange="updateExportCount()" class="w-full p-3 border border-slate-300 rounded-xl text-sm font-bold bg-slate-50">
+                        <option value="guru">Guru Mapel</option><option value="walikelas">Wali Kelas</option><option value="wali">Wali Murid</option><option value="admin">Admin</option><option value="ALL">Semua Peran</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Kelas (untuk wali kelas dan wali murid)</label>
+                    <select id="exportKelas" onchange="updateExportCount()" class="w-full p-3 border border-slate-300 rounded-xl text-sm font-bold bg-slate-50 disabled:opacity-50"></select>
+                </div>
+                <p class="text-sm text-slate-600"><b id="exportCount">0</b> kartu akan dibuat. Setiap kartu memuat nama, username, dan password, siap dibagikan lewat WhatsApp atau dicetak lalu digunting.</p>
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closeExportModal()" class="px-4 py-2.5 rounded-xl border text-xs font-bold text-slate-600">Batal</button>
+                    <button type="button" id="exportGo" onclick="exportCardsPdf()" class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-extrabold disabled:opacity-40">Unduh PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="modalLogo" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden">
             <div class="bg-spena-800 text-white px-6 py-4 flex justify-between items-center">
@@ -1096,7 +1169,7 @@
         }
 
         // --- SINKRONISASI PER-RECORD (v2) ---
-        const APP_VERSION = '2026-09-30-6'; // naikkan angka ini + version.json setiap update
+        const APP_VERSION = '2026-10-01-1'; // naikkan angka ini + version.json setiap update
         const SYNC_MS = 20000;
         let syncSnap = {};
         let pendingOps = JSON.parse(localStorage.getItem('spena_pending') || '[]');
@@ -1149,7 +1222,7 @@
         async function flushPending() {
             if (!googleScriptUrl || !pendingOps.length || flushing) return;
             flushing = true;
-            const batch = pendingOps.slice();
+            const batch = pendingOps.slice(0, 200);
             try {
                 const r = await fetch(googleScriptUrl, {
                     method: 'POST',
@@ -1492,7 +1565,7 @@
             div.id = rowId;
             div.className = 'flex items-center space-x-2 bg-white p-2 rounded-xl border border-amber-200 shadow-sm';
             div.innerHTML = `
-                <input type="text" placeholder="Nama lengkap siswa" value="${name}" class="absent-name p-2 border border-slate-300 rounded-lg text-xs flex-grow outline-none focus:ring-1 focus:ring-amber-500 font-medium">
+                <input type="text" placeholder="Nama lengkap murid" value="${name}" class="absent-name p-2 border border-slate-300 rounded-lg text-xs flex-grow outline-none focus:ring-1 focus:ring-amber-500 font-medium">
                 <select class="absent-status p-2 border border-slate-300 rounded-lg text-xs bg-slate-50 font-bold outline-none">
                     <option value="Sakit" ${status === 'Sakit' ? 'selected' : ''}>Sakit</option>
                     <option value="Izin" ${status === 'Izin' ? 'selected' : ''}>Izin</option>
@@ -1639,6 +1712,7 @@
             if (!container) return;
 
             let filterKelas = document.getElementById('waliFilterKelas').value;
+            if (!forcedKelas && currentUser && currentUser.role === 'wali' && !currentUser.classAssigned) forcedKelas = '-';
             if (forcedKelas) filterKelas = forcedKelas;
             
             // STRICT RESTRICTION: Lock Wali Murid to only view their assigned class
@@ -1688,7 +1762,7 @@
                     </div>
                     ${j.absentList && j.absentList.length > 0 ? `
                         <div>
-                            <h4 class="text-xs font-bold text-rose-500 uppercase tracking-wider mb-1">Siswa Tidak Masuk</h4>
+                            <h4 class="text-xs font-bold text-rose-500 uppercase tracking-wider mb-1">Murid Tidak Masuk</h4>
                             <div class="flex flex-wrap gap-1.5">
                                 ${j.absentList.map(a => `<span class="bg-rose-50 text-rose-700 text-xs px-2.5 py-1 rounded-lg border border-rose-200 font-semibold">${a.name} (${a.status})</span>`).join('')}
                             </div>
@@ -2018,7 +2092,7 @@
             div.id = rowId;
             div.className = 'flex items-center space-x-2 bg-white p-2 rounded-xl border border-slate-200 shadow-sm';
             div.innerHTML = `
-                <input type="text" placeholder="Nama lengkap siswa" value="${name}" class="absent-name p-2 border border-slate-300 rounded-lg text-xs flex-grow outline-none focus:ring-1 focus:ring-amber-500 font-medium">
+                <input type="text" placeholder="Nama lengkap murid" value="${name}" class="absent-name p-2 border border-slate-300 rounded-lg text-xs flex-grow outline-none focus:ring-1 focus:ring-amber-500 font-medium">
                 <select class="absent-status p-2 border border-slate-300 rounded-lg text-xs bg-slate-50 font-bold outline-none">
                     <option value="Sakit" ${status === 'Sakit' ? 'selected' : ''}>Sakit</option>
                     <option value="Izin" ${status === 'Izin' ? 'selected' : ''}>Izin</option>
@@ -2081,7 +2155,15 @@
             const table = document.getElementById('adminUserTable');
             if (!table) return;
 
-            table.innerHTML = usersData.map(u => `
+            USER_ROLES.forEach(r => {
+                const cnt = document.getElementById('userTabCount-' + r.key); if (cnt) cnt.textContent = usersData.filter(u => u.role === r.key).length;
+                const b = document.getElementById('userTabBtn-' + r.key);
+                if (b) b.className = 'px-4 py-3 rounded-xl text-sm font-extrabold flex items-center justify-between gap-2 shadow-sm ' + (adminUserTab === r.key ? 'bg-spena-700 text-white' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50');
+            });
+            document.getElementById('adminUserTableCard').classList.toggle('hidden', !adminUserTab);
+            document.getElementById('adminUserHint').classList.toggle('hidden', !!adminUserTab);
+            const list = usersData.filter(u => u.role === adminUserTab);
+            table.innerHTML = list.map(u => `
                 <tr class="hover:bg-slate-50 transition">
                     <td class="p-3.5 uppercase font-bold text-[10px]">
                         <span class="${u.role === 'admin' ? 'bg-indigo-100 text-indigo-800' : u.role === 'guru' ? 'bg-emerald-100 text-emerald-800' : u.role === 'walikelas' ? 'bg-teal-100 text-teal-800' : 'bg-amber-100 text-amber-800'} px-2.5 py-1 rounded-md">
@@ -2093,6 +2175,9 @@
                     <td class="p-3.5 font-mono text-xs font-bold text-slate-600">${u.password}</td>
                     <td class="p-3.5 font-bold text-slate-600">${u.classAssigned ? 'Kelas ' + u.classAssigned : '-'}</td>
                     <td class="p-3.5 text-center space-x-1">
+                        <button onclick="exportSingleCard('${u.id}')" class="bg-sky-600 hover:bg-sky-700 text-white p-2 rounded-xl text-xs shadow-sm" title="Unduh Kartu Login (PDF)">
+                            <i class="fa-solid fa-id-card"></i>
+                        </button>
                         <button onclick="openAddUserModal('${u.id}')" class="bg-amber-500 hover:bg-amber-600 text-white p-2 rounded-xl text-xs shadow-sm" title="Edit Akun & Password">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
@@ -2104,6 +2189,7 @@
                     </td>
                 </tr>
             `).join('');
+            if (!list.length) table.innerHTML = '<tr><td colspan="6" class="p-6 text-center text-slate-400 font-medium">Belum ada akun pada peran ini.</td></tr>';
         }
 
         function toggleUserRoleFields() {
@@ -2125,7 +2211,7 @@
                 document.getElementById('userNameInput').value = u.name;
                 document.getElementById('userUsernameInput').value = u.username;
                 document.getElementById('userPasswordInput').value = u.password;
-                document.getElementById('userClassSelect').value = u.classAssigned || '7A';
+                document.getElementById('userClassSelect').value = u.classAssigned || ((u.role === 'wali' || u.role === 'walikelas') ? '' : '7A');
             } else {
                 document.getElementById('addUserModalTitle').innerHTML = `<i class="fa-solid fa-user-plus me-2"></i><span>Tambah User Pengguna Baru</span>`;
                 document.getElementById('editUserId').value = '';
@@ -2396,7 +2482,7 @@
             showToast('Password Anda berhasil diperbarui!', 'success');
         }
 
-        // ================= NILAI SISWA & CATATAN WALI KELAS =================
+        // ================= NILAI MURID & CATATAN WALI KELAS =================
         const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
         const uid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
         const MONTHS_ID = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
@@ -2457,12 +2543,12 @@ function fillMapelSelect(id, current, placeholder) {
         // ---------- TABEL NILAI (dipakai guru, admin, wali kelas, dan cetak) ----------
         function gradeTableHTML(gb, edit, print) {
             const cols = sortedCols(gb);
-            if (!cols.length && !gb.students.length) return '<div class="p-8 text-center text-slate-400 font-medium">Daftar masih kosong. Tambahkan kolom nilai dan siswa.</div>';
+            if (!cols.length && !gb.students.length) return '<div class="p-8 text-center text-slate-400 font-medium">Daftar masih kosong. Tambahkan kolom nilai dan murid.</div>';
             const groups = GROUP_ORDER.filter(g => cols.some(c => c.g === g));
             const gc = g => print ? '' : GROUPS[g].cls;
             const stick = print ? '' : 'sticky left-0 z-10';
             let h = `<div class="${print ? '' : 'overflow-x-auto border border-slate-200 rounded-xl'}"><table class="w-full text-left text-sm text-slate-700 border-collapse"><thead>`;
-            h += `<tr><th rowspan="2" class="p-2 text-center border ${print ? '' : 'bg-slate-100'} w-10">No</th><th rowspan="2" class="p-2 border ${print ? '' : 'bg-slate-100'} ${stick} min-w-[190px]">Nama Siswa</th>`;
+            h += `<tr><th rowspan="2" class="p-2 text-center border ${print ? '' : 'bg-slate-100'} w-10">No</th><th rowspan="2" class="p-2 border ${print ? '' : 'bg-slate-100'} ${stick} min-w-[190px]">Nama Murid</th>`;
             h += groups.map(g => `<th colspan="${cols.filter(c => c.g === g).length}" class="p-2 text-center border ${gc(g)}">${GROUPS[g].label}</th>`).join('');
             h += `<th rowspan="2" class="p-2 text-center border ${print ? '' : 'bg-slate-100'}">Rata-rata</th>${edit ? '<th rowspan="2" class="border bg-slate-100"></th>' : ''}</tr><tr>`;
             h += cols.map(c => `<th class="p-1.5 text-center border ${gc(c.g)} min-w-[92px]">` + (edit
@@ -2478,18 +2564,18 @@ function fillMapelSelect(id, current, placeholder) {
                         : v) + '</td>';
                 }).join('') +
                 `<td ${print ? '' : `id="avg-${st.id}"`} class="p-2 border text-center font-black">${rowAvg(gb, st)}</td>` +
-                (edit ? `<td class="p-1 border text-center"><button onclick="gradeDelStudent('${gb.id}','${st.id}')" class="text-rose-600 hover:text-rose-800 p-2" title="Hapus siswa"><i class="fa-solid fa-trash-can"></i></button></td>` : '') + '</tr>').join('');
+                (edit ? `<td class="p-1 border text-center"><button onclick="gradeDelStudent('${gb.id}','${st.id}')" class="text-rose-600 hover:text-rose-800 p-2" title="Hapus murid"><i class="fa-solid fa-trash-can"></i></button></td>` : '') + '</tr>').join('');
             h += '</tbody></table></div>';
             return h;
         }
         function gradeToolsHTML(gid) {
             const b = (g) => `<button onclick="gradeAddCol('${gid}','${g}')" class="${GROUPS[g].btn} text-white text-sm font-extrabold px-4 py-2.5 rounded-xl shadow-sm">+ ${GROUPS[g].label}</button>`;
             return `<div class="flex flex-wrap gap-2">${GROUP_ORDER.map(b).join('')}
-                <button onclick="gradeAddStudent('${gid}')" class="bg-slate-700 hover:bg-slate-800 text-white text-sm font-extrabold px-4 py-2.5 rounded-xl"><i class="fa-solid fa-user-plus me-1"></i> Tambah Siswa</button>
+                <button onclick="gradeAddStudent('${gid}')" class="bg-slate-700 hover:bg-slate-800 text-white text-sm font-extrabold px-4 py-2.5 rounded-xl"><i class="fa-solid fa-user-plus me-1"></i> Tambah Murid</button>
                 <button onclick="document.getElementById('bulkBox').classList.toggle('hidden')" class="bg-white border border-slate-300 text-slate-800 text-sm font-extrabold px-4 py-2.5 rounded-xl"><i class="fa-solid fa-paste me-1"></i> Tempel Daftar Nama</button>
                 <button onclick="printGradebooks([getGb('${gid}')])" class="bg-white border border-slate-300 text-slate-800 text-sm font-extrabold px-4 py-2.5 rounded-xl"><i class="fa-solid fa-print me-1"></i> Cetak</button>
                 <button onclick="deleteGradebook('${gid}')" class="bg-rose-100 hover:bg-rose-200 text-rose-800 text-sm font-extrabold px-4 py-2.5 rounded-xl ms-auto"><i class="fa-solid fa-trash-can me-1"></i> Hapus Daftar</button></div>
-                <div id="bulkBox" class="hidden mt-3"><textarea id="bulkNames" rows="5" class="w-full p-3 border border-slate-300 rounded-xl text-sm" placeholder="Tempel nama siswa, satu nama per baris"></textarea>
+                <div id="bulkBox" class="hidden mt-3"><textarea id="bulkNames" rows="5" class="w-full p-3 border border-slate-300 rounded-xl text-sm" placeholder="Tempel nama murid, satu nama per baris"></textarea>
                 <button onclick="gradeBulk('${gid}')" class="mt-2 bg-spena-700 hover:bg-spena-800 text-white text-sm font-extrabold px-5 py-2.5 rounded-xl">Tambahkan ke Tabel</button></div>`;
         }
 
@@ -2528,16 +2614,16 @@ function fillMapelSelect(id, current, placeholder) {
         }
         function gradeDelStudent(gid, sid) {
             const gb = getGb(gid); const st = gb?.students.find(s => s.id === sid); if (!st) return;
-            if (!confirm(`Hapus siswa "${st.name || 'tanpa nama'}" dari daftar nilai?`)) return;
+            if (!confirm(`Hapus murid "${st.name || 'tanpa nama'}" dari daftar nilai?`)) return;
             gb.students = gb.students.filter(s => s.id !== sid); saveToLocalStorage(); rerenderGrade(gid);
         }
         function gradeBulk(gid) {
             const gb = getGb(gid); if (!gb) return;
             const names = $v('bulkNames').split('\n').map(x => x.replace(/^\s*\d+[\.\)]\s*/, '').trim()).filter(Boolean);
-            if (!names.length) { showToast('Tempel dulu daftar nama siswa.', 'error'); return; }
+            if (!names.length) { showToast('Tempel dulu daftar nama murid.', 'error'); return; }
             names.forEach(n => gb.students.push({ id: uid('s-'), name: n, scores: {} }));
             document.getElementById('bulkNames').value = ''; document.getElementById('bulkBox').classList.add('hidden');
-            saveToLocalStorage(); rerenderGrade(gid); showToast(`${names.length} siswa ditambahkan.`, 'success');
+            saveToLocalStorage(); rerenderGrade(gid); showToast(`${names.length} murid ditambahkan.`, 'success');
         }
         function gradeKey(e) {
             if (e.key !== 'Enter') return;
@@ -2571,7 +2657,7 @@ function fillMapelSelect(id, current, placeholder) {
             if (!list.length) { showToast('Tidak ada data nilai untuk dicetak.', 'error'); return; }
             printSheet('<style>@media print{@page{size:landscape;margin:10mm}}</style>' + list.map((gb, i) =>
                 `<div style="${i ? 'page-break-before:always;' : ''}">` +
-                sheetHeader('LAPORAN DAFTAR NILAI SISWA', `Kelas ${esc(gb.kelas)} &bull; ${esc(gb.mapel)} &bull; Semester ${esc(gb.semester)} ${esc(gb.tahun)} &bull; Guru: ${esc(gb.guruName)}`) +
+                sheetHeader('LAPORAN DAFTAR NILAI MURID', `Kelas ${esc(gb.kelas)} &bull; ${esc(gb.mapel)} &bull; Semester ${esc(gb.semester)} ${esc(gb.tahun)} &bull; Guru: ${esc(gb.guruName)}`) +
                 gradeTableHTML(gb, false, true) + `<p style="font-size:11px;margin-top:10px">Dicetak: ${todayLong()}</p></div>`).join(''));
         }
 
@@ -2604,14 +2690,14 @@ function fillMapelSelect(id, current, placeholder) {
             gradebooksData.push(gb); saveToLocalStorage();
             guruGbId = gb.id; toggleNewGb(); renderGuruNilai();
             document.getElementById('bulkBox')?.classList.remove('hidden');
-            showToast('Daftar nilai dibuat. Tempel daftar nama siswa atau tambah satu per satu.', 'success');
+            showToast('Daftar nilai dibuat. Tempel daftar nama murid atau tambah satu per satu.', 'success');
         }
         function gbCardHTML(g, fn, showGuru) {
             return `<button onclick="${fn}('${g.id}')" class="text-left bg-white hover:bg-spena-50 border-2 border-slate-200 hover:border-spena-500 rounded-2xl p-4 shadow-sm transition space-y-1.5 w-full">
                 <div class="flex items-center justify-between gap-2"><span class="bg-spena-100 text-spena-800 font-extrabold px-3 py-1 rounded-lg text-sm">Kelas ${esc(g.kelas)}</span><i class="fa-solid fa-chevron-right text-slate-400"></i></div>
                 <div class="font-extrabold text-slate-800 text-base leading-snug">${esc(g.mapel)}</div>
                 ${showGuru ? `<div class="text-sm font-semibold text-slate-600"><i class="fa-solid fa-user-tie me-1.5 text-emerald-600"></i>${esc(g.guruName)}</div>` : ''}
-                <div class="text-xs text-slate-500 font-medium">Semester ${esc(g.semester)} ${esc(g.tahun)} &bull; ${g.students.length} siswa &bull; ${g.cols.length} kolom nilai</div></button>`;
+                <div class="text-xs text-slate-500 font-medium">Semester ${esc(g.semester)} ${esc(g.tahun)} &bull; ${g.students.length} murid &bull; ${g.cols.length} kolom nilai</div></button>`;
         }
         function gbListHTML(list, fn, showGuru, emptyMsg) {
             return list.length ? `<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">${list.map(g => gbCardHTML(g, fn, showGuru)).join('')}</div>`
@@ -2688,7 +2774,7 @@ function fillMapelSelect(id, current, placeholder) {
             if (!list.length) { showToast('Tidak ada catatan untuk dicetak.', 'error'); return; }
             const rows = [...list].sort((a, b) => a.kelas.localeCompare(b.kelas) || a.siswa.localeCompare(b.siswa, 'id') || (a.tanggal || '').localeCompare(b.tanggal || ''));
             printSheet(sheetHeader('LAPORAN CATATAN WALI KELAS', sub) +
-                `<table class="w-full text-left text-xs"><thead><tr><th>No</th><th>Tanggal</th><th>Nama Siswa</th><th>Kelas</th><th>Jenis</th><th>Catatan</th><th>Dicatat Oleh</th></tr></thead><tbody>` +
+                `<table class="w-full text-left text-xs"><thead><tr><th>No</th><th>Tanggal</th><th>Nama Murid</th><th>Kelas</th><th>Jenis</th><th>Catatan</th><th>Dicatat Oleh</th></tr></thead><tbody>` +
                 rows.map((n, i) => `<tr><td>${i + 1}</td><td>${fmtDate(n.tanggal)}</td><td>${esc(n.siswa)}</td><td>${esc(n.kelas)}</td><td>${(NOTE_TYPES[n.jenis] || NOTE_TYPES.baik).label}</td><td>${esc(n.isi)}</td><td>${esc(n.penulisName || '-')}</td></tr>`).join('') +
                 `</tbody></table><p style="font-size:11px;margin-top:10px">Dicetak: ${todayLong()}. Dokumen ini bersifat rahasia.</p>`);
         }
@@ -2729,7 +2815,7 @@ function rosterNames(kelas) {
             if (keep && !rn.includes(keep)) selSiswa.insertAdjacentHTML('beforeend', `<option value="${esc(keep)}">${esc(keep)}</option>`);
             selSiswa.value = keep;
             const fs = document.getElementById('wkNoteFilterSiswa'), cur = fs.value || 'ALL';
-            fs.innerHTML = '<option value="ALL">Semua Siswa</option>' + names.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('');
+            fs.innerHTML = '<option value="ALL">Semua Murid</option>' + names.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('');
             fs.value = names.includes(cur) ? cur : 'ALL';
             if (!wkEditNoteId && !$v('wkNoteTanggal')) document.getElementById('wkNoteTanggal').value = todayISO();
             const list = filteredNotes(k || '__none__', fs.value, $v('wkNoteFilterJenis'));
@@ -2740,7 +2826,7 @@ function rosterNames(kelas) {
             e.preventDefault();
             const k = wkClass(); if (!k) { showToast('Akun Anda belum diberi kelas. Hubungi admin.', 'error'); return; }
             const siswa = $v('wkNoteSiswa').trim(), jenis = $v('wkNoteJenis'), tanggal = $v('wkNoteTanggal'), isi = $v('wkNoteIsi').trim();
-            if (!siswa || !isi || !tanggal) { showToast('Lengkapi nama siswa, tanggal, dan isi catatan.', 'error'); return; }
+            if (!siswa || !isi || !tanggal) { showToast('Lengkapi nama murid, tanggal, dan isi catatan.', 'error'); return; }
             const ex = wkEditNoteId && notesData.find(n => n.id === wkEditNoteId);
             if (ex) Object.assign(ex, { siswa, jenis, tanggal, isi });
             else notesData.push({ id: uid('n-'), kelas: k, siswa, jenis, tanggal, isi, penulisId: currentUser.id, penulisName: currentUser.name, timestamp: new Date().toISOString() });
@@ -2771,14 +2857,14 @@ function rosterNames(kelas) {
         }
         function printWkNotes() {
             const s = $v('wkNoteFilterSiswa');
-            printNotes(filteredNotes(wkClass() || '__none__', s, $v('wkNoteFilterJenis')), `Kelas ${esc(wkClass())}${s && s !== 'ALL' ? ' &bull; Siswa: ' + esc(s) : ''} &bull; Wali Kelas: ${esc(currentUser.name)}`);
+            printNotes(filteredNotes(wkClass() || '__none__', s, $v('wkNoteFilterJenis')), `Kelas ${esc(wkClass())}${s && s !== 'ALL' ? ' &bull; Murid: ' + esc(s) : ''} &bull; Wali Kelas: ${esc(currentUser.name)}`);
         }
         function renderAdminCatatan() {
             const kelas = $v('admNoteFilterKelas') || 'ALL';
             const names = classStudentNames(kelas === 'ALL' ? '' : kelas);
             const fs = document.getElementById('admNoteFilterSiswa'); if (!fs) return;
             const cur = fs.value || 'ALL';
-            fs.innerHTML = '<option value="ALL">Semua Siswa</option>' + names.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('');
+            fs.innerHTML = '<option value="ALL">Semua Murid</option>' + names.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('');
             fs.value = names.includes(cur) ? cur : 'ALL';
             const list = filteredNotes(kelas, fs.value, $v('admNoteFilterJenis'));
             document.getElementById('admNoteList').innerHTML = list.length ? list.map(n => noteCardHTML(n, false, true)).join('')
@@ -2786,7 +2872,7 @@ function rosterNames(kelas) {
         }
         function printAdminNotes() {
             const k = $v('admNoteFilterKelas') || 'ALL', s = $v('admNoteFilterSiswa');
-            printNotes(filteredNotes(k, s, $v('admNoteFilterJenis')), `${k === 'ALL' ? 'Semua Kelas' : 'Kelas ' + esc(k)}${s && s !== 'ALL' ? ' &bull; Siswa: ' + esc(s) : ''}`);
+            printNotes(filteredNotes(k, s, $v('admNoteFilterJenis')), `${k === 'ALL' ? 'Semua Kelas' : 'Kelas ' + esc(k)}${s && s !== 'ALL' ? ' &bull; Murid: ' + esc(s) : ''}`);
         }
 
         // ---------- WALI KELAS ----------
@@ -2814,6 +2900,284 @@ function rosterNames(kelas) {
                 ? gbDetailHead(gb, 'backWkGb', true) + `<div class="grade-host" data-gb="${gb.id}" data-edit="0">${gradeTableHTML(gb, false)}</div>`
                 : gbListHTML(list, 'openWkGb', true, 'Belum ada nilai yang diinput guru mata pelajaran untuk kelas ini.');
         }
+
+        // ================= KELOLA AKUN: TAB PERAN, IMPOR EXCEL, EKSPOR KARTU LOGIN PDF =================
+        const USER_ROLES = [
+            { key: 'admin', label: 'Admin', icon: 'fa-user-shield' },
+            { key: 'guru', label: 'Guru Mapel', icon: 'fa-chalkboard-user' },
+            { key: 'walikelas', label: 'Wali Kelas', icon: 'fa-user-tie' },
+            { key: 'wali', label: 'Wali Murid', icon: 'fa-people-roof' }
+        ];
+        const roleLabel = r => (USER_ROLES.find(x => x.key === r) || { label: r }).label;
+        let adminUserTab = null;
+        function setUserTab(r) { adminUserTab = adminUserTab === r ? null : r; renderAdminUsers(); }
+
+        // ---------- pustaka dimuat saat dibutuhkan saja ----------
+        const _libs = {};
+        function loadLib(url, check) {
+            if (check()) return Promise.resolve();
+            if (_libs[url]) return _libs[url];
+            return (_libs[url] = new Promise((res, rej) => {
+                const el = document.createElement('script');
+                el.src = url; el.onload = res;
+                el.onerror = () => { delete _libs[url]; rej(new Error('Gagal memuat pustaka. Periksa koneksi internet.')); };
+                document.head.appendChild(el);
+            }));
+        }
+        const ensureJSZip = () => loadLib('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js', () => window.JSZip);
+        const ensurePdfLib = () => loadLib('https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js', () => window.PDFLib);
+        function downloadBlob(blob, name) {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob); a.download = name;
+            document.body.appendChild(a); a.click();
+            setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+        }
+
+        // ---------- TEMPLATE EXCEL ----------
+        const xmlEsc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        async function downloadAccountTemplate() {
+            try {
+                await ensureJSZip();
+                const NS = 'xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"';
+                const HEAD = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+                const c = (ref, t, st) => `<c r="${ref}" t="inlineStr" s="${st}"><is><t xml:space="preserve">${xmlEsc(t)}</t></is></c>`;
+                const sheet1 = `${HEAD}<worksheet ${NS}><cols><col min="1" max="1" width="36" style="2" customWidth="1"/><col min="2" max="3" width="26" style="2" customWidth="1"/></cols><sheetData><row r="1">${c('A1', 'Nama Lengkap', 1)}${c('B1', 'Username', 1)}${c('C1', 'Password', 1)}</row></sheetData></worksheet>`;
+                const notes = ['Petunjuk pengisian', '1. Isi sheet "Data Akun": satu akun per baris, mulai baris ke-2 (di bawah judul kolom).',
+                    '2. Kolom Nama Lengkap, Username, dan Password wajib diisi. Username tidak boleh memakai spasi dan tidak boleh sama dengan akun lain.',
+                    '3. Jangan mengubah judul kolom di baris pertama.', '4. Peran akun (guru mapel / wali kelas / wali murid) dipilih saat mengunggah file di aplikasi.',
+                    '5. Akses kelas untuk wali kelas dan wali murid diisi menyusul oleh admin lewat menu Edit Akun.'];
+                const sheet2 = `${HEAD}<worksheet ${NS}><cols><col min="1" max="1" width="120" customWidth="1"/></cols><sheetData>${notes.map((t, i) => `<row r="${i + 1}">${c('A' + (i + 1), t, i === 0 ? 1 : 0)}</row>`).join('')}</sheetData></worksheet>`;
+                const styles = `${HEAD}<styleSheet ${NS}><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF075985"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="3"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/><xf numFmtId="49" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+                const zip = new JSZip();
+                zip.file('[Content_Types].xml', `${HEAD}<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>`);
+                zip.file('_rels/.rels', `${HEAD}<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`);
+                zip.file('xl/workbook.xml', `${HEAD}<workbook ${NS} xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Data Akun" sheetId="1" r:id="rId1"/><sheet name="Petunjuk" sheetId="2" r:id="rId2"/></sheets></workbook>`);
+                zip.file('xl/_rels/workbook.xml.rels', `${HEAD}<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`);
+                zip.file('xl/styles.xml', styles); zip.file('xl/worksheets/sheet1.xml', sheet1); zip.file('xl/worksheets/sheet2.xml', sheet2);
+                const blob = await zip.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                downloadBlob(blob, 'Template-Impor-Akun.xlsx');
+            } catch (err) { showToast(err.message || 'Gagal membuat template.', 'error'); }
+        }
+
+        // ---------- BACA FILE EXCEL / CSV ----------
+        function colIndex(ref) { let n = 0; for (const ch of ref.replace(/[^A-Z]/gi, '').toUpperCase()) n = n * 26 + ch.charCodeAt(0) - 64; return n - 1; }
+        async function parseXlsx(buf) {
+            await ensureJSZip();
+            const zip = await JSZip.loadAsync(buf);
+            const dom = t => new DOMParser().parseFromString(t, 'application/xml');
+            let sst = [];
+            const sf = zip.file('xl/sharedStrings.xml');
+            if (sf) sst = [...dom(await sf.async('string')).getElementsByTagName('si')].map(si => [...si.getElementsByTagName('t')].map(t => t.textContent).join(''));
+            let path = null;
+            const wb = zip.file('xl/workbook.xml'), rl = zip.file('xl/_rels/workbook.xml.rels');
+            if (wb && rl) {
+                const first = dom(await wb.async('string')).getElementsByTagName('sheet')[0];
+                const rid = first && first.getAttribute('r:id');
+                const rel = [...dom(await rl.async('string')).getElementsByTagName('Relationship')].find(r => r.getAttribute('Id') === rid);
+                if (rel) { const t = rel.getAttribute('Target'); path = t.startsWith('/') ? t.slice(1) : 'xl/' + t; }
+            }
+            if (!path || !zip.file(path)) path = Object.keys(zip.files).filter(f => /^xl\/worksheets\/sheet\d+\.xml$/.test(f)).sort()[0];
+            if (!path) throw new Error('Isi file Excel tidak terbaca.');
+            const rows = [];
+            [...dom(await zip.file(path).async('string')).getElementsByTagName('row')].forEach(r => {
+                const arr = [];
+                [...r.getElementsByTagName('c')].forEach(cell => {
+                    const t = cell.getAttribute('t'), vEl = cell.getElementsByTagName('v')[0];
+                    let val = '';
+                    if (t === 'inlineStr') val = [...cell.getElementsByTagName('t')].map(x => x.textContent).join('');
+                    else if (vEl) val = t === 's' ? (sst[parseInt(vEl.textContent, 10)] ?? '') : vEl.textContent;
+                    arr[colIndex(cell.getAttribute('r') || 'A1')] = String(val).trim();
+                });
+                rows.push({ line: parseInt(r.getAttribute('r'), 10) || rows.length + 1, cells: Array.from(arr, v => v || '') });
+            });
+            return rows;
+        }
+        function parseCsv(text) {
+            text = text.replace(/^\uFEFF/, '');
+            const first = text.split(/\r?\n/)[0] || '';
+            const d = (first.match(/;/g) || []).length > (first.match(/,/g) || []).length ? ';' : ',';
+            const rows = []; let row = [], cur = '', q = false;
+            for (let i = 0; i < text.length; i++) {
+                const ch = text[i];
+                if (q) { if (ch === '"') { if (text[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += ch; }
+                else if (ch === '"') q = true;
+                else if (ch === d) { row.push(cur.trim()); cur = ''; }
+                else if (ch === '\n' || ch === '\r') { if (ch === '\r' && text[i + 1] === '\n') i++; row.push(cur.trim()); cur = ''; rows.push({ line: rows.length + 1, cells: row }); row = []; }
+                else cur += ch;
+            }
+            if (cur || row.length) { row.push(cur.trim()); rows.push({ line: rows.length + 1, cells: row }); }
+            return rows;
+        }
+
+        // ---------- IMPOR ----------
+        let importPending = null;
+        function openImportModal() {
+            document.getElementById('importRole').value = adminUserTab || 'guru';
+            document.getElementById('importFile').value = '';
+            document.getElementById('importPreview').classList.add('hidden');
+            document.getElementById('importGo').disabled = true;
+            importPending = null;
+            document.getElementById('modalImportAccounts').classList.remove('hidden');
+        }
+        function closeImportModal() { document.getElementById('modalImportAccounts').classList.add('hidden'); }
+        async function previewImport() {
+            const f = document.getElementById('importFile').files[0];
+            const box = document.getElementById('importPreview'), go = document.getElementById('importGo');
+            importPending = null; go.disabled = true;
+            if (!f) { box.classList.add('hidden'); return; }
+            box.classList.remove('hidden'); box.innerHTML = '<span class="text-slate-500 font-medium">Membaca file...</span>';
+            try {
+                const rows = /\.csv$/i.test(f.name) ? parseCsv(await f.text()) : await parseXlsx(await f.arrayBuffer());
+                const norm = s => String(s || '').toLowerCase().replace(/[^a-z]/g, '');
+                let start = 0, ci = { name: 0, user: 1, pass: 2 };
+                const hdr = rows.find(r => r.cells.some(x => norm(x) === 'username'));
+                if (hdr) {
+                    start = rows.indexOf(hdr) + 1;
+                    hdr.cells.forEach((h, i) => { const n = norm(h); if (n.includes('nama')) ci.name = i; else if (n.includes('user')) ci.user = i; else if (n.includes('pass') || n.includes('sandi')) ci.pass = i; });
+                }
+                const taken = new Set(usersData.map(u => String(u.username).toLowerCase()));
+                const good = [], skipped = [];
+                rows.slice(start).forEach(r => {
+                    const name = (r.cells[ci.name] || '').trim(), username = (r.cells[ci.user] || '').trim(), password = (r.cells[ci.pass] || '').trim();
+                    if (!name && !username && !password) return;
+                    let why = '';
+                    if (!name || !username || !password) why = 'nama, username, atau password kosong';
+                    else if (/\s/.test(username)) why = 'username tidak boleh memakai spasi';
+                    else if (taken.has(username.toLowerCase())) why = `username "${username}" sudah dipakai`;
+                    if (why) skipped.push({ line: r.line, why }); else { taken.add(username.toLowerCase()); good.push({ name, username, password }); }
+                });
+                importPending = { rows: good };
+                let h = `<div class="font-extrabold text-emerald-700">${good.length} akun siap diimpor</div>`;
+                if (skipped.length) h += `<div class="mt-1 font-bold text-rose-700">${skipped.length} baris dilewati:</div><ul class="list-disc ms-5 text-xs text-slate-600">${skipped.slice(0, 8).map(s => `<li>Baris ${s.line}: ${esc(s.why)}</li>`).join('')}${skipped.length > 8 ? `<li>dan ${skipped.length - 8} baris lainnya</li>` : ''}</ul>`;
+                box.innerHTML = h; go.disabled = !good.length;
+            } catch (err) {
+                box.innerHTML = `<span class="font-bold text-rose-700">${/^(Gagal memuat|Isi file)/.test(err.message || '') ? esc(err.message) : 'File tidak dapat dibaca. Pastikan memakai template (.xlsx) atau .csv.'}</span>`;
+            }
+        }
+        function doImportAccounts() {
+            if (!importPending || !importPending.rows.length) return;
+            const role = document.getElementById('importRole').value;
+            const n = importPending.rows.length;
+            importPending.rows.forEach(r => usersData.push({ id: uid('u-'), role, name: r.name, username: r.username, password: r.password, classAssigned: '' }));
+            saveToLocalStorage(); adminUserTab = role; renderAdminUsers(); closeImportModal();
+            showToast(`${n} akun ${roleLabel(role)} berhasil diimpor.` + ((role === 'wali' || role === 'walikelas') ? ' Atur akses kelasnya lewat Edit Akun.' : ''), 'success');
+        }
+
+        // ---------- EKSPOR KARTU LOGIN (PDF) ----------
+        function openExportModal() {
+            document.getElementById('exportRole').value = adminUserTab || 'guru';
+            const k = document.getElementById('exportKelas');
+            k.innerHTML = '<option value="ALL">Semua Kelas</option>' + ALL_CLASSES.map(c => `<option value="${c}">Kelas ${c}</option>`).join('');
+            updateExportCount();
+            document.getElementById('modalExportCards').classList.remove('hidden');
+        }
+        function closeExportModal() { document.getElementById('modalExportCards').classList.add('hidden'); }
+        function exportList() {
+            const role = $v('exportRole'), kelas = $v('exportKelas') || 'ALL';
+            const order = USER_ROLES.map(r => r.key);
+            return usersData.filter(u => (role === 'ALL' || u.role === role) && (kelas === 'ALL' || u.classAssigned === kelas))
+                .sort((a, b) => order.indexOf(a.role) - order.indexOf(b.role) || (a.classAssigned || '').localeCompare(b.classAssigned || '') || a.name.localeCompare(b.name, 'id'));
+        }
+        function updateExportCount() {
+            const role = $v('exportRole'), kel = document.getElementById('exportKelas');
+            kel.disabled = role === 'admin' || role === 'guru';
+            if (kel.disabled) kel.value = 'ALL';
+            document.getElementById('exportCount').textContent = exportList().length;
+        }
+        function pdfSafe(font, text) {
+            return Array.from(String(text || '').replace(/\s+/g, ' ').normalize('NFC')).map(ch => {
+                try { font.encodeText(ch); return ch; } catch (e) {
+                    const b = ch.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                    try { font.encodeText(b); return b; } catch (e2) { return '?'; }
+                }
+            }).join('');
+        }
+        function pdfWrap(text, font, size, maxW, maxLines) {
+            const words = pdfSafe(font, text).split(' '), lines = []; let cur = '';
+            for (const w of words) {
+                const t = cur ? cur + ' ' + w : w;
+                if (font.widthOfTextAtSize(t, size) <= maxW || !cur) cur = t; else { lines.push(cur); cur = w; }
+            }
+            if (cur) lines.push(cur);
+            if (lines.length > maxLines) { lines.length = maxLines; let l = lines[maxLines - 1]; while (l.length > 1 && font.widthOfTextAtSize(l + '...', size) > maxW) l = l.slice(0, -1); lines[maxLines - 1] = l + '...'; }
+            return lines;
+        }
+        async function buildCardsPdf(list) {
+            await ensurePdfLib();
+            const { PDFDocument, StandardFonts, rgb } = PDFLib;
+            const pdf = await PDFDocument.create();
+            const F = await pdf.embedFont(StandardFonts.Helvetica), FB = await pdf.embedFont(StandardFonts.HelveticaBold), FM = await pdf.embedFont(StandardFonts.CourierBold);
+            const embedLogo = async src => {
+                const bytes = Uint8Array.from(atob(src.split(',')[1]), ch => ch.charCodeAt(0));
+                return /^data:image\/png/.test(src) ? pdf.embedPng(bytes) : pdf.embedJpg(bytes);
+            };
+            let logo = null;
+            try { if (/^data:image\/(png|jpe?g);base64,/.test(customLogo)) logo = await embedLogo(customLogo); } catch (e) { logo = null; }
+            if (!logo) { try { logo = await embedLogo(DEFAULT_LOGO_SVG); } catch (e) { logo = null; } }
+
+            const PW = 595.28, PH = 841.89, M = 26, GX = 12, GY = 10, ROWS = 4;
+            const cw = (PW - 2 * M - GX) / 2, ch = (PH - 2 * M - (ROWS - 1) * GY) / ROWS;
+            const brand = rgb(7 / 255, 89 / 255, 133 / 255), grey = rgb(0.42, 0.46, 0.5), dark = rgb(0.1, 0.13, 0.18);
+            const base = (location.origin && location.origin !== 'null' ? location.origin : '') + location.pathname.replace(/index\.html$/, '');
+            const url = base || location.href.split('?')[0];
+            let page = null;
+            list.forEach((u, i) => {
+                const slot = i % (2 * ROWS);
+                if (slot === 0) page = pdf.addPage([PW, PH]);
+                const x = M + (slot % 2) * (cw + GX), top = PH - M - Math.floor(slot / 2) * (ch + GY), bottom = top - ch;
+                page.drawRectangle({ x, y: bottom, width: cw, height: ch, color: rgb(1, 1, 1), borderColor: rgb(0.55, 0.6, 0.66), borderWidth: 1, borderDashArray: [4, 3] });
+                page.drawRectangle({ x, y: top - 46, width: cw, height: 46, color: brand });
+                let tx = x + 12;
+                if (logo) {
+                    const lh = 36, lw = logo.width * lh / logo.height;
+                    page.drawRectangle({ x: x + 8, y: top - 41, width: lw + 6, height: lh + 2, color: rgb(1, 1, 1) });
+                    page.drawImage(logo, { x: x + 11, y: top - 40, width: lw, height: lh });
+                    tx = x + 11 + lw + 12;
+                }
+                page.drawText('KARTU AKSES JURNAL ONLINE SPENA', { x: tx, y: top - 20, size: 8.6, font: FB, color: rgb(1, 1, 1) });
+                page.drawText('SMP NEGERI 6 KOTA BLITAR', { x: tx, y: top - 33, size: 7.8, font: F, color: rgb(0.88, 0.94, 1) });
+
+                const px = x + 14, innerW = cw - 28;
+                let y = top - 60;
+                const role = roleLabel(u.role).toUpperCase() + (u.classAssigned ? '  -  KELAS ' + u.classAssigned : '');
+                page.drawText(pdfSafe(FB, role), { x: px, y, size: 8.6, font: FB, color: brand });
+                y -= 13;
+                page.drawText('Nama', { x: px, y, size: 7, font: F, color: grey });
+                y -= 11;
+                pdfWrap(u.name, FB, 11, innerW, 2).forEach(l => { page.drawText(l, { x: px, y, size: 11, font: FB, color: dark }); y -= 12.5; });
+                y -= 3;
+                const field = (label, value) => {
+                    page.drawText(label, { x: px, y, size: 7, font: F, color: grey }); y -= 11;
+                    page.drawRectangle({ x: px - 3, y: y - 4, width: innerW + 6, height: 15, color: rgb(0.94, 0.97, 1) });
+                    let size = 12; const v = pdfSafe(FM, value);
+                    while (size > 7 && FM.widthOfTextAtSize(v, size) > innerW) size -= 0.5;
+                    page.drawText(v, { x: px, y, size, font: FM, color: dark }); y -= 17;
+                };
+                field('Username', u.username);
+                field('Password', u.password);
+                const fl = pdfWrap('Buka aplikasi: ' + url, F, 6.4, innerW, 2);
+                let fy = bottom + 8 + (fl.length - 1) * 8;
+                page.drawText('Simpan kartu ini dan jaga kerahasiaan password Anda.', { x: px, y: fy + fl.length * 8 + 1, size: 6.4, font: FB, color: grey });
+                fl.forEach(l => { page.drawText(l, { x: px, y: fy, size: 6.4, font: F, color: grey }); fy -= 8; });
+            });
+            return new Blob([await pdf.save()], { type: 'application/pdf' });
+        }
+        async function exportCardsPdf() {
+            const list = exportList();
+            if (!list.length) { showToast('Tidak ada akun yang cocok dengan pilihan ini.', 'error'); return; }
+            const btn = document.getElementById('exportGo'); btn.disabled = true;
+            try {
+                downloadBlob(await buildCardsPdf(list), `Kartu-Login-${$v('exportRole') === 'ALL' ? 'Semua' : roleLabel($v('exportRole')).replace(/\s+/g, '-')}.pdf`);
+                closeExportModal(); showToast(`${list.length} kartu login dibuat.`, 'success');
+            } catch (err) { showToast(err.message || 'Gagal membuat PDF.', 'error'); }
+            btn.disabled = false;
+        }
+        async function exportSingleCard(id) {
+            const u = usersData.find(x => x.id === id); if (!u) return;
+            try { downloadBlob(await buildCardsPdf([u]), `Kartu-Login-${u.username}.pdf`); }
+            catch (err) { showToast(err.message || 'Gagal membuat PDF.', 'error'); }
+        }
+
 
         // --- TOAST NOTIFICATIONS ---
         function showToast(message, type = 'info') {
